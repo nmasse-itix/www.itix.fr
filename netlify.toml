@@ -1,0 +1,12 @@
+[build]
+publish = "public"
+command = "hugo"
+
+[build.environment] # Global
+HUGO_VERSION = "0.42"
+
+[context.production.environment] # Only for prod
+HUGO_VERSION = "0.42"
+
+[context.deploy-preview]
+command = "hugo --buildDrafts --buildFuture"
