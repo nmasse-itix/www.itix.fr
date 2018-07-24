@@ -9,4 +9,7 @@ HUGO_VERSION = "0.42"
 HUGO_VERSION = "0.42"
 
 [context.deploy-preview]
-command = "hugo --buildDrafts --buildFuture"
+command = "hugo --buildDrafts --buildFuture --baseURL $DEPLOY_PRIME_URL"
+
+[context.deploy-preview.environment]
+HUGO_ENABLEGITINFO = "true"
