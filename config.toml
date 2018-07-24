@@ -1,0 +1,51 @@
+baseURL                = "https://www.itix.fr/"
+languageCode           = "en-us"
+title                  = "Nicolas Massé"
+author                 = "Nicolas Massé"
+theme                  = "cocoa"
+
+[params]
+include_rss            = true
+latestpostscount       = 10
+i18n_flags             = true
+author                 = "Nicolas Massé"
+description            = "TODO"
+github                 = "//github.com/nmasse-itix"
+px500                  = "//500px.com/nmasse"
+linkedin               = "//linkedin.com/in/nicolasmasse"
+#selfintro              = "TODO intro"
+twitter                = "//twitter.com/nmasse_itix"
+gravatar               = "006617bcd9aae1a019e1f923c8bd69e0"
+#faviconfile            = "images/favicon.ico"
+
+[menu]
+
+[[menu.main]]
+name                   = "Home"
+weight                 = 10
+identifier             = "home"
+url                    = "/"
+
+[[menu.main]]
+name                   = "Biography"
+weight                 = 20
+identifier             = "biography"
+url                    = "/biography/"
+
+[[menu.main]]
+name                   = "Blog"
+weight                 = 30
+identifier             = "blog"
+url                    = "/blog/"
+
+[[menu.main]]
+name                   = "Speaking"
+weight                 = 40
+identifier             = "speaking"
+url                    = "/speaking/"
+
+[[menu.main]]
+name                   = "Contact"
+weight                 = 50
+identifier             = "contact"
+url                    = "/contact/"
