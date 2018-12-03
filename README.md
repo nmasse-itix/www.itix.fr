@@ -15,6 +15,12 @@ hugo new speaking/my-wonderful-event.md
 vim content/speaking/my-wonderful-event.md
 ```
 
+Check locally that your changes are OK:
+
+```sh
+hugo server -D &
+```
+
 Commit your changes:
 ```sh
 git add .
