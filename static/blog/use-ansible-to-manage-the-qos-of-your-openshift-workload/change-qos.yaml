@@ -1,0 +1,67 @@
+---
+
+- name: Change the QoS class of commodity projects
+  hosts: localhost
+  gather_facts: no
+  vars:
+    namespace_blacklist:
+    - default
+    - openshift-sdn
+    - openshift-monitoring
+    - openshift-console
+    - openshift-web-console
+  tasks:
+
+  - name: Make sure we are logged in on the CLI
+    command: oc whoami
+    changed_when: false
+
+  - name: Get a list of all DeploymentConfig on our OpenShift cluster
+    command: oc get dc -o json --all-namespaces
+    register: oc_get_dc
+    changed_when: false
+
+  - name: Get a list of all Deployment on our OpenShift cluster
+    command: oc get deploy -o json --all-namespaces
+    register: oc_get_deploy
+    changed_when: false
+
+  - name: Get a list of all StatefulSet on our OpenShift cluster
+    command: oc get sts -o json --all-namespaces
+    register: oc_get_sts
+    changed_when: false
+
+  - block:
+
+    - debug: 
+        var: to_update
+        verbosity: 1
+
+    - debug:
+        msg: 'Will update {{ to_update|length }} objects'
+
+    - pause:
+        prompt: 'Proceed ?'
+
+    - name: Change the QoS class to "Best Effort"
+      command: >
+        oc set resources {{ obj.kind }} {{ obj.name }} -n {{ obj.namespace }}
+        --requests=cpu=0,memory=0 --limits=cpu=0,memory=0 
+      loop: '{{ to_update }}'
+      loop_control:
+        loop_var: obj
+      when: obj.namespace not in namespace_blacklist
+
+    vars:
+      all_objects: >
+        {{ (oc_get_dc.stdout|from_json)['items'] }}
+        + {{ (oc_get_deploy.stdout|from_json)['items'] }}
+        + {{ (oc_get_sts.stdout|from_json)['items'] }}
+      to_update: '{{ all_objects|json_query(json_query) }}'
+      json_query: >
+        [? spec.template.spec.containers[].resources.requests
+            || spec.template.spec.containers[].resources.limits ].{
+            name: metadata.name,
+            namespace: metadata.namespace,
+            kind: kind
+        }

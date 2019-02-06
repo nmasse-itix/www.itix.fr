@@ -4,6 +4,11 @@ title                  = "Nicolas Massé"
 author                 = "Nicolas Massé"
 theme                  = "cocoa"
 
+[taxonomies]
+opensource             = "opensource"
+topic                  = "expertise"
+tags                   = "tags"
+
 [params]
 include_rss            = true
 latestpostscount       = 10
@@ -37,6 +42,12 @@ name                   = "Blog"
 weight                 = 30
 identifier             = "blog"
 url                    = "/blog/"
+
+[[menu.main]]
+name                   = "Open Source"
+weight                 = 35
+identifier             = "opensource"
+url                    = "/opensource/"
 
 [[menu.main]]
 name                   = "Speaking"
