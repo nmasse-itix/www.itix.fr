@@ -1,5 +1,5 @@
 ---
-title: "Writing mini-training with Hugo"
+title: "Writing workshop instructions with Hugo"
 date: 2019-02-20T00:00:00+02:00
 opensource: 
 - Hugo
@@ -58,7 +58,7 @@ suited design for training instructions. It features breadcrumb, navigation
 buttons, table of content in the sidebar, checkmark to know which sections
 the participant visited and much more!
 
-Install the learn theme:
+Install the `learn` theme:
 
 ```sh
 cd hugo-workshop
@@ -159,7 +159,7 @@ mkdir -p static/images/
 curl https://upload.wikimedia.org/wikipedia/fr/c/cb/Red_hat_logo.png -o static/images/logo.png
 mkdir -p layouts/partials
 echo '<img src="/images/logo.png" />' > layouts/partials/logo.html
-curl "http://www.myiconfinder.com/icon/download/16895e53b6d340dffee1c9b84d90ca94-Redhat.png~10057" -o static/images/favicon.png
+curl "https://www.redhat.com/profiles/rh/themes/redhatdotcom/favicon.ico" -o static/images/favicon.png
 ```
 
 # Test locally
@@ -199,4 +199,5 @@ clearly presented. Maintenance and collaboration have been greatly simplified!
 
 ![Screenshot of our mini-training](hugo-screenshot.png)
 
-This article is the first of a serie. To be continued.
+In this first part of the series, we presented a very light introduction to
+Hugo and its application to workshop instructions. Be sure to read [part 2: Writing workshop instructions with Hugo, with variables in your content](../writing-workshop-instructions-with-hugo-variables/) to discover advanced usages.
