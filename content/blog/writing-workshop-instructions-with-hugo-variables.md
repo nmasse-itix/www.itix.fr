@@ -6,7 +6,7 @@ opensource:
 ---
 
 This is the second part of my series covering how to
-[Write workshop instructions with Hugo"](../writing-workshop-instructions-with-hugo/).
+[Write workshop instructions with Hugo](../writing-workshop-instructions-with-hugo/).
 In the first part, we saw how to:
 
 - bootstrap a website with Hugo
@@ -59,4 +59,4 @@ Congratulation, you can now change your `github_username` and
 `github_repository` variables at will and see your changes reflect in your
 pages!
 
-Stay tuned for the next part of this serie!
+Be sure to read [part 3: Writing workshop instructions with Hugo and deploying in OpenShift](../writing-workshop-instructions-with-hugo-deploy-openshift/) to learn how to deploy Hugo websites in a container!
