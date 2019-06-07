@@ -47,7 +47,7 @@ You can try the following queries in the GraphQL explorer.
 
 ## Get all pods in the current namespace
 
-Unless you gave the `cluster-admin` right to the QLKube Service Account, you will have to specify a target namespace in all your queries. The `all` type is a [meta type defined by QLKube](TODO) to ease the use of common types such as `services`, `deployments`, `pods`, `daemonSets`, `replicaSets`, `statefulSets`, `jobs` or `cronJobs`.
+Unless you gave the `cluster-admin` right to the QLKube Service Account, you will have to specify a target namespace in all your queries. The `all` type is a [meta type defined by QLKube](https://github.com/qlkube/qlkube/blob/9274405bb46592646220c099affdd24211875eed/src/schema.js#L25-L39) to ease the use of common types such as `services`, `deployments`, `pods`, `daemonSets`, `replicaSets`, `statefulSets`, `jobs` or `cronJobs`.
 
 **Query:**
 
