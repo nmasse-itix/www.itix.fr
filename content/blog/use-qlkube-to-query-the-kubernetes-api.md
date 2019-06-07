@@ -325,7 +325,7 @@ EOF
 
 ## Advanced use-cases
 
-One use case in which GraphQL is very interesting is the ability to request in the same query an object and it's linked objects. For instance, it would be nice from a hostname to query the route that matches this hostname, along with the service backing this routes and the pods behind the service.
+One use case in which GraphQL is very interesting is the ability to request in the same query an object and it's linked objects. For instance, it would be nice from a hostname to query the route that matches this hostname, along with the service backing this route and the pods behind the service.
 
 Unfortunately, this is not yet possible with GLKube. Since it auto-generates its GraphQL schema from the OpenAPI Specifications of the Kubernetes APIs and those APIs are loosely coupled, some code would be required to link the relevant object between them.
 
