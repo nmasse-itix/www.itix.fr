@@ -303,7 +303,7 @@ Once your GraphQL queries refined in the GraphQL Explorer, you can send them dir
 ```sh
 export GLKUBE_HOSTNAME=$(oc get route qlkube -o go-template --template="{{.spec.host}}")
 
-cat <<EOF | curl -XPOST 'http://$GLKUBE_HOSTNAME/' -H "Content-Type: application/json" -d @- -s |jq .
+cat <<EOF | curl -XPOST "http://$GLKUBE_HOSTNAME/" -H "Content-Type: application/json" -d @- -s |jq .
 {
   "query": "query getAllPodsInCurrentNamespace {
               all(namespace: \"qlkube\") {
