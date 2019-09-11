@@ -61,3 +61,9 @@ You can update a theme to the latest version by executing the following command 
 git submodule update --rebase --remote
 ```
 
+## How to change the Chroma style for syntax highlighting
+
+```sh
+mkdir -p static/css
+hugo gen chromastyles --style=perldoc > static/css/chroma.css
+```

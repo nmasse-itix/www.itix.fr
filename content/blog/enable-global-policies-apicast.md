@@ -19,7 +19,7 @@ Start from those default *Environment Files* and add a `policy_chain` field with
 The default *Global Policy Chain* can be found in the [`gateway/src/apicast/policy_chain.lua`](https://github.com/3scale/APIcast/blob/b8f7f067dd47936f93bc9bd3e6de224c304d58ea/gateway/src/apicast/policy_chain.lua#L67-L72) file.
 
 **production.lua:**
-```lua
+{{< highlight lua >}}
 return {
     master_process = 'on',
     lua_code_cache = 'on',
@@ -35,7 +35,7 @@ return {
         'apicast.policy.nginx_metrics'
     }),
 }
-```
+{{< / highlight >}}
 
 **staging.lua:**
 ```lua
