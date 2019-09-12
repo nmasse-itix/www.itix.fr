@@ -49,7 +49,7 @@ had a `requests` or `limits` field in it.
 
 This first task has been accomplished very easily with a first playbook:
 
-```yaml
+```raw
 - name: List all DeploymentConfig having a request or limit set
   hosts: localhost
   gather_facts: no
@@ -162,7 +162,7 @@ in order to bring back those objects to the Best Effort QoS class.
 Since I do not want all Pods to have the Best Effort QoS class, I added a
 blacklist of critical namespaces that should not be touched.
 
-```raw
+{{< highlight raw "hl_lines=5-10 23" >}}
 - name: Change the QoS class of commodity projects
   hosts: localhost
   gather_facts: no
@@ -186,7 +186,7 @@ blacklist of critical namespaces that should not be touched.
       loop_control:
         loop_var: obj
       when: obj.namespace not in namespace_blacklist
-```
+{{< / highlight >}}
 
 You can find the complete playbook [here](change-qos.yaml). Of course, it is
 very rough and would need to more work to be used on a daily basis but for a

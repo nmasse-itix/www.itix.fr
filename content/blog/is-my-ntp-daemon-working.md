@@ -19,7 +19,7 @@ time.
 
 First, make sure your NTP daemon is started:
 
-```sh
+```raw
 $ sudo systemctl status ntpd
 ● ntpd.service - Network Time Service
    Loaded: loaded (/usr/lib/systemd/system/ntpd.service; enabled; vendor preset: disabled)
@@ -96,7 +96,7 @@ sudo systemctl stop ntpd
 
 Then, run the ntpdate command:
 
-```sh
+```raw
 $ sudo ntpdate -q 0.rhel.pool.ntp.org
 server 91.121.88.161, stratum 2, offset -0.000393, delay 0.02974
 server 129.250.35.251, stratum 2, offset 0.004071, delay 0.02733

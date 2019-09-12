@@ -19,7 +19,7 @@ Start from those default *Environment Files* and add a `policy_chain` field with
 The default *Global Policy Chain* can be found in the [`gateway/src/apicast/policy_chain.lua`](https://github.com/3scale/APIcast/blob/b8f7f067dd47936f93bc9bd3e6de224c304d58ea/gateway/src/apicast/policy_chain.lua#L67-L72) file.
 
 **production.lua:**
-```lua
+{{< highlight lua "hl_lines=8-14" >}}
 return {
     master_process = 'on',
     lua_code_cache = 'on',
@@ -35,10 +35,10 @@ return {
         'apicast.policy.nginx_metrics'
     }),
 }
-```
+{{< / highlight >}}
 
 **staging.lua:**
-```lua
+{{< highlight lua "hl_lines=7-13" >}}
 return {
     master_process = 'on',
     lua_code_cache = 'on',
@@ -53,12 +53,12 @@ return {
         'apicast.policy.nginx_metrics'
     }),
 }
-```
+{{< / highlight >}}
 
 Then, create a ConfigMap from those two files and mount it in `/opt/app-root/src/config`:
 
-```sh
+{{< highlight sh >}}
 oc create configmap apicast-cors --from-file=production.lua --from-file=staging.lua
 oc set volume dc/apicast-production --add --name=apicast-cors -t configmap --configmap-name=apicast-cors -m /opt/app-root/src/config
 oc set volume dc/apicast-staging --add --name=apicast-cors -t configmap --configmap-name=apicast-cors -m /opt/app-root/src/config
-```
+{{< / highlight >}}
