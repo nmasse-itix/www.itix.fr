@@ -4,6 +4,7 @@ title                  = "Nicolas Massé"
 author                 = "Nicolas Massé"
 theme                  = "cocoa"
 pygmentsUseClasses     = true
+pygmentsCodefences     = true
 
 [taxonomies]
 opensource             = "opensource"
