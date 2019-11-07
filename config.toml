@@ -58,7 +58,13 @@ identifier             = "speaking"
 url                    = "/speaking/"
 
 [[menu.main]]
-name                   = "Contact"
+name                   = "Writing"
 weight                 = 50
+identifier             = "writing"
+url                    = "/writing/"
+
+[[menu.main]]
+name                   = "Contact"
+weight                 = 60
 identifier             = "contact"
 url                    = "/contact/"
