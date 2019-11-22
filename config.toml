@@ -5,6 +5,7 @@ author                 = "Nicolas Massé"
 theme                  = "cocoa"
 pygmentsUseClasses     = true
 pygmentsCodefences     = true
+enableRobotsTXT        = true
 
 [taxonomies]
 opensource             = "opensource"
