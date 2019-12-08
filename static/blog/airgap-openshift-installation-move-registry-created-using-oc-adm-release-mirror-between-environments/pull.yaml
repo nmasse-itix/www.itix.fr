@@ -1,0 +1,63 @@
+---
+- name: Pull a complete Docker registry
+  hosts: localhost
+  become: no
+  gather_facts: no
+  vars:
+    registry: docker-registry.default.svc:5000
+    validate_certs: false
+    target: /tmp/oci_registry
+  tasks:
+
+  - name: Verify that Ansible version is >= 2.9
+    assert:
+      that: "ansible_version.full is version_compare('2.9.0', '>=')"
+      msg: >-
+        This playbook uses the 'headers' property of the 'url' filter and thus
+        requires Ansible 2.9 
+
+  - assert:
+      that:
+      - token is defined
+      msg: >
+        Please pass an administrative token to connect to '{{ registry }}'
+        as an extra var (-e token=bla.bla.bla).
+  
+  - name: Fetch the catalog of the docker registry
+    uri:
+      url: 'https://{{ registry }}/v2/_catalog'
+      headers:
+        Authorization: Bearer {{ token }}
+      status_code: 200
+      return_content: yes
+      validate_certs: '{{ validate_certs }}'
+    register: catalog
+
+  - name: Construct a list of all available images
+    set_fact:
+      images: >
+        {{ images|default([]) + new_images }}
+    vars:
+      image_tags: >
+        {{ (lookup("url", "https://" ~ registry ~ "/v2/" ~ item ~ "/tags/list", 
+                          headers={"Authorization": "Bearer " ~ token},
+                          validate_certs=validate_certs)|from_json).tags }}
+      new_images: >
+        {{ [item] | product(image_tags) | map('join', ':') | list }}
+    loop: '{{ catalog.json.repositories }}'
+
+  - debug:
+      var: images
+
+  - pause:
+      prompt: "Would pull {{ images|length }} images from {{ registry }}. Continue?"
+
+  - name: Create a directory to hold the images
+    file:
+      path: '{{ target }}'
+      state: directory
+    register: mkdir
+
+  - name: Downloading OpenShift images...
+    command: skopeo --insecure-policy copy --src-tls-verify={{ validate_certs|bool|ternary('true','false') }} --src-creds=admin:{{ token }} 'docker://{{ registry }}/{{ item }}' 'oci:{{ target }}:{{ item }}'
+    with_items: '{{ images }}'
