@@ -5,7 +5,7 @@ opensource:
 - OpenWRT
 ---
 
-OpenWRT is a Linux distribution for embedded systems.
+[OpenWRT](https://openwrt.org/) is a Linux distribution for embedded systems.
 It made design choices that take it apart from the usual Linux distributions: musl libc instead of the usual glibc, busybox instead of coreutils, ash instead of bash, etc.
 As a result, the system is very light and blazing fast!
 
@@ -331,10 +331,10 @@ uci commit
 OpenWRT was originally a Linux distribution for routers, so it comes bundled with network software that might be useless for you. You can remove those unneeded software if you wish.
 
 ```sh
-opkg remove --force-removal-of-dependent-packages ppp ppp-mod-pppoe odhcpd-ipv6only dnsmasq hostapd-common luci-base lua luci-app-firewall luci-lib-ip luci-lib-jsonc luci-lib-nixio luci-proto-ipv6 luci-proto-ppp luci-theme-bootstrap
+opkg remove --force-removal-of-dependent-packages ppp ppp-mod-pppoe odhcpd-ipv6only dnsmasq hostapd-common luci luci-ssl-openssl luci-base lua luci-app-firewall luci-lib-ip luci-lib-jsonc luci-lib-nixio luci-proto-ipv6 luci-proto-ppp luci-theme-bootstrap uhttpd uhttpd-mod-ubus
 ```
 
 ## Conclusion
 
 OpenWRT is now installed on your Raspberry PI.
-You can start installing software on it, such as the nginx reverse proxy or miniflux, an RSS reader.
+You can start installing software on it, such as the [nginx reverse proxy](../nginx-with-tls-on-openwrt/) or miniflux, an RSS reader.
