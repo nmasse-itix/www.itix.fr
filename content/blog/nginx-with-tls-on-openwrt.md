@@ -285,13 +285,6 @@ Welcome!
 The TLS certificate we fetched from Let's Encrypt is valid for ninety days.
 If you do not want to manually renew the certificate every ninety days, you will have to setup automatic renewal in a cron job.
 
-Install pkill. We will use it to tell nginx to reload its configuration and the renewed certificates.
-
-```sh
-opkg update
-opkg install procps-ng-pkill
-```
-
 Edit the crontab of the root user.
 
 ```sh
@@ -302,7 +295,7 @@ And an entry to renew the certificate using lego.
 
 ```crontab
 # At 3:59 the first day of the month, renew the Let's Encrypt certificates
-3 59 1 * * GANDIV5_API_KEY=[REDACTED] /opt/lego/bin/lego -m replace.with@your.email -d raspberry-pi.example.test -a --dns gandiv5 --path /etc/nginx/tls run  --no-bundle && pkill -SIGHUP 'nginx: master'
+3 59 1 * * GANDIV5_API_KEY=[REDACTED] /opt/lego/bin/lego -m replace.with@your.email -d raspberry-pi.example.test -a --dns gandiv5 --path /etc/nginx/tls run  --no-bundle && service nginx restart
 ```
 
 ## Conclusion
