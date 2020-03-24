@@ -331,7 +331,7 @@ uci commit
 OpenWRT was originally a Linux distribution for routers, so it comes bundled with network software that might be useless for you. You can remove those unneeded software if you wish.
 
 ```sh
-opkg remove --force-removal-of-dependent-packages ppp ppp-mod-pppoe odhcpd-ipv6only dnsmasq hostapd-common luci luci-ssl-openssl luci-base lua luci-app-firewall luci-lib-ip luci-lib-jsonc luci-lib-nixio luci-proto-ipv6 luci-proto-ppp luci-theme-bootstrap uhttpd uhttpd-mod-ubus
+opkg remove --force-remove --force-removal-of-dependent-packages ppp ppp-mod-pppoe odhcpd-ipv6only dnsmasq hostapd-common luci luci-ssl-openssl luci-base lua luci-app-firewall luci-lib-ip luci-lib-jsonc luci-lib-nixio luci-proto-ipv6 luci-proto-ppp luci-theme-bootstrap uhttpd uhttpd-mod-ubus
 ```
 
 ## Conclusion
