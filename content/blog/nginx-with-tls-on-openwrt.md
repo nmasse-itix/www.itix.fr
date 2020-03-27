@@ -11,9 +11,9 @@ As I plan to use my Raspberry PI to host plenty of web applications, I wanted to
 
 OpenWRT has an [nginx package](https://openwrt.org/packages/pkgdata/nginx), ready to be installed using *opkg* but unfortunately it does not have TLS enabled. So we need to recompile nginx with TLS enabled!
 
-## Install the OpenWRT build system
+## Install the OpenWRT SDK
 
-Install a Linux distribution [supported by the OpenWRT build system](https://openwrt.org/docs/guide-developer/build-system/install-buildsystem) in a Virtual Machine. For instance, [Ubuntu Server LTS 18.04.3](http://cdimage.ubuntu.com/releases/18.04.3/release/).
+Install a Linux distribution [supported by the OpenWRT build system](https://openwrt.org/docs/guide-developer/build-system/install-buildsystem) in a Virtual Machine (the OpenWRT SDK has the same requirements as the OpenWRT build system). For instance, [Ubuntu Server LTS 18.04.3](http://cdimage.ubuntu.com/releases/18.04.3/release/).
 
 Install the build system pre-requisites.
 
@@ -21,77 +21,145 @@ Install the build system pre-requisites.
 sudo apt-get install -y build-essential libncurses5-dev gawk git libssl-dev gettext unzip zlib1g-dev file python-dev libmodule-build-perl  libmodule-install-perl libthread-queue-any-perl
 ```
 
-Clone the OpenWRT GIT repository. Change the branch name to your version number, if you are not on 18.06.
+Then, download the OpenWRT SDK matching your target platform. To do so, you will need to know the target and subtarget. For Raspberry PI devices, the target is **brcm2708** and the subtarget depends on your Raspberry PI model. For my **Raspberry PI 3B+**, the subtarget is **bcm2710**. If you have a different model, check the [OpenWRT documentation](https://openwrt.org/docs/techref/targets/brcm2708).
+
+Now, go to the download page for the [brcm2708 target](https://downloads.openwrt.org/releases/18.06.2/targets/brcm2708/) and click on your subtarget (**bcm2710** in my case).
+
+In the **Supplementary Files** section, download **openwrt-sdk-*.tar.xz** and expand the archive.
 
 ```sh
-git clone https://git.openwrt.org/openwrt/openwrt.git -b openwrt-18.06
-cd openwrt
+curl -o openwrt-sdk.tar.xz https://downloads.openwrt.org/releases/18.06.2/targets/brcm2708/bcm2710/openwrt-sdk-18.06.2-brcm2708-bcm2710_gcc-7.3.0_musl.Linux-x86_64.tar.xz
+tar Jxvf openwrt-sdk.tar.xz
+mv openwrt-sdk-*/ openwrt-sdk
+cd openwrt-sdk
 ```
 
-Run *make menuconfig* to configure the build system.
+Generate a key pair to sign the packages.
+
+```sh
+staging_dir/host/bin/usign -G -p key-build.pub -s key-build
+```
+
+Fetch the existing package feed.
+
+```sh
+scripts/feeds update -a
+```
+
+Rename the **nginx** feed to **nginx-tls** so that our rebuilt package does not mix with the existing OpenWRT packages.
+
+```sh
+mv feeds/packages/net/nginx feeds/packages/net/nginx-tls
+```
+
+You also have to change the package name in a few files.
+
+```sh
+sed -i.bak -r 's/^PKG_NAME:=.*/PKG_NAME:=nginx-tls/; s/call BuildPackage,nginx(-tls)?/call BuildPackage,nginx-tls/; s/^(define Package\/nginx)(-tls)?/\1-tls/' feeds/packages/net/nginx-tls/Makefile
+sed -i.bak -r 's/PACKAGE_nginx(-tls)?/PACKAGE_nginx-tls/' feeds/packages/net/nginx-tls/Config.in
+```
+
+Regenerate the index file and install the *nginx-tls* feed.
+
+```sh
+scripts/feeds update -i
+scripts/feeds install nginx-tls
+```
+
+Run *make menuconfig* to configure the SDK.
 
 ```sh
 make menuconfig
 ```
 
-Select the following options:
+Enter **Global Build Settings** and:
 
-- Target System: **Broadcom BCM27xx**
-- Subtarget: **BCM2710 64 bit based boards**
-- Target Profile: **Raspberry Pi 3B/3B+**
-- Enable **Build the OpenWRT SDK**
+* Press space to unset **Select all target specific packages by default**
+* Press space to unset **Select all kernel module packages by default**
+* Press space to unset **Select all userspace packages by default**
+* Leave **Cryptographically sign packages** set
 
 ![make menuconfig](make-menuconfig.png)
 
-Launch a complete build. According to [the documentation](https://oldwiki.archive.openwrt.org/doc/techref/buildroot), the parameter *V=s* in the following command is used to display verbose output.
-
-```sh
-make V=s
-```
-
-## Recompile the nginx package
-
-Fetch the existing nginx package sources.
-
-```sh
-scripts/feeds update
-scripts/feeds install nginx
-```
-
-Run *make menuconfig* again.
-
-```sh
-make menuconfig
-```
+Go back to the root menu.
 
 Drill down to **Network** > **Web Servers/Proxies** and:
 
-- Press space to select **nginx**
-- Press enter to enter configuration
-- Choose **Configuration**
-- Press space to select "**Enable SSL Module**"
-- Exit five times and save
+* Press space to select **nginx**
+* Press enter to enter configuration
+* Choose **Configuration**
+* Press space to select "**Enable SSL Module**"
+* Exit five times and save
 
 Build the nginx package.
 
 ```sh
-make V=s
+make package/feeds/packages/nginx-tls/download
+make package/feeds/packages/nginx-tls/prepare
+make package/feeds/packages/nginx-tls/compile
 ```
 
-Once the build finished, the nginx package will be in *bin/packages*.
+Create the Packages.gz index (this will make the output directory usable as a local opkg source).
+
+```sh
+make package/index
+```
+
+Once the build finished, the built packages will be in *bin/packages*.
 
 ```raw
-$ find . -type f -name 'nginx*.ipk'
-./bin/packages/aarch64_cortex-a53/packages/nginx_1.12.2-1_aarch64_cortex-a53.ipk
+$ ls bin/packages/*/*/*.ipk
+bin/packages/aarch64_cortex-a53/base/libopenssl_1.0.2q-1_aarch64_cortex-a53.ipk
+bin/packages/aarch64_cortex-a53/base/zlib_1.2.11-2_aarch64_cortex-a53.ipk
+bin/packages/aarch64_cortex-a53/packages/libpcre_8.41-2_aarch64_cortex-a53.ipk
+bin/packages/aarch64_cortex-a53/packages/nginx-tls_1.12.2-1_aarch64_cortex-a53.ipk
 ```
 
 ## Install nginx
 
-Install the freshly compiled nginx package on your OpenWRT system.
+Create a directory on your Raspberry PI that will be used as an opkg repository.
 
 ```sh
-scp ./bin/packages/aarch64_cortex-a53/packages/nginx_1.12.2-1_aarch64_cortex-a53.ipk root@raspberry-pi.example.test:/tmp
-ssh root@raspberry-pi.example.test opkg install /tmp/nginx_1.12.2-1_aarch64_cortex-a53.ipk
+mkdir -p /opt/opkg/
+```
+
+Declare the local opkg repository in **customfeeds.conf**.
+
+```sh
+cat > /etc/opkg/customfeeds.conf <<"EOF"
+src/gz base file:///opt/opkg/base/
+src/gz packages file:///opt/opkg/packages/
+EOF
+```
+
+Copy the freshly compiled nginx package on your OpenWRT system.
+
+```sh
+scp -r bin/packages/*/base/ bin/packages/*/packages/ root@raspberry-pi.example.test:/opt/opkg/
+```
+
+Copy the public key that signed the packages on your OpenWRT system.
+
+```sh
+scp key-build.pub root@raspberry-pi.example.test:/etc/opkg/keys/$(staging_dir/host/bin/usign -F -p key-build.pub)
+```
+
+Install *nginx-tls* on your device.
+
+```sh
+ssh root@raspberry-pi.example.test opkg update
+ssh root@raspberry-pi.example.test opkg install nginx-tls
+```
+
+**Note:** if [like me](https://forum.openwrt.org/t/the-usign-command-does-not-validate-a-signature-in-some-cases/58679) you have issues with the packages signature being rejected, you can disable temporarily the signature validation in **/opt/opkg.conf** by commenting out **option check_signature**.
+
+```
+# cat /etc/opkg.conf
+dest root /
+dest ram /tmp
+lists_dir ext /var/opkg-lists
+option overlay_root /overlay
+# option check_signature
 ```
 
 ## Install Lego
