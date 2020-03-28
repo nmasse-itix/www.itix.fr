@@ -127,8 +127,8 @@ Declare the local opkg repository in **customfeeds.conf**.
 
 ```sh
 cat > /etc/opkg/customfeeds.conf <<"EOF"
-src/gz base file:///opt/opkg/base/
-src/gz packages file:///opt/opkg/packages/
+src/gz base file:/opt/opkg/base
+src/gz packages file:/opt/opkg/packages
 EOF
 ```
 
@@ -147,8 +147,8 @@ scp key-build.pub root@raspberry-pi.example.test:/etc/opkg/keys/$(staging_dir/ho
 Install *nginx-tls* on your device.
 
 ```sh
-ssh root@raspberry-pi.example.test opkg update
-ssh root@raspberry-pi.example.test opkg install nginx-tls
+opkg update
+opkg install nginx-tls libopenssl zlib
 ```
 
 **Note:** if [like me](https://forum.openwrt.org/t/the-usign-command-does-not-validate-a-signature-in-some-cases/58679) you have issues with the packages signature being rejected, you can disable temporarily the signature validation in **/opt/opkg.conf** by commenting out **option check_signature**.
