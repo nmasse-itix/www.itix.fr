@@ -353,6 +353,39 @@ Welcome!
 The TLS certificate we fetched from Let's Encrypt is valid for ninety days.
 If you do not want to manually renew the certificate every ninety days, you will have to setup automatic renewal in a cron job.
 
+Create a file **/opt/lego/etc/lego.conf** containing the environment variables needed by Lego to use your DNS provider.
+Example shown below with Gandi, which is my DNS provider.
+
+```sh
+export GANDIV5_API_KEY=[REDACTED]
+```
+
+Make it readable only by root.
+
+```sh
+chmod -R og-rwx /opt/lego/etc/
+```
+
+Create a file **/opt/lego/bin/renew.sh** with the following content.
+Do not forget to change the email address and the hostname!
+
+```sh
+#!/bin/sh
+
+set -e # Exit immediately if a command exits with a non-zero status
+
+. /opt/lego/etc/lego.conf
+
+/opt/lego/bin/lego -m replace.with@your.email -d raspberry-pi.example.test -a --dns gandiv5 --path /etc/nginx/tls run  --no-bundle
+/etc/init.d/nginx restart
+```
+
+Make it executable.
+
+```sh
+chmod 755 /opt/lego/bin/renew.sh
+```
+
 Edit the crontab of the root user.
 
 ```sh
@@ -363,7 +396,7 @@ And an entry to renew the certificate using lego.
 
 ```crontab
 # At 3:59 the first day of the month, renew the Let's Encrypt certificates
-3 59 1 * * GANDIV5_API_KEY=[REDACTED] /opt/lego/bin/lego -m replace.with@your.email -d raspberry-pi.example.test -a --dns gandiv5 --path /etc/nginx/tls run  --no-bundle && service nginx restart
+59 3 1 * * /opt/lego/bin/renew.sh
 ```
 
 ## Conclusion
