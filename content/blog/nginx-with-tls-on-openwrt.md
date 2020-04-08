@@ -408,4 +408,4 @@ And an entry to renew the certificate using lego.
 Nginx is now installed on your Raspberry PI, with TLS support enabled and a valid public certificate from Let's Encrypt that will be renewed automatically.
 The configuration serves a default virtual host to every bot that queries the nginx instance by its IP address and can serve any number of virtual host, provided you add the matching *server* block.
 
-Discover in the next article how to deploy a real world application: miniflux, an RSS reader.
+Discover in the next article how to [deploy a real world application: miniflux, an RSS reader](../install-miniflux-raspberry-pi/).
