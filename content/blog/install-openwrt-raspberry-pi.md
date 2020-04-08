@@ -292,7 +292,7 @@ ssh-keygen -N ""
 And copy it to **/etc/dropbear/authorized_keys**.
 
 ```sh
-ssh-keygen -y | ssh root@192.168.2.2 tee /etc/dropbear/authorized_keys
+ssh-keygen -y -f ~/.ssh/id_rsa | ssh root@192.168.2.2 tee /etc/dropbear/authorized_keys
 ```
 
 Copy it also to your user account.

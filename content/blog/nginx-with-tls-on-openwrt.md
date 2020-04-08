@@ -46,6 +46,8 @@ Fetch the existing package feed.
 scripts/feeds update -a
 ```
 
+## Compile nginx with TLS
+
 Rename the **nginx** feed to **nginx-tls** so that our rebuilt package does not mix with the existing OpenWRT packages.
 
 ```sh
@@ -115,7 +117,7 @@ bin/packages/aarch64_cortex-a53/packages/libpcre_8.41-2_aarch64_cortex-a53.ipk
 bin/packages/aarch64_cortex-a53/packages/nginx-tls_1.12.2-1_aarch64_cortex-a53.ipk
 ```
 
-## Install nginx
+## Create a local opkg repository
 
 Create a directory on your Raspberry PI that will be used as an opkg repository.
 
@@ -143,6 +145,8 @@ Copy the public key that signed the packages on your OpenWRT system.
 ```sh
 scp key-build.pub root@raspberry-pi.example.test:/etc/opkg/keys/$(staging_dir/host/bin/usign -F -p key-build.pub)
 ```
+
+## Install nginx
 
 Install *nginx-tls* on your device.
 
