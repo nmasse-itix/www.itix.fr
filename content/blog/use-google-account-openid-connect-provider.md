@@ -1,6 +1,8 @@
 ---
 title: "Use your Google Account as an OpenID Connect provider"
 date: 2020-03-27T00:00:00+02:00
+topics:
+- OpenID Connect
 ---
 
 We have passwords everywhere: to unlock our computer, to reach our inbox, to login as root on our Raspberry PI, etc.
@@ -160,3 +162,4 @@ This article gave a general overview of OpenID Connect protocol, explained how t
 Now, you are all set to use your Google Account as an OpenID Connect provider. Continue with one of the following articles:
 
 * [Secure your Raspberry PI with Keycloak Gatekeeper on OpenWRT](../secure-raspberry-pi-keycloak-gatekeeper/)
+* [Secure your OpenShift 4 cluster with OpenID Connect authentication](../secure-openshift-4-openid-connect-authentication/)

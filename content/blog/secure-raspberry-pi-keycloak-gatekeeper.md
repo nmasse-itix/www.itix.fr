@@ -4,6 +4,8 @@ date: 2020-03-28T00:00:00+02:00
 opensource: 
 - OpenWRT
 - Keycloak
+topics:
+- OpenID Connect
 ---
 
 In the article "[Nginx with TLS on OpenWRT](../nginx-with-tls-on-openwrt/)", I explained how to install nginx on a Raspberry PI running OpenWRT for hosting web applications.

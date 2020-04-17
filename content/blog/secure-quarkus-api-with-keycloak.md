@@ -4,6 +4,8 @@ date: 2020-03-17T00:00:00+02:00
 opensource: 
 - Keycloak
 - Quarkus
+topics:
+- OpenID Connect
 ---
 
 [Quarkus](https://quarkus.io/) is a Java stack that is Kubernetes native, lightweight and fast.
