@@ -9,7 +9,7 @@ enableRobotsTXT        = true
 
 [taxonomies]
 opensource             = "opensource"
-topic                  = "expertise"
+topic                  = "topics"
 tags                   = "tags"
 
 [params]
