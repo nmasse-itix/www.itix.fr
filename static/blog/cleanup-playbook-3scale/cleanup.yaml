@@ -1,0 +1,118 @@
+---
+
+- name: Delete all services of a 3scale tenant
+  hosts: localhost
+  gather_facts: no
+  vars:
+    ansible_connection: local
+    threescale_api: https://{{ admin_portal_hostname }}/admin/api
+    validate_certs: no
+    threescale_token: "{{ lookup('env', 'THREESCALE_TOKEN' )}}"
+    admin_portal_hostname: "{{ lookup('env', 'ADMIN_PORTAL_HOSTNAME' )}}"
+  tasks:
+  - assert:
+      that:
+      - threescale_token|length > 0
+      msg: >
+        Please pass your 3scale Access Token in the 'threescale_token' extra var
+        or in the THREESCALE_TOKEN environment variable.
+
+  - assert:
+      that:
+      - admin_portal_hostname|length > 0
+      msg: >
+        Please pass your 3scale Admin Portal hostname in the 'admin_portal_hostname'
+        extra var or in the ADMIN_PORTAL_HOSTNAME environment variable.
+
+  - assert:
+      that:
+      - systemname_filter is defined
+      msg: >
+        Please pass a string common to all the system_name you would like to delete 
+        in the 'systemname_filter' extra var.
+        For instance: systemname_filter=library would delete 'dev_library_v1',
+        'my_library_service' but not 'echo_api'.
+
+  - name: Check if jmespath is available locally
+    debug: msg={{ dummy|json_query('@') }}
+    register: check_jmespath
+    ignore_errors: yes
+    vars:
+      dummy: Hello World
+
+  - name: Ensure JMESPath is installed
+    assert:
+      that:
+      - 'check_jmespath is success'
+      msg: >
+        The JMESPath library is required by this playbook. 
+        Please install the JMESPath library with 'pip install jmespath'.
+
+  - name: Find Services
+    uri:
+      url: '{{ threescale_api }}/services.json?access_token={{ threescale_token }}'
+      validate_certs: '{{ validate_certs }}'
+    register: find_services_response
+    changed_when: false
+
+  - name: Delete all matching services
+    uri:
+      url: '{{ threescale_api }}/services/{{ item.id }}.json?access_token={{ threescale_token }}'
+      method: DELETE
+      status_code: "200,404"
+      validate_certs: '{{ validate_certs }}'
+    register: delete_service_response
+    changed_when: delete_service_response.status == 200
+    with_items: '{{ services }}'
+    when: >
+      systemname_filter in item.system_name
+    vars:
+      services: '{{ find_services_response.json|json_query(query) }}'
+      query: >
+        services[?service.system_name != `api`].{"id": service.id, "system_name": service.system_name}
+
+  - name: Find API Backends
+    uri:
+      url: '{{ threescale_api }}/backend_apis.json?access_token={{ threescale_token }}'
+      validate_certs: '{{ validate_certs }}'
+    register: find_backends_response
+    changed_when: false
+
+  - name: Delete all matching API Backends
+    uri:
+      url: '{{ threescale_api }}/backend_apis/{{ item.id }}.json?access_token={{ threescale_token }}'
+      method: DELETE
+      status_code: "200,404"
+      validate_certs: '{{ validate_certs }}'
+    register: delete_service_response
+    changed_when: delete_service_response.status == 200
+    with_items: '{{ services }}'
+    when: >
+      systemname_filter in item.system_name
+    vars:
+      services: '{{ find_backends_response.json|json_query(query) }}'
+      query: >
+        backend_apis[?backend_api.system_name != `api`].{"id": backend_api.id, "system_name": backend_api.system_name}
+
+  - name: Find ActiveDocs
+    uri:
+      url: '{{ threescale_api }}/active_docs.json?access_token={{ threescale_token }}'
+      validate_certs: '{{ validate_certs }}'
+    register: find_active_docs_response
+    changed_when: false
+
+  - name: Delete all matching ActiveDocs
+    uri:
+      url: '{{ threescale_api }}/active_docs/{{ item.id }}.json?access_token={{ threescale_token }}'
+      method: DELETE
+      status_code: "200,404"
+      validate_certs: '{{ validate_certs }}'
+    register: delete_active_docs_response
+    changed_when: delete_active_docs_response.status == 200
+    with_items: '{{ active_docs }}'
+    when: >
+      systemname_filter in item.system_name
+    vars:
+      active_docs: '{{ find_active_docs_response.json|json_query(query) }}'
+      query: >
+        api_docs[?api_doc.system_name != `echo`].{"id": api_doc.id, "system_name": api_doc.system_name}
