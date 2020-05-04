@@ -92,7 +92,7 @@ There are several open source tools to test your OpenID Connect setup but a very
 Download the following script and make it executable.
 
 ```sh
-curl -o test-auth.sh https://www.itix.fr/blog/use-google-account-openid-connect-provider/test-auth.sh
+curl -o test-auth.sh {{< baseurl >}}blog/use-google-account-openid-connect-provider/test-auth.sh
 chmod 755 test-auth.sh
 ```
 

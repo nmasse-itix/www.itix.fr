@@ -53,7 +53,7 @@ export THREESCALE_TOKEN="$(oc get secret system-seed -o go-template --template='
 Fetch the cleanup playbook.
 
 ```sh
-curl -Lo cleanup.yaml https://www.itix.fr/blog/cleanup-playbook-3scale/cleanup.yaml
+curl -Lo cleanup.yaml {{< baseurl >}}blog/cleanup-playbook-3scale/cleanup.yaml
 ```
 
 ## Cleanup 3scale
