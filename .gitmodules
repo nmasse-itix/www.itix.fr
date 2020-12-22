@@ -1,8 +1,0 @@
-[submodule "themes/cocoa"]
-	path = themes/cocoa
-	url = https://github.com/nmasse-itix/cocoa-hugo-theme.git
-	branch = nmasse-itix
-[submodule "themes/diary"]
-	path = themes/diary
-	url = https://github.com/nmasse-itix/hugo-theme-diary.git
-	branch = www.itix.fr
