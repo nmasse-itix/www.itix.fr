@@ -6,6 +6,8 @@ opensource:
 - nginx
 topics:
 - Embedded Systems
+resources:
+- '*.png'
 ---
 
 In the article "[Install OpenWRT on your Raspberry PI](../install-openwrt-raspberry-pi/)", I explained how to install OpenWRT on a Raspberry PI and the first steps as an OpenWRT user.
@@ -85,7 +87,7 @@ Enter **Global Build Settings** and:
 * Press space to unset **Select all userspace packages by default**
 * Leave **Cryptographically sign packages** set
 
-![make menuconfig](make-menuconfig.png)
+{{< attachedFigure src="make-menuconfig.png" title="Parameters to activate in your make menuconfig" >}}
 
 Go back to the root menu.
 

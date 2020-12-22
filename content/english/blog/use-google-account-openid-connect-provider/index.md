@@ -3,6 +3,9 @@ title: "Use your Google Account as an OpenID Connect provider"
 date: 2020-03-27T00:00:00+02:00
 topics:
 - OpenID Connect
+resources:
+- src: '*.png'
+- src: '*.sh'
 ---
 
 We have passwords everywhere: to unlock our computer, to reach our inbox, to login as root on our Raspberry PI, etc.
@@ -47,15 +50,15 @@ First, connect to the [Google Developer Console](https://console.developers.goog
 
 Click **Create Project**.
 
-![create project](create-project.png)
+{{< attachedFigure src="create-project.png" title="Click 'Create Project'." >}}
 
 Fill-in the **Project name** (free choice). The location does not matter. Click **Create**.
 
-![project name](project-name.png)
+{{< attachedFigure src="project-name.png" title="Fill-in the 'Project name'. Click 'Create'." >}}
 
 Click **OAuth Consent screen**. If you are a Google Suite user, select **Internal**. If you are a regular GMail user, select **External**. Click **Create**.
 
-![oauth-consent](oauth-consent.png)
+{{< attachedFigure src="oauth-consent.png" title="The OAuth Consent screen." >}}
 
 Choose an application name (free choice).
 Leave the default scopes.
@@ -63,15 +66,15 @@ Add your personal domain to the list of **Authorized Domains**.
 For instance, if your target service is at *raspberry-pi.example.test*, add **example.test**.
 **DO NOT FORGET to press Enter!**
 
-![authorized-domains](authorized-domains.png)
+{{< attachedFigure src="authorized-domains.png" title="Add your personal domain to the list of Authorized Domains." >}}
 
 Fill-in the **Application Homepage Link** and **Application Privacy Policy Link** (free choices). Click **Save**.
 
-![links](links.png)
+{{< attachedFigure src="links.png" title="Fill-in the links." >}}
 
 Click **Credentials**. Select **+ Create Credentials**, then **OAuth Client ID**.
 
-![create-credentials](create-credentials.png)
+{{< attachedFigure src="create-credentials.png" title="Create the OAuth credentials." >}}
 
 Under **Application type**, select **Web Application**.
 Choose a name for your application (free choice).
@@ -83,7 +86,7 @@ To be able to do so, we need to add a special Redirect URI: **http://localhost:6
 
 Click **Create**.
 
-![redirect-uri](redirect-uri.png)
+{{< attachedFigure src="redirect-uri.png" title="Fill-in the Redirect URI." >}}
 
 Google generated a **Client ID** and **Client Secret** for you. Keep them somewhere safe!
 
@@ -94,7 +97,7 @@ There are several open source tools to test your OpenID Connect setup but a very
 Download the following script and make it executable.
 
 ```sh
-curl -o test-auth.sh {{< baseurl >}}blog/use-google-account-openid-connect-provider/test-auth.sh
+curl -o test-auth.sh {{< attachedFileLink src="test-auth.sh" >}}
 chmod 755 test-auth.sh
 ```
 
@@ -113,15 +116,15 @@ Now, run this script!
 
 The script generates a URL that you need to copy and paste in your web browser.
 
-![script-start](script-start.png)
+{{< attachedFigure src="script-start.png" title="The script generates a URL that you need to copy and paste in your web browser." >}}
 
 If you are not yet logged in, Google asks you to authenticate.
 
-![auth](auth.png)
+{{< attachedFigure src="auth.png" title="If you are not yet logged in, Google asks you to authenticate." >}}
 
 Once logged in or if you are already logged in, you are redirected to the fake Redirect URI we registered earlier.
 
-![auth-ok](auth-ok.png)
+{{< attachedFigure src="auth-ok.png" title="You are redirected to the fake Redirect URI we registered earlier" >}}
 
 We registered a fake Redirect URI so that we could play each part of the OpenID Connect exchange manually.
 **So, if you see an error message from your web browser saying that it cannot connect to the target service: THIS IS EXPECTED FOR OUR TEST.**
@@ -131,7 +134,7 @@ Once the browser is redirected at `http://localhost:666/stop-here`, copy the red
 Remember that the Authorization Code is very short lived.
 So, be quick!
 
-![script-url](script-url.png)
+{{< attachedFigure src="script-url.png" title="Paste the Redirect URI." >}}
 
 The script contacts the Authorization Server to get an Access Token from the Authorization Code captured in the Redirect URI.
 

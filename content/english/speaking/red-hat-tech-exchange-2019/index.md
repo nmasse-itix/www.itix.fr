@@ -2,6 +2,8 @@
 title: "Red Hat Tech Exchange 2019"
 date: 2019-10-21T00:00:00+02:00
 draft: false
+resources:
+- '*.png'
 ---
 
 During the three Red Hat Tech Exchange sessions (Americas, EMEA and APAC), I presented two sessions:
@@ -11,4 +13,4 @@ During the three Red Hat Tech Exchange sessions (Americas, EMEA and APAC), I pre
 
 The session _Leverage the power of open source communities to manage your APIs_ has been the second best voted session in RHTE APAC!
 
-![I received an award!](/speaking/2019-10-21-RHTE-Award.png)
+{{< attachedFigure src="2019-10-21-RHTE-Award.png" title="I received an award!" >}}

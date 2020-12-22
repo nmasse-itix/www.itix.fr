@@ -6,6 +6,8 @@ trap cleanup SIGINT SIGTERM ERR EXIT
 function cleanup() {
   trap - SIGINT SIGTERM ERR EXIT
 
+  # On exit, remove any symbolic link in content/french that points
+  # to content/english
   find content/french -type l -print0 | while IFS= read -r -d $'\0' filename; do
     if realpath "$filename" | grep -E "^$PWD/" > /dev/null; then
       rm -f "$filename"
@@ -13,12 +15,22 @@ function cleanup() {
   done
 }
 
+# First, try to find page bundles. In that case, link the directory
+(cd content/english && find * -type f -name 'index.md') | while read file; do
+  if [ ! -e "content/french/$file" ]; then
+    d="$(dirname $file)"
+    ln -s ../../../content/english/$d content/french/$d
+  fi
+done
+
+# Then, find the regular pages and link the files directly.
 (cd content/english && find * -type f -name '*.md') | while read file; do
   if [ ! -e "content/french/$file" ]; then
     ln -s ../../../content/english/$file content/french/$file
   fi
 done
 
+# Remove dangling links
 find content/french -xtype l -exec rm -f {} \;
 
 hugo gen chromastyles --style=borland > static/css/chroma.css

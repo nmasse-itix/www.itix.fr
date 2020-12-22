@@ -4,6 +4,8 @@ date: 2019-02-27T00:00:00+02:00
 opensource: 
 - Hugo
 - OpenShift
+resources:
+- '*.png'
 ---
 
 This is the third part of my series covering how to
@@ -166,25 +168,25 @@ First, get the GitHub Webhook URL of your BuildConfig:
 - Open the **Configuration** tab
 - Copy the **GitHub Webhook URL**
 
-![The BuildConfig on OpenShift](openshift-buildconfig-webhook.png)
+{{< attachedFigure src="openshift-buildconfig-webhook.png" title="The BuildConfig on OpenShift." >}}
 
 Then, go on your GitHub repository and add a webhook:
 
 - Go to **Settings** > **Webhooks**
 - Click **Add webhook**
 
-![Add a webhook on GitHub](github-add-webhook.png)
+{{< attachedFigure src="github-add-webhook.png" title="Add a webhook on GitHub." >}}
 
 - Paste your Webhook URL in the **Payload URL** field
 - Select `application/json` in the **Content type** dropdown list
 - Check **Disable** in the **SSL verification** section if your OpenShift console has a self-signed certificate
 - Click **Add webhook**
 
-![The GitHub webhook](github-webhook.png)
+{{< attachedFigure src="github-webhook.png" title="The GitHub webhook." >}}
 
 Try to push some changes to your GitHub repository and see OpenShift rebuilding and deploying your website!
 
-![OpenShift rebuilding and redeploying your website](openshift-rebuild.png)
+{{< attachedFigure src="openshift-rebuild.png" title="OpenShift rebuilding and redeploying your website" >}}
 
 ## Conclusion
 

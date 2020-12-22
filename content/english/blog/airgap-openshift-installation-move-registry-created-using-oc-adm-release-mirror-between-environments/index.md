@@ -7,6 +7,8 @@ opensource:
 - Skopeo
 topics:
 - Containers
+resources:
+- src: '*.yaml'
 ---
 
 Some customers, especially large banks, have very tight security requirements.
@@ -145,7 +147,7 @@ Finally, skopeo is called to download each image to */tmp/oci_registry*.
     with_items: '{{ images }}'
 ```
 
-The complete playbook [is available here](pull.yaml) and can be run as follow.
+The complete playbook [is available here]({{< attachedFileLink src="pull.yaml" >}}) and can be run as follow.
 
 ```sh
 ansible-playbook pull.yaml -e token=$TOKEN

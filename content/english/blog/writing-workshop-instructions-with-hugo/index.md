@@ -3,6 +3,8 @@ title: "Writing workshop instructions with Hugo"
 date: 2019-02-20T00:00:00+02:00
 opensource: 
 - Hugo
+resources:
+- '*.png'
 ---
 
 In my professional life, I often have to lead workshops with customers or
@@ -199,7 +201,7 @@ git push -u origin master
 Congratulations! You now have your training instructions neatly organised and
 clearly presented. Maintenance and collaboration have been greatly simplified!
 
-![Screenshot of our mini-training](hugo-screenshot.png)
+{{< attachedFigure src="hugo-screenshot.png" title="Screenshot of our mini-training." >}}
 
 In this first part of the series, we presented a very light introduction to
 Hugo and its application to workshop instructions. Be sure to read [part 2: Writing workshop instructions with Hugo, with variables in your content](../writing-workshop-instructions-with-hugo-variables/) to discover advanced usages.

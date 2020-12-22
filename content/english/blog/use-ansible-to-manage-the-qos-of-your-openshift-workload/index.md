@@ -6,6 +6,8 @@ opensource:
 - Ansible
 topics:
 - IT Automation
+resources:
+- src: '*.yaml'
 ---
 
 As I was administering my OpenShift cluster, I found out that I had a too
@@ -192,6 +194,6 @@ blacklist of critical namespaces that should not be touched.
       when: obj.namespace not in namespace_blacklist
 {{< / highlight >}}
 
-You can find the complete playbook [here](change-qos.yaml). Of course, it is
+You can find the complete playbook [here]({{< attachedFileLink src="change-qos.yaml" >}}). Of course, it is
 very rough and would need to more work to be used on a daily basis but for a
 single use this is sufficient.

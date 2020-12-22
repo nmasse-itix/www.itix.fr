@@ -1,6 +1,6 @@
 [build]
 publish = "public"
-command = "./hugo"
+command = "./hugo --baseURL https://www.itix.fr"
 
 [build.environment] # Global
 HUGO_VERSION = "0.42"

@@ -7,6 +7,8 @@ opensource:
 topics:
 - API Management
 - IT Automation
+resources:
+- src: '*.yaml'
 ---
 
 If you are running integration tests embedding 3scale or are doing a lot of 3scale demos, you might sooner or later **have plenty of services declared in the 3scale Admin console**, which could reveal difficult to work with.
@@ -59,7 +61,7 @@ export THREESCALE_TOKEN="$(oc get secret system-seed -o go-template --template='
 Fetch the cleanup playbook.
 
 ```sh
-curl -Lo cleanup.yaml {{< baseurl >}}blog/cleanup-playbook-3scale/cleanup.yaml
+curl -Lo cleanup.yaml {{< attachedFileLink src="cleanup.yaml" >}}
 ```
 
 ## Cleanup 3scale

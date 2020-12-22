@@ -6,6 +6,9 @@ opensource:
 - project1
 topics:
 - topic1
+resources:
+#- src: '*.yaml'
+#- src: '*.png'
 ---
 
 Headline.

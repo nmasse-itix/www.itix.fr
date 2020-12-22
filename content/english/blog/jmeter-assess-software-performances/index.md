@@ -6,7 +6,7 @@ opensource:
 topics:
 - Performance testing
 resources:
-- '**.png'
+- '*.png'
 ---
 
 One of my side projects (the [Telegram Photo Bot](https://github.com/nmasse-itix/Telegram-Photo-Album-Bot)), have some performance issues that I will have to tackle.
@@ -104,7 +104,7 @@ http {
 
 My first measure on the control (nginx) gave strange results.
 
-{{< figure src="control1.png" title="First measure gave results too low to be representative of nginx's performances." >}}
+{{< attachedFigure src="control1.png" title="First measure gave results too low to be representative of nginx's performances." >}}
 
 Less than 30 tps, even on an old ARM board, is definitely too low to be representative of nginx's performances.
 Using [Wireshark](https://www.wireshark.org/), I discovered that JMeter did not established [Keep-Alive connections](https://sqa.stackexchange.com/questions/38211/re-using-the-tcp-connections-with-jmeter-like-a-real-browser).
@@ -137,13 +137,13 @@ httpclient.reset_state_on_thread_group_iteration=false
 With Keep-Alive enabled, the 1200 tps are much more inline with the known performance level of nginx.
 Except there is a performance drop every 10-15 seconds that is not expected.
 
-{{< figure src="control2.png" title="Second measure shows a periodic performance drop." >}}
+{{< attachedFigure src="control2.png" title="Second measure shows a periodic performance drop." >}}
 
 Using Wireshark, I discovered that during those performance drops, there are [TCP packets retransmissions](https://wiki.wireshark.org/DuplicatePackets).
 At that time, my Macbook Pro hosting the injector was connected **using Wifi**.
 I switched to a good old Ethernet cable, and this time the results on the control were as expected.
 
-{{< figure src="control3.png" title="Third measure is ok." >}}
+{{< attachedFigure src="control3.png" title="Third measure is ok." >}}
 
 As a conclusion, always have a control in your experience!
 
@@ -151,7 +151,7 @@ As a conclusion, always have a control in your experience!
 
 To build my JMeter Test Plan, I started by adding a **User Defined Variables** component that holds all the settings related to lab environment (DNS names, ports, tokens, etc.).
 
-{{< figure src="udv.png" title="JMeter User Defined Variables" >}}
+{{< attachedFigure src="udv.png" title="JMeter User Defined Variables" >}}
 
 I added a variable named **scenario** whose value will be passed to JMeter from the CLI.
 This enables me to run all my experiments automatically from a script, one after another.
@@ -163,12 +163,12 @@ ${__P(parameter-name,default-value)}
 
 I configured a **Thread Group** based on the **jp@gc - Ultimate Thread Group** with five concurrent users.
 
-{{< figure src="thread-group.png" title="JMeter Thread Group" >}}
+{{< attachedFigure src="thread-group.png" title="JMeter Thread Group" >}}
 
 And finally, a **Loop** component with three **If Controllers** underneath.
 Each **If Controller** holds an **HTTP Probe** configured for the target scenario.
 
-{{< figure src="if.png" title="JMeter If Controller" >}}
+{{< attachedFigure src="if.png" title="JMeter If Controller" >}}
 
 The If Controllers are defined with a **jexl3** expression, asserting the value of the **scenario** variable.
 

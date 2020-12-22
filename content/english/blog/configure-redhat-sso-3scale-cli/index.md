@@ -6,6 +6,8 @@ opensource:
 - Keycloak
 topics:
 - OpenID Connect
+resources:
+- src: '*.png'
 ---
 
 [3scale API Management](https://3scale.github.io/) can be used in conjunction with [Red Hat SSO](https://access.redhat.com/products/red-hat-single-sign-on) / [Keycloak](https://www.keycloak.org/) to secure APIs managed by 3scale using the OpenID Connect protocol.
@@ -96,7 +98,7 @@ You can use the following URL for the **OpenID Connect Issuer** (replace $SSO_HO
 https://zync:s3cr3t@$SSO_HOSTNAME/auth/realms/3scale
 ```
 
-![openid-connect-issuer](openid-connect-issuer.png)
+{{< figure src="openid-connect-issuer.png" title="OpenID Connect Issuer settings in the 3scale Admin Portal." >}}
 
 Or when [deploying an API in 3scale with the 3scale toolbox](https://developers.redhat.com/blog/2019/07/29/3scale-toolbox-deploy-an-api-from-the-cli/), you can use:
 
