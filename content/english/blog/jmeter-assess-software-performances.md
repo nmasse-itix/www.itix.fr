@@ -19,7 +19,6 @@ To keep this article short and readable, I focused on the assessment of two HTTP
 
 ## Hardware setup
 
-### Test 1
 When building my lab, I chose the smallest computer I had at home to host the thing to be assessed.
 The reason is: the more powerful is the server, the more steady needs the network setup to be, the more powerful the injector needs to be.
 If the rest of your setup is not up to the task, you are measuring something that is not the performances of the thing but rather the performances of your network or the injector itself!
@@ -28,7 +27,7 @@ We will see a good demonstration of this in the rest of the article.
 So, the target hardware is an ARMv5 board with only one core running at 1.2 GHz, 128 MB of RAM and 256 MB of Flash.
 It was [a cheap NAS device](https://www.cnet.com/reviews/seagate-goflex-home-network-storage-system-review/) in its previous life.
 I installed [OpenWRT](/opensource/openwrt/) on this little device.
-### Test 2
+
 The injector is hosted on my Macbook Pro, a Core i7 at 2.5 GHz.
 This will provide a comfortable margin before reaching the limits of the injector.
 
