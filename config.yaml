@@ -1,0 +1,74 @@
+baseURL: "/"
+title: "Nicolas Massé"
+author: "Nicolas Massé"
+theme: "diary"
+# pygmentsUseClasses implies a style sheet that can be generated as follow:
+# hugo gen chromastyles --style=borland > static/css/chroma.css
+pygmentsUseClasses: true
+pygmentsCodefences: true
+enableRobotsTXT: true
+
+defaultContentLanguage: "en"
+languages:
+  en:
+    weight: 1
+    languageName: English
+    contentDir: content/english
+    menu:
+      main:
+      - name: "Articles"
+        weight: 10
+        url: "/blog/"
+      - name: "Open Source"
+        weight: 20
+        url: "/opensource/"
+      - name: "Expertise"
+        weight: 30
+        url: "/topics/"
+      - name: "Speaking"
+        weight: 40
+        url: "/speaking/"
+      - name: "Writing"
+        weight: 50
+        url: "/writing/"
+      - name: "Contact"
+        weight: 60
+        url: "/contact/"
+      - name: "Resume"
+        weight: 70
+        url: "https://www.linkedin.com/in/nicolasmasse/"
+  fr:
+    weight: 2
+    languageName: Français
+    contentDir: content/french
+    menu:
+      main:
+      - name: "Articles"
+        weight: 10
+        url: "/fr/blog/"
+      - name: "Open Source"
+        weight: 20
+        url: "/fr/opensource/"
+      - name: "Expertise"
+        weight: 30
+        url: "/fr/topics/"
+      - name: "Conférences"
+        weight: 40
+        url: "/fr/speaking/"
+      - name: "Publications"
+        weight: 50
+        url: "/fr/writing/"
+      - name: "Me contacter"
+        weight: 60
+        url: "/fr/contact/"
+      - name: "CV"
+        weight: 70
+        url: "https://www.linkedin.com/in/nicolasmasse/"
+
+taxonomies:
+  opensource: "opensource"
+  topic: "topics"
+  tags: "tags"
+
+params:
+
