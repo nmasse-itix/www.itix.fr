@@ -11,6 +11,8 @@ My Ansible playbooks sometimes use features that are available only in a very re
 
 To prevent unecessary troubles to the team mates that will execute them, I like to add a task at the very beginning of my playbooks to check the Ansible version number and abort if the requirements are not met.
 
+<!--more-->
+
 ```yaml
 - name: Verify that Ansible version is >= 2.4.6
   assert:

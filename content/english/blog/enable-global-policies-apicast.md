@@ -12,6 +12,9 @@ This is very powerful since each service receives its specific configuration.
 However, if the same treatment has to be applied to every service exposed, it becomes an administration overhead.
 
 Hopefully, Apicast has the concept of *Global Policies* that applies to every service exposed by itself.
+
+<!--more-->
+
 An example of a widespread policy, especially during demos, is the CORS policy to allow the API Developer Portal to query the API Gateway directly.
 
 To configure the *Global Policy Chain*, you will have to provide a custom *Environment file*.

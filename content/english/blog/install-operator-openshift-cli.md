@@ -15,6 +15,8 @@ Most software now provide an operator and describe how to use it.
 Nevertheless, almost every software documentation I read so far, includes the steps to install the operator using the nice GUI of OpenShift 4.
 But since my OpenShift environments are provisioned by a playbook, I want to be able to install operators using the CLI only!
 
+<!--more-->
+
 The [OpenShift official documentation](https://docs.openshift.com/container-platform/4.3/operators/olm-adding-operators-to-cluster.html#olm-installing-operator-from-operatorhub-using-cli_olm-adding-operators-to-a-cluster) covers this part but I did not find it very clear.
 So, this article tries to make it clearer: **how to install Kubernetes operators in OpenShift using only the CLI**.
 

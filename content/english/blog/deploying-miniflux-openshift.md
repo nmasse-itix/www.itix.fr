@@ -10,6 +10,8 @@ topics:
 
 [Miniflux](https://miniflux.app) is a minimalist, open source and opinionated RSS feed reader. There is a [hosted instance](https://miniflux.app/hosting.html) available at a fair price point but wouldn't it be cooler to host your own instance on your OpenShift cluster? Let's do it!
 
+<!--more-->
+
 Create a new project.
 
 ```sh

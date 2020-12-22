@@ -11,6 +11,8 @@ In an article named [Red Hat Single Sign-On: Give it a try for no cost!](https:/
 
 As pointed by a reader in a comment, as widespread OpenShift can be, not everyone has access to a running OpenShift cluster. So, here is how to run Red Hat SSO outside of OpenShift: using only plain Docker commands.
 
+<!--more-->
+
 The rest of this procedure assumes you already have a token to access the Red Hat registry (full procedure described in [my article](https://developers.redhat.com/blog/2019/02/07/red-hat-single-sign-on-give-it-a-try-for-no-cost/) and in the [Red Hat SSO Getting Started guide, chapter 3, section 3.1](https://access.redhat.com/documentation/en-us/red_hat_single_sign-on/7.3/html/red_hat_single_sign-on_for_openshift/get_started)).
 
 Start by logging in with this token using the *docker login* command (do not forget to replace the login and password with yours):

@@ -11,6 +11,8 @@ In the article "[Nginx with TLS on OpenWRT](../nginx-with-tls-on-openwrt/)", I e
 But without an application to protect, Nginx is quite useless.
 This article explains how to install [Miniflux](https://miniflux.app/) (a lightweight RSS reader) on your Raspberry PI and how to host it as an Nginx virtual host.
 
+<!--more-->
+
 Miniflux is a web application written in Go and backed by a PostgreSQL database. So we will need to install PostgreSQL, install miniflux and setup Nginx. The rest of this article assumes you [installed OpenWRT on your Raspberry](../install-openwrt-raspberry-pi/), but it should be applicable to any Linux distribution with minimal changes.
 
 ## Install PostgreSQL

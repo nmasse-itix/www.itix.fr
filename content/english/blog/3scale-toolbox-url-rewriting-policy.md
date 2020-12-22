@@ -10,6 +10,8 @@ topics:
 In this article on the Red Hat Developer blog, I explained [how to deploy an API from a Jenkins Pipeline, using the 3scale toolbox](https://developers.redhat.com/blog/2019/07/30/deploy-your-api-from-a-jenkins-pipeline/).
 If you tried this approach by yourself you may have noticed that in some cases, the configured service includes the *URL Rewriting* policy in its *Policy Chain*.
 
+<!--more-->
+
 The *URL Rewriting* policy can be used for a variety of use cases but, in a nutshell, the *URL Rewriting* policy is used by the toolbox to change the *Base Path* of an API.
 
 For instance, if your actual API implementation is live at **/camel/my-route** but you wish to expose it on **/api/v1**, you can instruct the 3scale toolbox to configure the *URL Rewriting* policy for you by specifying the `--override-private-basepath` and `--override-public-basepath` options.

@@ -14,6 +14,8 @@ I could have jumped into the code and changed something, hoping it will improve 
 But that would be ineffective and unprofessional.
 So, I decided to have an honest measure of the current performances as well as a reproducible setup to have consistent measures over time.
 
+<!--more-->
+
 This article explains how I built my performance testing lab using [JMeter](https://jmeter.apache.org/index.html) and an old ARM board.
 To keep this article short and readable, I focused on the assessment of two HTTP libraries (golang's net/http and valyala's fasthttp), leaving the discussion about the Telegram Photo Bot performances for a next article.
 

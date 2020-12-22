@@ -13,6 +13,8 @@ Some of the web applications that I installed on my Raspberry PI do not feature 
 No authentication means that anybody on the internet could reach those applications and play with them.
 This article explains how to secure applications running on a Raspberry PI with [Keycloak Gatekeeper](https://github.com/keycloak/keycloak-gatekeeper).
 
+<!--more-->
+
 [Keycloak Gatekeeper](https://github.com/keycloak/keycloak-gatekeeper) is a reverse proxy whose sole purpose is to authenticate the end-users using the [OpenID Connect](https://openid.net/connect/) protocol.
 If Keycloak Gatekeeper is best used in conjunction with the [Keycloak Identity Provider](https://www.keycloak.org/), it can also be used with any Identity Provider that conforms to the OpenID Connect specifications.
 

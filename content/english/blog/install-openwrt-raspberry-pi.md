@@ -11,6 +11,8 @@ topics:
 It made design choices that take it apart from the usual Linux distributions: musl libc instead of the usual glibc, busybox instead of coreutils, ash instead of bash, etc.
 As a result, the system is very light and blazing fast!
 
+<!--more-->
+
 Continue reading to know how to **install OpenWRT on your Raspberry PI**.
 
 ## Install OpenWRT

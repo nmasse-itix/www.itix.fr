@@ -12,6 +12,8 @@ As I was administering my OpenShift cluster, I found out that I had a too
 much memory requests. To preserve a good quality of service on my cluster,
 I had to tacle this issue.
 
+<!--more-->
+
 Resource requests and limits in OpenShift (and Kubernetes in general) are
 the concepts that helps define the quality of service of every running Pod.
 

@@ -13,6 +13,8 @@ topics:
 Unfortunately, sometimes TLS certificates can get in the way of proper communication between the two projects.
 This post explains how to configure the trust store in Apicurio to overcome TLS communication issues between Apicurio and Microcks.
 
+<!--more-->
+
 Start by gathering the CA certificates used in your company. There can be several ones.
 
 You can then create a trust store by running this command for each CA certificate to import:

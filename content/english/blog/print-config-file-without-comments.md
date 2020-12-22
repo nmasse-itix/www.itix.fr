@@ -9,6 +9,8 @@ Sounds familiar?
 Not that comments are useless in a configuration file but sometimes it's handy to print a configuration file without the comment lines.
 Especially when the file is thousand lines long but the useful lines fit the twenty five lines of a standard terminal.
 
+<!--more-->
+
 The `egrep` command which is standard on most Linux distributions and on MacOS, can strip out the unwanted lines:
 
 ```sh

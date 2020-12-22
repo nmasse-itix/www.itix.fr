@@ -12,6 +12,8 @@ topics:
 
 There is a hosted instance at [invidio.us](https://invidio.us/) if you want to give it a try. But, wouldn't it be cooler to host your own instance on your OpenShift cluster? Let's do it!
 
+<!--more-->
+
 Create a new project.
 
 ```sh

@@ -29,6 +29,8 @@ but is difficult to work with for the participants.
 
 Hopefully [Hugo](https://gohugo.io/) can help us!
 
+<!--more-->
+
 As an example, in the rest of this article, we will craft a mini-training
 about Hugo!
 

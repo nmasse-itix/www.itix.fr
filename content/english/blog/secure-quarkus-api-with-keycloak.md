@@ -14,6 +14,8 @@ Quarkus can be used for any type of backend development, including API-enabled b
 
 In this article, I'm describing how to secure a Quarkus API with Keycloak using JWT tokens.
 
+<!--more-->
+
 ## Preparation
 
 As a pre-requisite, install [Maven](https://maven.apache.org/), [jq](https://stedolan.github.io/jq/download/) and [jwt-cli](https://github.com/mike-engel/jwt-cli#installation).

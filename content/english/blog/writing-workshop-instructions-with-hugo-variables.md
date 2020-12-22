@@ -16,6 +16,8 @@ In the first part, we saw how to:
 For this second part, we will add variables to our content so that we can easily
 adjust the workshop instructions to different use cases.
 
+<!--more-->
+
 One of the most common usage we have for variables is to deliver the same workshop
 on different environments. This means URLs, username and passwords change and we
 need to adjust our workshop instructions very quicky to match the new environment.

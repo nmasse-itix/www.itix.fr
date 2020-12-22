@@ -11,6 +11,8 @@ topics:
 In the article "[Install OpenWRT on your Raspberry PI](../install-openwrt-raspberry-pi/)", I explained how to install OpenWRT on a Raspberry PI and the first steps as an OpenWRT user.
 As I plan to use my Raspberry PI to host plenty of web applications, I wanted to setup a versatile reverse proxy to protect them all, along with TLS support to meet nowadays security requirements.
 
+<!--more-->
+
 OpenWRT has an [nginx package](https://openwrt.org/packages/pkgdata/nginx), ready to be installed using *opkg* but unfortunately it does not have TLS enabled. So we need to recompile nginx with TLS enabled!
 
 ## Install the OpenWRT SDK

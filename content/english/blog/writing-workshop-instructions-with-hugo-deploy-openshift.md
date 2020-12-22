@@ -9,6 +9,8 @@ opensource:
 This is the third part of my series covering how to
 [Write workshop instructions with Hugo](../writing-workshop-instructions-with-hugo/). In this article, we will deploy our [Hugo mini-training](https://github.com/nmasse-itix/hugo-workshop/) as a container in OpenShift.
 
+<!--more-->
+
 Since Hugo is a static website generator, we only need a web server in our container to serve those pages. Let's settle for nginx that is [neatly packaged as a container image, as part of the Software Collections](https://www.softwarecollections.org/en/scls/rhscl/rh-nginx114/).
 
 And to build our final container image that will contain both our website (the static pages to serve) and the web server itself, we will use the [Source-to-image (S2I)](https://github.com/openshift/source-to-image) tool. Hopefully, the nginx image of the Software Collections is already S2I enabled!

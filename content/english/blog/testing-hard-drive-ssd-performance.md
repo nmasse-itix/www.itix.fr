@@ -9,6 +9,8 @@ If your Linux system appears to be slow, it might be an issue with your disks,
 either hard drive or SSD. Hopefully, with a few commands you can get an idea
 of the performances of your disks.
 
+<!--more-->
+
 First, you will have to install `hdparm` using `yum` or `dnf`:
 
 ```sh

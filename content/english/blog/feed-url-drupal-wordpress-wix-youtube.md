@@ -7,6 +7,8 @@ If like me you are using [an RSS reader](../deploying-miniflux-openshift/) to st
 
 But since most website are based on commonly found CMS, it is highly probable the RSS feeds are there, just not advertised.
 
+<!--more-->
+
 Here are the URL patterns for the most common CMS on the market:
 
 - **Wordpress**: `/feed/` or `/?feed=rss2`

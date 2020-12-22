@@ -14,6 +14,8 @@ And with the new feature named *API-as-a-Product*, there are now **Backends and 
 
 This article explains how to cleanup a 3scale tenant using Ansible.
 
+<!--more-->
+
 ## Pre-requisites
 
 Make sure Ansible is installed locally and is a fairly recent version.

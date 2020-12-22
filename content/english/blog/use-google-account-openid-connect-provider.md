@@ -10,6 +10,8 @@ Unless you have a password vault to store your credentials securely, it is very 
 
 This article goes through all the steps to use your Google Account as an [OpenID Connect](https://openid.net/connect/) provider and subsequent articles (check links at the bottom of this article) explain how to configure the different services and software to use your Google Account as an OpenID Connect provider.
 
+<!--more-->
+
 The article is divided in three parts.
 
 * a general overview of OpenID Connect protocol

@@ -13,6 +13,9 @@ With great power comes great responsibilities.
 So, you might want to be notified when something goes wrong, a cron job failed, a hard disk is dying, etc., so that you can fix the problem at earliest, maybe before anyone else could notice.
 
 This article explains how to send mails on OpenWRT with MSMTP and a GMail account.
+
+<!--more-->
+
 You can adapt this procedure to any email provider that supports SMTP access with a login and password.
 
 ## Configure GMail

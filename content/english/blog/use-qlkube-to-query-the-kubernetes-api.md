@@ -12,6 +12,8 @@ topics:
 It strives to reduce the chattiness clients can experience when querying REST APIs.
 It is very useful for mobile application and web development: by reducing the number of roundtrips needed to fetch the relevant data and by fetching only the needed field, the network usage is greatly reduced.
 
+<!--more-->
+
 To install QLKube in OpenShift, use the NodeJS Source-to-Image builder:
 
 {{< highlight sh >}}

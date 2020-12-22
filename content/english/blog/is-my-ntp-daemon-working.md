@@ -17,6 +17,8 @@ This can happen when your [NTP](https://en.wikipedia.org/wiki/Network_Time_Proto
 daemon is not synchronized. This means it cannot reliably determine the current
 time.
 
+<!--more-->
+
 First, make sure your NTP daemon is started:
 
 ```raw

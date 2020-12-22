@@ -12,6 +12,8 @@ topics:
 
 The [official documentation](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.8/html/administering_the_api_gateway/openid-connect#configure_red_hat_single_sign_on) describes the steps to configure Red Hat SSO / Keycloak but it uses the Graphical User Interface, which can be tedious if you have multiple environments to configure. Let's configure Red Hat SSO for 3scale using the CLI!
 
+<!--more-->
+
 As a pre-requisite, install [jq](https://stedolan.github.io/jq/download/).
 
 Fetch the hostname, login and password of your Red Hat SSO instance, from your OpenShift environment.

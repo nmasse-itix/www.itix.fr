@@ -12,6 +12,8 @@ If you tried this approach by yourself you may end up, *sooner or later*, with a
 What is this policy and why is it there?
 Let's dig in!
 
+<!--more-->
+
 In a nutshell, the *Anonymous* policy instruct the *APIcast* gateway to expose an API **without any security mechanism**.
 Given how we stress out the importance of security in our very fragile IT systems, this calls out the following question: why was it there in the first place?
 

@@ -14,6 +14,8 @@ But this is yet another password to remember!
 OpenShift can handle the [OpenID Connect](https://openid.net/connect/) protocol and thus offers Single Sign On to its users.
 No additional password to remember: you can login to the OpenShift console with your [Google Account](../use-google-account-openid-connect-provider) for instance.
 
+<!--more-->
+
 ## Pre-requisites
 
 The rest of this article assumes you have already setup your OpenID Connect client in the Google Developer Console as explained in this article: [Use your Google Account as an OpenID Connect provider](../use-google-account-openid-connect-provider).

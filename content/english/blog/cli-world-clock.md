@@ -10,6 +10,8 @@ requires me to leave my terminal.
 
 Let's meet the CLI World clock!
 
+<!--more-->
+
 ```sh
 function t() {
   for tz in Europe/Paris Europe/Dublin US/Eastern US/Central US/Pacific; do
