@@ -1,6 +1,6 @@
 [build]
 publish = "public"
-command = "hugo gen chromastyles --style=perldoc > static/css/chroma.css && hugo"
+command = "./hugo"
 
 [build.environment] # Global
 HUGO_VERSION = "0.42"
@@ -9,7 +9,7 @@ HUGO_VERSION = "0.42"
 HUGO_VERSION = "0.42"
 
 [context.deploy-preview]
-command = "hugo gen chromastyles --style=perldoc > static/css/chroma.css && hugo --buildDrafts --buildFuture --baseURL $DEPLOY_PRIME_URL"
+command = "./hugo --buildDrafts --buildFuture --baseURL $DEPLOY_PRIME_URL"
 
 [context.deploy-preview.environment]
 HUGO_ENABLEGITINFO = "true"

@@ -1,0 +1,25 @@
+#!/bin/sh
+
+set -Eeuo pipefail
+trap cleanup SIGINT SIGTERM ERR EXIT
+
+function cleanup() {
+  trap - SIGINT SIGTERM ERR EXIT
+
+  find content/french -type l -print0 | while IFS= read -r -d $'\0' filename; do
+    if realpath "$filename" | grep -E "^$PWD/" > /dev/null; then
+      rm -f "$filename"
+    fi
+  done
+}
+
+(cd content/english && find * -type f -name '*.md') | while read file; do
+  if [ ! -e "content/french/$file" ]; then
+    ln -s ../../../content/english/$file content/french/$file
+  fi
+done
+
+find content/french -xtype l -exec rm -f {} \;
+
+hugo gen chromastyles --style=borland > static/css/chroma.css
+hugo "$@"
