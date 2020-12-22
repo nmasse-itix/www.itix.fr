@@ -1,0 +1,3 @@
+[submodule "themes/itix"]
+	path = themes/itix
+	url = https://github.com/nmasse-itix/hugo-theme-itix.git
