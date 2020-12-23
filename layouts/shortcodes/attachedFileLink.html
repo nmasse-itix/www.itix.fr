@@ -1,0 +1,4 @@
+<!-- This shortcode renders an HTML figure based on a page resource -->
+{{- $filename := .Get "src" -}}
+{{- $file := .Page.Resources.GetMatch (printf "%s" $filename) -}}
+{{- $file.Permalink -}}

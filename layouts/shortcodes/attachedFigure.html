@@ -1,0 +1,11 @@
+<!-- This shortcode renders an HTML figure based on a page resource -->
+{{- $filename := .Get "src" -}}
+{{- $image := .Page.Resources.GetMatch (printf "%s" $filename) -}}
+<figure>
+  <img src="{{ $image.RelPermalink }}">
+  {{- with .Get "title" }}
+  <figcaption>
+    {{- . -}}
+  </figcaption>
+  {{- end }}
+</figure>

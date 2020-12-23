@@ -1,0 +1,10 @@
+<!-- This shortcode renders an HTML figure based on a file dropped in the /public folder -->
+{{ $url := .Get "src" }}
+<figure>
+  <img src="{{ $url }}">
+  {{ with .Get "title" }}
+  <figcaption>
+    {{ . }}
+  </figcaption>
+  {{ end }}
+</figure>
