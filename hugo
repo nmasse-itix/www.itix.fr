@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# temporary hack
+echo ">>>"
+env
+echo ">>>"
+which python
+echo ">>>"
+/usr/bin/env python
+echo ">>>"
+
 set -Eeuo pipefail
 trap cleanup SIGINT SIGTERM ERR EXIT
 
