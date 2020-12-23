@@ -3,10 +3,10 @@ publish = "public"
 command = "./hugo --baseURL https://www.itix.fr"
 
 [build.environment] # Global
-HUGO_VERSION = "0.75"
+HUGO_VERSION = "0.79.1"
 
 [context.production.environment] # Only for prod
-HUGO_VERSION = "0.75"
+HUGO_VERSION = "0.79.1"
 
 [context.deploy-preview]
 command = "./hugo --buildDrafts --buildFuture --baseURL $DEPLOY_PRIME_URL"
