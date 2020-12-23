@@ -16,8 +16,10 @@ function cleanup() {
   find content/french -type l -print0 | while IFS= read -r -d $'\0' filename; do
 
   # Temporary hack
-  echo ${realpath:-realpath} "$filename"
+  echo ">>> " ${realpath:-realpath} "$filename" " <<<"
+  echo -----
   ${realpath:-realpath} "$filename"
+  echo -----
 
     if ${realpath:-realpath} "$filename" | grep -E "^$PWD/" > /dev/null; then
       rm -f "$filename"
