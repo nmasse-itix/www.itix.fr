@@ -6,10 +6,15 @@ trap cleanup SIGINT SIGTERM ERR EXIT
 function cleanup() {
   trap - SIGINT SIGTERM ERR EXIT
 
+  if [ -n "${NETLIFY_BUILD_BASE:-}" ]; then
+    # Dirty hack for netlify that don't ship the realpath command
+    realpath=./realpath.py
+  fi
+
   # On exit, remove any symbolic link in content/french that points
   # to content/english
   find content/french -type l -print0 | while IFS= read -r -d $'\0' filename; do
-    if realpath "$filename" | grep -E "^$PWD/" > /dev/null; then
+    if ${realpath:-realpath} "$filename" | grep -E "^$PWD/" > /dev/null; then
       rm -f "$filename"
     fi
   done
