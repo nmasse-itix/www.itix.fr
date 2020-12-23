@@ -1,14 +1,5 @@
 #!/bin/bash
 
-# temporary hack
-echo ">>>"
-env
-echo ">>>"
-which python
-echo ">>>"
-/usr/bin/env python
-echo ">>>"
-
 set -Eeuo pipefail
 trap cleanup SIGINT SIGTERM ERR EXIT
 
@@ -17,7 +8,7 @@ function cleanup() {
 
   if [ -n "${NETLIFY_BUILD_BASE:-}" ]; then
     # Dirty hack for netlify that don't ship the realpath command
-    realpath=./realpath.py
+    realpath=python ./realpath.py
   fi
 
   # On exit, remove any symbolic link in content/french that points
