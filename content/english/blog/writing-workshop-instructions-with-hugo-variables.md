@@ -49,7 +49,7 @@ Test locally your changes new website by running:
 hugo server -D
 ```
 
-You can now open [localhost:1313/packaging/git-commit/](http://localhost:1313/packaging/git-commit/)
+You can now open http://localhost:1313/packaging/git-commit/
 and confirm that variables have been expanded:
 
 ```md
