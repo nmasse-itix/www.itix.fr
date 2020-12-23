@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# temporary test
-env
-
 set -Eeuo pipefail
 trap cleanup SIGINT SIGTERM ERR EXIT
 
