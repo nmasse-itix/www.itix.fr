@@ -12,6 +12,8 @@ Once installed, you can install RPMs, tweak configuration files, etc.
 This article tries to explore Fedora CoreOS customizability one step further by building your own distribution based on Fedora CoreOS.
 The idea would be to have everything wired in the Operating System image and minimal configuration in the Ignition file.
 
+<!--more-->
+
 ## Prerequisites
 
 To build your own distribution based on Fedora CoreOS, you will need a Linux system (Fedora 33 has been used when writing this article) with **ostree**, **git**, **rclone** and **podman**.
