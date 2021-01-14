@@ -1,6 +1,8 @@
 [build]
 publish = "public"
-command = "./hugo --baseURL https://www.itix.fr"
+# Use --minify to reduce HTML file size since Google is now tracking this
+# as "Core Web Vitals".
+command = "./hugo --baseURL https://www.itix.fr --minify"
 
 [build.environment] # Global
 HUGO_VERSION = "0.79.1"

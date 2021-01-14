@@ -38,5 +38,5 @@ done
 # Remove dangling links
 find content/french -xtype l -exec rm -f {} \;
 
-hugo gen chromastyles --style=borland > static/css/chroma.css
+hugo gen chromastyles --style=borland > themes/itix/assets/css/chroma.css
 hugo "$@"
