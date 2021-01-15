@@ -2,7 +2,7 @@
 {{- $filename := .Get "src" -}}
 {{- $image := .Page.Resources.GetMatch (printf "%s" $filename) -}}
 <figure>
-  <img src="{{ $image.RelPermalink }}">
+  <img src="{{ $image.RelPermalink }}" alt="{{- .Get "title" | plainify -}}">
   {{- with .Get "title" }}
   <figcaption>
     {{- . -}}
