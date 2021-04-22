@@ -2,6 +2,11 @@
 title: "Manage your APIs deployed with Istio service mesh"
 date: 2019-04-30T00:00:00+02:00
 draft: false
+opensource:
+- 3scale
+- istio
+topics:
+- API Management
 ---
 
 With the rise of microservices architectures, companies are looking for a way to connect, secure, control, and observe their microservices. Currently, a service mesh such as Istio is the best option to reach this goal.

@@ -2,6 +2,8 @@
 title: "Red Hat Single Sign-On: Give it a try for no cost!"
 date: 2019-02-07T00:00:00+02:00
 draft: false
+opensource:
+- keycloak
 ---
 
 In a software world where each day is more hostile than the previous one, security matters and developers are coping with more and more non-functional requirements about security. The most common ones are the “OWASP Top 10”: the ten security risks that every developer should know. There are many more security risks you should care about, but those ten risks are the ones having the most impact on the security of your software. Among them are authentication and access control.

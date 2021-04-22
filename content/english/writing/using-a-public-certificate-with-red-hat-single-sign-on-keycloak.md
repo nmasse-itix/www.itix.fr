@@ -2,6 +2,8 @@
 title: "Using a public certificate with Red Hat Single Sign-On/Keycloak"
 date: 2019-02-06T00:00:00+02:00
 draft: false
+opensource:
+- keycloak
 ---
 
 When deploying Red Hat Single Sign-On/Keycloak for a test or a proof of concept, most users will choose to use a self-signed certificate as explained in the official documentation.

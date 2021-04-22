@@ -2,6 +2,10 @@
 title: "5 principles for deploying your API from a CI/CD pipeline"
 date: 2019-07-26T00:00:00+02:00
 draft: false
+opensource:
+- 3scale
+topics:
+- API Management
 ---
 
 At Red Hat, we strongly believe an API is not “just another piece of software.” Instead, we think an API is a software component in conjunction with:
