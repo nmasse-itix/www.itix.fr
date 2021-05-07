@@ -13,4 +13,6 @@ Podman was advertised as a drop-in replacement for Docker. Advocates gave the im
 
 This article discusses the barriers to getting Microcks to work with Podman and the design decisions we made to get around them. It includes a brief example of using Podman in rootless mode with Microcks.
 
-[Continue reading](https://developers.redhat.com/blog/2021/04/22/using-podman-compose-with-microcks-a-cloud-native-api-mocking-and-testing-tool/)
+[Continue reading on developers.redhat.com](https://developers.redhat.com/blog/2021/04/22/using-podman-compose-with-microcks-a-cloud-native-api-mocking-and-testing-tool/)
+
+[Continue reading on microcks.io](https://microcks.io/blog/podman-compose-support/)
