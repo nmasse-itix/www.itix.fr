@@ -1,6 +1,7 @@
 ---
 title: "Consistent DNS name resolution for virtual machines and containers"
 date: 2021-06-09T00:00:00+02:00
+lastmod: 2021-06-10T00:00:00+02:00
 opensource: 
 - Podman
 - libvirt
@@ -205,7 +206,7 @@ Install Fedora in a virtual machine.
 
 ```sh
 sudo curl -Lo /var/lib/libvirt/images/fedora-cloud.qcow2 https://download.fedoraproject.org/pub/fedora/linux/releases/34/Cloud/x86_64/images/Fedora-Cloud-Base-34-1.2.x86_64.qcow2
-sudo virt-install --name fedora --memory 3074 --cpu host --vcpus 2 --graphics none --os-type linux --os-variant fedora33 --import --disk path=/var/lib/libvirt/images/fedora.qcow2,backing_store=/var/lib/libvirt/images/fedora-cloud.qcow2,format=qcow2,bus=virtio --network network=default --cloud-init
+sudo virt-install --name fedora --memory 3074 --cpu host --vcpus 2 --graphics none --os-type linux --os-variant fedora33 --import --disk path=/var/lib/libvirt/images/fedora-cloud.qcow2,format=qcow2,bus=virtio --network network=default --cloud-init
 ```
 
 Write down the root password that is auto-generated for you and login as root once the VM has started.
