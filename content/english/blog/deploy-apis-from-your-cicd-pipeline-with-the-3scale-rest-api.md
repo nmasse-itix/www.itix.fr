@@ -1,6 +1,7 @@
 ---
 title: "Deploy APIs from your CI/CD pipeline with the 3scale REST API"
-date: 2021-06-16T00:00:00+02:00
+date: 2021-07-26T00:00:00+02:00
+lastMod: 2021-08-20T00:00:00+02:00
 topics:
 - API Management
 opensource:
