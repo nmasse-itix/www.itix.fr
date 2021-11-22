@@ -3,6 +3,7 @@ title: "Build your own distribution based on Fedora CoreOS"
 date: 2020-11-25T00:00:00+02:00
 opensource:
 - Fedora
+- CoreOS
 ---
 
 [Fedora CoreOS](https://getfedora.org/fr/coreos) is a new Linux distribution from the [Fedora Project](https://docs.fedoraproject.org/en-US/project/) that features filesystem immutability (you cannot change the system while it is running) and atomic upgrades (you cannot break your system if there is a crash or power loss during the upgrade).
