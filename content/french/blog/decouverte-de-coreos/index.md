@@ -1,6 +1,7 @@
 ---
 title: "À la découverte de CoreOS !"
 date: 2021-11-22T00:00:00+02:00
+lastMod: 2021-11-25T00:00:00+02:00
 opensource:
 - OpenShift
 - CoreOS
@@ -34,7 +35,7 @@ C'est en 2017 que le NIST définit le concept dans un article intitulé "[NIST S
 
 Jusqu'à OpenShift 3, le socle était composé d'un système d'exploitation qu'il fallait installer, configurer, mettre à jour, réparer manuellement.
 C'est chronophage et incompatible avec une gestion à large échelle.
-Même automatisées avec outil d'automatisation tel que Ansible, les mises à jour et les installations étaient pénibles.
+Même automatisées avec un outil d'automatisation tel que Ansible, les mises à jour et les installations étaient pénibles.
 
 Mais avec l'arrivée d'OpenShift 4 et des opérateurs Kubernetes, CoreOS a beaucoup contribué à faciliter la gestion à large échelle !
 
