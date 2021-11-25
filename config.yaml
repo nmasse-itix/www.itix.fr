@@ -8,6 +8,11 @@ pygmentsUseClasses: true
 pygmentsCodefences: true
 enableRobotsTXT: true
 
+blackfriday:
+  extensionsmask:
+  # No "a" tag on bare links
+  - autolink
+
 defaultContentLanguage: "en"
 languages:
   en:
@@ -71,4 +76,4 @@ taxonomies:
   tags: "tags"
 
 params:
-
+  enablePlausible: true
