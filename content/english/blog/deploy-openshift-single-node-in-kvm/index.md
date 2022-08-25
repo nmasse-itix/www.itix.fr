@@ -1,6 +1,7 @@
 ---
 title: "Deploy OpenShift Single Node in KVM"
 date: 2021-06-09T00:00:00+02:00
+lastMod: 2022-08-25T00:00:00+02:00
 opensource:
 - OpenShift
 topics:
@@ -37,13 +38,13 @@ The OpenShift routes will be available at `*.apps.<cluster_name>.<base_domain>`.
 Note: Do **not** choose a **.local** base domain as it is reserved for multicast DNS.
 
 Last but not least, you will need a user account on **cloud.redhat.com**.
-You can get one for free by registering as a developer [here](https://developers.redhat.com/register/).
+You can get one for free by registering as a developer [here](https://developers.redhat.com/about/).
 
 ## Create the libvirt network
 
 Create the libvirt network definition.
 
-{{< highlightFile "/tmp/ocp-net.xml" "xml" "" >}}
+{{< highlightFile "ocp-net.xml" "xml" "" >}}
 <network xmlns:dnsmasq="http://libvirt.org/schemas/network/dnsmasq/1.0">
   <name>ocp-dev</name>
   <forward mode='nat'>
@@ -82,7 +83,7 @@ This MAC address is used below during the installation.
 Create the libvirt network, start it and flag it as autostart.
 
 ```sh
-sudo virsh net-define /tmp/ocp-dev-net.xml
+sudo virsh net-define ocp-net.xml
 sudo virsh net-start ocp-dev
 sudo virsh net-autostart ocp-dev
 ```
