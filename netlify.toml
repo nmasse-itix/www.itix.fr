@@ -15,3 +15,11 @@ command = "./hugo --buildDrafts --buildFuture --baseURL $DEPLOY_PRIME_URL"
 
 [context.deploy-preview.environment]
 HUGO_ENABLEGITINFO = "true"
+
+# Matrix homeserver discovery
+[[headers]]
+  for = "/.well-known/*"
+
+  [headers.values]
+    Content-Type = "application/json"
+    Access-Control-Allow-Origin = "*"
