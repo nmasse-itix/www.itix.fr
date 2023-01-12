@@ -6,7 +6,7 @@ draft: false
 
 On the 12th November 2019, I spoke at Société Générale for their TechWeek event on a session named _"Accelerate and secure your API releases with Microcks"_.
 
-{{< tweet 1194254972872986624 >}}
+{{< tweet user="YadaYac" id="1194254972872986624" >}}
 
 The session was a one hour lab focusing on the design, mock and tests of REST APIs.
 The [lab documents](https://microcks-workshop.netlify.com/) and [source code](https://github.com/nmasse-itix/microcks-workshop) are freely available!

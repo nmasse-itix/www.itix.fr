@@ -7,8 +7,7 @@ draft: false
 On the 30th January 2018, I spoke at API Days on a session named
 _"An API Journey: from Mock to Deployment workshop"_.
 
-{{< tweet 958303326638141440 >}}
-{{< tweet 958306163585634304 >}}
-{{< tweet 958633464932241408 >}}
+{{< tweet user="jylls35" id="958303326638141440" >}}
+{{< tweet user="RedHatFrance" id="958633464932241408" >}}
 
 For more information: http://www.apidays.io/events/paris-2017

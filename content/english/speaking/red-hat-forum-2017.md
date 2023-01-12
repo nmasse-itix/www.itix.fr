@@ -9,6 +9,6 @@ _"Gestion des API dans une démarche CI/CD"_.
 
 For more information: https://www.redhat.com/fr/events/red-hat-forum-france-2017
 
-{{< tweet 918126983963447296 >}}
+{{< tweet user="ylebihan" id="918126983963447296" >}}
 
 [Slide deck can be found here](http://images.engage.redhat.com/Web/RedHat/%7Bd7510765-62e8-4ea8-9f64-226259730a17%7D_Gestion_des_API_dans_une_de%CC%81marche_CI_CD.pdf)

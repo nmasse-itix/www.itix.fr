@@ -31,12 +31,12 @@ Quelques constats chiffrés :
 
 Mon intervention a été reprise par les journalistes dans certains tweets :
 
-{{< tweet 1544241974848487425 >}}
+{{< tweet user="ITforB" id="1544241974848487425" >}}
 
-{{< tweet 1544240686303744002 >}}
+{{< tweet user="ITforB" id="1544240686303744002" >}}
 
-{{< tweet 1544240966097375233 >}}
+{{< tweet user="ITforB" id="1544240966097375233" >}}
 
-{{< tweet 1544241464326201345 >}}
+{{< tweet user="ITforB" id="1544241464326201345" >}}
 
-{{< tweet 1544241708271116289 >}}
+{{< tweet user="ITforB" id="1544241708271116289" >}}
