@@ -4,6 +4,7 @@ date: 2023-10-03T00:00:00+02:00
 draft: false
 resources:
 - '*.jpeg'
+- src: slides.pdf
 topics:
 - Security
 - DevOps
@@ -119,5 +120,7 @@ C’est une sélections de packages, bibliothèque et dépendances spécialement
 C’est également une plateforme de CI pour construire des applicatifs de manière sécurisée.
 
 {{< attachedFigure src="RedHat.HL-63.jpeg" >}}
+
+[Téléchargez les slides de ma Keynote !]({{< attachedFileLink src="slides.pdf" >}})
 
 À l'année prochaine !
