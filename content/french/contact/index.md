@@ -4,7 +4,7 @@ title: "Me contacter"
 
 Besoin de quelque chose ?
 
-Pour toute demande de conférence, d'article ou de prestation, vous pouvez me contacter directement à mon adresse e-mail ou sur Twitter à [@nmasse_itix](https://twitter.com/nmasse_itix).
+Pour toute demande de conférence, d'article ou de prestation, vous pouvez me contacter directement à mon adresse e-mail, sur Twitter à [@nmasse_itix](https://twitter.com/nmasse_itix) ou encore sur Bluesky à [@nicolas.itix.fr](https://bsky.app/profile/nicolas.itix.fr).
 
 ![Mon e-mail](/images/my-email.png)
 

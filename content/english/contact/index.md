@@ -4,8 +4,7 @@ title: "Contact me"
 
 Do you need something from me ?
 
-For any inquiry about speaking, writing or engagement, you can contact me directly at my
-email address or on twitter at [@nmasse_itix](https://twitter.com/nmasse_itix).
+For any inquiry about speaking, writing or engagement, you can contact me directly at my email address, on twitter at [@nmasse_itix](https://twitter.com/nmasse_itix) or on Bluesky at [@nicolas.itix.fr](https://bsky.app/profile/nicolas.itix.fr).
 
 ![My Email](/images/my-email.png)
 
