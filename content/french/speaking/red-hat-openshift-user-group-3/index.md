@@ -6,6 +6,7 @@ resources:
 - '*.jpeg'
 topics:
 - Containers
+- GitOps
 opensource:
 - OpenShift
 ---
