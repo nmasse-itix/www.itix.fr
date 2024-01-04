@@ -76,4 +76,4 @@ taxonomies:
   tags: "tags"
 
 params:
-  enablePlausible: true
+  enablePlausible: false
