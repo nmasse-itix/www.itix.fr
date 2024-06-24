@@ -104,7 +104,7 @@ Cette carte mère a fait sensation dans la presse spécialisée. [Patrick Kenned
 En soit, la carte a tout pour plaire :
 
 - Support des CPU Ampere Altra / Ampere Altra Max
-- 8 slots de DDR4 (supportant la mémoire ECC), 2 DIMM par slot, max 256 Go par DIMM. Soit un maximum de 4 To de RAM.
+- 8 slots de DDR4 (supportant la mémoire ECC), 2 DIMM par *channel*, max 256 Go par DIMM. Soit un maximum de 2 To de RAM.
 - 2 slots PCIe 4.0 x16 + 2 slots PCIe 4.0 x8
 - 2 slots M.2 2280/2230 (PCIe 4.0 x4)
 - 4 connecteurs SlimSAS (PCIe 4.0 x8)
@@ -307,7 +307,7 @@ C'est au niveau des 6 SSD NVMe à gauche que l'effet est le plus notable.
 En effet, ils ne sont refroidis que par les ventilateurs des alimentations.
 
 Le boitier est prévu pour des cartes mères à 7 emplacements PCIe alors que l'**ASRock Rack ALTRAD8UD-1L2T** n'en a que 4.
-Les trois emplacements inutilisés peuvent être masqués pour forcer le flux d'air à passer là où sera plus utile.
+Les trois emplacements inutilisés peuvent être masqués pour forcer le flux d'air à passer là où il sera plus utile.
 
 ## Résultat
 
