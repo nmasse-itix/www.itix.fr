@@ -104,7 +104,7 @@ This motherboard has created quite a stir in the specialist press. [Patrick Kenn
 On its own, the card has everything to please:
 
 - Support for Ampere Altra / Ampere Altra Max CPUs
-- 8 DDR4 slots (supporting ECC memory), 2 DIMMs per channel, max 256 GB per DIMM. A maximum of 2 TB RAM.
+- 8 DDR4 slots (supporting ECC memory), 1 DIMM per channel, max 256 GB per DIMM. A maximum of 2 TB RAM.
 - 2 PCIe 4.0 x16 slots + 2 PCIe 4.0 x8 slots
 - 2 M.2 2280/2230 slots (PCIe 4.0 x4)
 - 4 SlimSAS connectors (PCIe 4.0 x8)
