@@ -6,6 +6,8 @@ opensource:
 - Tekton Chains
 topics:
 - Security
+resources:
+- '*.png'
 ---
 
 J'ai été interviewé par le magazine [IT for Business](https://www.itforbusiness.fr/) sur le sujet "[DevSecOps: quand l'agilité rime avec la sécurité](https://www.itforbusinesslesmatinales.fr/?matinale=05-juillet-2022)".
@@ -31,12 +33,8 @@ Quelques constats chiffrés :
 
 Mon intervention a été reprise par les journalistes dans certains tweets :
 
-{{< tweet user="ITforB" id="1544241974848487425" >}}
-
-{{< tweet user="ITforB" id="1544240686303744002" >}}
-
-{{< tweet user="ITforB" id="1544240966097375233" >}}
-
-{{< tweet user="ITforB" id="1544241464326201345" >}}
-
-{{< tweet user="ITforB" id="1544241708271116289" >}}
+{{< screenshotOf src="tweet-ITforB-01.png" href="https://twitter.com/ITforB/status/1544241974848487425" >}}
+{{< screenshotOf src="tweet-ITforB-02.png" href="https://twitter.com/thierryderouet/status/1544240686303744002" >}}
+{{< screenshotOf src="tweet-ITforB-03.png" href="https://twitter.com/thierryderouet/status/1544240966097375233" >}}
+{{< screenshotOf src="tweet-ITforB-04.png" href="https://twitter.com/thierryderouet/status/1544241464326201345" >}}
+{{< screenshotOf src="tweet-ITforB-05.png" href="https://twitter.com/thierryderouet/status/1544241708271116289" >}}
