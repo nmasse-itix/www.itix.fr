@@ -11,7 +11,7 @@ Le jeudi 28 mars à 10h, j'ai animé un webinaire sur le thème du *Edge Computi
 
 <!--more-->
 
-{{< tweet user="RedHatFrance" id="1768201675481698412" >}}
+{{< screenshotOf src="tweet-RedHatFrance.png" href="https://twitter.com/RedHatFrance/status/1768201675481698412" >}}
 
 Lors du webinaire, une introduction à l'*Edge Computing* a été présentée, suivie d'une exploration des solutions spécifiques de Red Hat pour cette technologie.
 La session s'est achevée avec un cas client.
