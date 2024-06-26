@@ -1,0 +1,6 @@
+<!-- This shortcode renders an image linked to a resource somewhere -->
+{{- $filename := .Get "src" -}}
+{{- $image := .Page.Resources.GetMatch (printf "%s" $filename) -}}
+<a href="{{- .Get "href" | plainify -}}">
+  <img src="{{ $image.RelPermalink }}">
+</a>
