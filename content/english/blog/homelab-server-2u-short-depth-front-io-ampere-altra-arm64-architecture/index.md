@@ -6,6 +6,12 @@ opensource:
 topics:
 - Edge Computing
 - Homelab
+# Featured images for Social Media promotion (sorted from by priority)
+images:
+- final-product.webp
+- ampere-altra-q64-22.jpeg
+- internal-layout.webp
+- more-nvme-storage.webp
 resources:
 - '*.jpeg'
 - '*.webp'
