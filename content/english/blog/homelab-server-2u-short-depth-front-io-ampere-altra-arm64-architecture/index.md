@@ -35,7 +35,7 @@ This **HP DL20 Gen9** server is equipped with :
 
 {{< attachedFigure src="hp-dl20-gen9.webp" title="The existing HP DL20 Gen9 server." >}}
 
-This server is currently racked in a 7U, short depth IT rack in the basement of the house and is currently running **CentOS Stream 8** which I have configured as a [router](/fr/blog/fibre-orange-remplacer-livebox-routeur-centos-stream-8) and hypervisor (with **libvirt**).
+This server is currently racked in a 7U, short depth IT rack in the basement of the house and is currently running **CentOS Stream 8** which I have configured as a router (see {{< internalLink path="/blog/fibre-orange-remplacer-livebox-routeur-centos-stream-8" >}}) and hypervisor (with **libvirt**).
 
 The hypervisor runs several VMs:
 
@@ -68,7 +68,7 @@ The expansion capabilities of the **HP DL20 Gen9** are quite limited: 2 PCIe x8 
 The full-height slot is taken by the RAID controller and the half-height slot is taken by the 4-port GbE network card.
 
 Last but not least, the motherboard and CPU of the **HP DL20 Gen9** do not support **SR-IOV**. This currently forces me to run network routing functions directly on the hypervisor.
-SR-IOV would allow me to put the [CentOS Stream router](/fr/blog/fibre-orange-remplacer-livebox-routeur-centos-stream-8) into a VM without performance loss.
+SR-IOV would allow me to put the {{<internalLink path="/blog/fibre-orange-remplacer-livebox-routeur-centos-stream-8" title="CentOS Stream router" >}} into a VM without performance loss.
 
 To sum up, I need :
 

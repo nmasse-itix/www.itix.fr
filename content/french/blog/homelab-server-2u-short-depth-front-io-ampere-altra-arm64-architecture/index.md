@@ -35,7 +35,7 @@ Ce serveur **HP DL20 Gen9** est équipé de :
 
 {{< attachedFigure src="hp-dl20-gen9.webp" title="Le serveur HP DL20 Gen9 existant." >}}
 
-Ce serveur est actuellement racké dans une baie informatique de 7U de haut, faible profondeur, au sous-sol de la maison et il fait actuellement tourner **CentOS Stream 8** que j'ai configuré en [routeur]({{<relref "/blog/fibre-orange-remplacer-livebox-routeur-centos-stream-8" >}}) et hyperviseur (avec **libvirt**).
+Ce serveur est actuellement racké dans une baie informatique de 7U de haut, faible profondeur, au sous-sol de la maison et il fait actuellement tourner **CentOS Stream 8** que j'ai configuré en routeur (voir {{< internalLink path="/blog/fibre-orange-remplacer-livebox-routeur-centos-stream-8" >}}) et hyperviseur (avec **libvirt**).
 
 L'hyperviseur fait tourner plusieurs VM :
 
@@ -68,7 +68,7 @@ Les capacités d'expansion du **HP DL20 Gen9** sont bien limitées : 2 emplaceme
 L'emplacement pleine hauteur est pris par le contrôleur RAID et l'emplacement demi hauteur est pris par la carte réseau 4 ports GbE.
 
 Dernier point, et non des moindres, la carte mère et le CPU du **HP DL20 Gen9** ne supportent pas le **SR-IOV**. Ça m'oblige actuellement à faire tourner les fonctions de routage réseau directement sur l'hyperviseur.
-La fonction SR-IOV me permettrait de mettre le [routeur CentOS Stream]({{<relref "/blog/fibre-orange-remplacer-livebox-routeur-centos-stream-8" >}}) dans une VM sans perte de performance.
+La fonction SR-IOV me permettrait de mettre le {{<internalLink path="/blog/fibre-orange-remplacer-livebox-routeur-centos-stream-8" title="routeur CentOS Stream" >}} dans une VM sans perte de performance.
 
 En résumé, j'ai besoin de :
 

@@ -21,7 +21,7 @@ This article explores how to deploy OpenShift Single Node (SNO) using KVM on you
 
 On your Fedora workstation, make sure you installed the required packages [as explained in the Fedora documentation](https://docs.fedoraproject.org/en-US/quick-docs/getting-started-with-virtualization/).
 
-Configure [NetworkManager to use dnsmasq]({{<relref "/blog/consistent-dns-name-resolution-for-virtual-machines-and-containers/index.md" >}}) for DNS resolution.
+Configure {{<internalLink path="/blog/consistent-dns-name-resolution-for-virtual-machines-and-containers/index.md" title="NetworkManager to use dnsmasq" >}} for DNS resolution.
 
 Choose a base domain name and a cluster name.
 The base domain does not need to be public or registered somewhere.
@@ -143,7 +143,7 @@ Once the installation is complete, download the **kubeadmin** password and make 
 {{< attachedFigure src="assisted-installer-5.png" title="Assisted Installer: the installation is complete." >}}
 
 Also, make sure you can login with SSH to your OpenShift node.
-If you configured NetworkManager and dnsmasq [as explained here]({{<relref "/blog/consistent-dns-name-resolution-for-virtual-machines-and-containers/index.md" >}}), you should be able to reach your OpenShift node by its DNS name.
+If you configured NetworkManager and dnsmasq {{<internalLink path="/blog/consistent-dns-name-resolution-for-virtual-machines-and-containers/index.md" title="as explained here" >}}, you should be able to reach your OpenShift node by its DNS name.
 Otherwise, use the IP address.
 
 ```sh
