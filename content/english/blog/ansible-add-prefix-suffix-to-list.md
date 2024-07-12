@@ -7,7 +7,7 @@ topics:
 - IT Automation
 ---
 
-Recently, in [one of my Ansible playbooks](../airgap-openshift-installation-move-registry-created-using-oc-adm-release-mirror-between-environments) I had to prefix all items of a list with a chosen string.
+Recently, in [one of my Ansible playbooks](../airgap-openshift-installation-move-registry-created-using-oc-adm-release-mirror-between-environments/) I had to prefix all items of a list with a chosen string.
 
 <!--more-->
 
