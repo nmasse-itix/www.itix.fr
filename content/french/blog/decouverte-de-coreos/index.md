@@ -74,7 +74,7 @@ Vous remarquerez que le fichier [ignition](https://coreos.github.io/ignition/con
 C'est également une spécificité de CoreOS : tous les logiciels qui tournent sur CoreOS doivent tourner sous la forme de conteneurs, instanciés et démarrés depuis un *unit* systemd ou provisionné par OpenShift.
 
 Note: si vous souhaitez tout de même installer un package RPM, il est possible de personnaliser l'image CoreOS avec vos modification.
-Je vous conseille alors la lecture de cet article : {{< internalLink path="/blog/build-your-own-distribution-on-fedora-coreos.md" lang="en" >}}.
+Je vous conseille alors la lecture de cet article : {{< internalLink path="/blog/build-your-own-distribution-on-fedora-coreos.md" >}}.
 
 Autre différence majeure avec un système d'exploitation classique : les mises à jour s'effectuent de manière transactionnelle.
 Cela signifie qu'une mise à jour du système d'exploitation s'effectue dans son intégralité ou ne se fait pas du tout.

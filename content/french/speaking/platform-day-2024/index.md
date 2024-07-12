@@ -58,7 +58,7 @@ Dans le cloud AWS, nous disposons d'une machine virtuelle RHEL 9 qui nous permet
 Notre application de vidéo surveillance fonctionne dans le cluster OpenShift, ce qui nous permet de surveiller à distance la caméra embarquée du train.
 Le flux vidéo est relayé depuis le Jetson via un **broker Kafka**.
 
-De plus, des pipelines MLOps sont mis en place pour entraîner le modèle d'intelligence artificielle, ainsi que des [pipelines CI/CD pour construire les images de conteneurs de nos microservices pour les architectures x86 et ARM]({{<relref "../../blog/build-multi-architecture-container-images-with-kubernetes-buildah-tekton-aws/" >}}).
+De plus, des pipelines MLOps sont mis en place pour entraîner le modèle d'intelligence artificielle, ainsi que des pipelines CI/CD pour construire les images de conteneurs de nos microservices pour les architectures x86 et ARM.
 
 {{< attachedFigure src="mission-edge.png" title="Les points clés de ma mission." >}}
 
@@ -104,7 +104,7 @@ Il a donc fallu récupérer auprès de l'*engineering* RHEL les modules noyau Nv
 Le **dernier défi** a été de concevoir des **pipelines CI/CD** pour créer des images de conteneur multi-architecture.
 En effet, les puces M1 d'Apple ont une architecture **arm64**, les PC sont en **x86_64**.
 Idem, les tests d'intégration sont souvent exécutés sur des serveurs dans le cloud (**x86_64**) alors que le déploiement se fait sur la carte Nvidia Jetson Orin Nano (**arm64**).
-J'ai détaillé la procédure complète dans l'article intitulé "[Construction d'images de conteneur multi-architecture avec OpenShift, Buildah et Tekton dans le cloud AWS]({{<relref "../../blog/build-multi-architecture-container-images-with-kubernetes-buildah-tekton-aws/" >}})".
+J'ai détaillé la procédure complète dans l'article intitulé {{< internalLink path="/blog/build-multi-architecture-container-images-with-kubernetes-buildah-tekton-aws/index.md" >}}.
 
 ## Genius Bar
 

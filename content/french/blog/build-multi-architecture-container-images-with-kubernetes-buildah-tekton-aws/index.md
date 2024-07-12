@@ -14,7 +14,7 @@ resources:
 - '*.svg'
 ---
 
-En 2022, j'ai écrit un article sur ce sujet intitulé "[Build multi-architecture container images with Kubernetes, Buildah, Tekton and Qemu]({{<relref "/blog/build-multi-architecture-container-images-with-kubernetes-buildah-tekton-and-qemu" >}})".
+En 2022, j'ai écrit un article sur ce sujet intitulé {{< internalLink path="/blog/build-multi-architecture-container-images-with-kubernetes-buildah-tekton-and-qemu/index.md" >}}.
 L'article relatait la configuration que j'avais mise en place pour mes projets personnels.
 Il a même un peu débordé de sa vocation initiale puisqu'il a également été utilisé par plusieurs collègues chez Red Hat qui avaient le même besoin.
 Si la configuration décrite dans ce précédent article est toujours d'actualité, l'approche est un peu datée.

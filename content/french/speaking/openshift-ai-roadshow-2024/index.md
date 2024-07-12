@@ -22,7 +22,7 @@ Grâce un modèle d'intelligence artificielle conçu dans **OpenShift AI** et d�
 
 {{< attachedFigure src="le-train-lego.jpeg" title="Le train Lego équipé de la webcam, du Nvidia Jetson Orin et de la batterie." >}}
 
-Et c'est à l'occasion de cette démo que j'ai écrit un article sur intitulé "[Construction d'images de conteneur multi-architecture avec OpenShift, Buildah et Tekton dans le cloud AWS]({{<relref "/blog/build-multi-architecture-container-images-with-kubernetes-buildah-tekton-aws" >}})".
+Et c'est à l'occasion de cette démo que j'ai écrit un article sur intitulé {{< internalLink path="/blog/build-multi-architecture-container-images-with-kubernetes-buildah-tekton-aws/index.md" >}}.
 
 {{< attachedFigure src="train-console-1.png" title="Vue de la caméra embarquée du train avec les résultats de l'inférence." >}}
 
