@@ -1,0 +1,66 @@
+#!/bin/bash
+
+set -Eeuo pipefail
+
+declare -a exit_hooks=()
+function cleanup () {
+  for hook in "${exit_hooks[@]}"; do
+    echo "Running cleanup hook: $hook"
+    eval "$hook"
+  done
+}
+trap "cleanup" EXIT
+function addExitHook () {
+  exit_hooks+=("$1")
+}
+
+DEST="$(mktemp -d -t 'hugo-href-check.XXXXXX')"
+addExitHook "rm -rf \$DEST"
+echo "All artefacts will be generated in $DEST"
+
+#echo "Generating and serving content..."
+#./hugo serve -p 1313 -b http://localhost:1313/ --disableLiveReload --disableBrowserError --watch false --logLevel info --quiet --appendPort false &>"$DEST/hugo.log" &
+#addExitHook "pkill -e --ignore-ancestors --full '^hugo'"
+
+echo "Generating content..."
+mkdir -p "$DEST/html" "$DEST/nginx"
+./hugo -b http://localhost:1313/ -d "$DEST/html"
+
+echo "Serving content with nginx..."
+cat > "$DEST/nginx.conf" <<EOF
+worker_processes auto;
+error_log $DEST/nginx/error.log notice;
+pid $DEST/nginx/nginx.pid;
+
+events {
+    worker_connections 1024;
+}
+http {
+  client_body_temp_path $DEST/nginx/client_temp;
+  proxy_temp_path       $DEST/nginx/proxy_temp_path;
+  fastcgi_temp_path     $DEST/nginx/fastcgi_temp;
+  uwsgi_temp_path       $DEST/nginx/uwsgi_temp;
+  scgi_temp_path        $DEST/nginx/scgi_temp;
+  error_log             $DEST/nginx/error.log;
+  log_format            main  '\$remote_addr - \$remote_user [\$time_local] "\$request" \$status \$body_bytes_sent "\$http_referer" "\$http_user_agent" "\$http_x_forwarded_for"';
+  access_log            $DEST/nginx/access.log  main;
+  include               /etc/nginx/mime.types;
+  default_type          application/octet-stream;
+  server {
+    listen              1313;
+    server_name         _;
+    root                $DEST/html;
+  }
+}
+EOF
+nginx -e stderr -c "$DEST/nginx.conf" -g "daemon off;" &
+addExitHook 'if [ -n "$(jobs -rp)" ]; then kill $(jobs -rp); fi'
+
+while ! curl -o /dev/null -sf http://localhost:1313/; do
+  echo "Waiting for nginx to start..."
+  sleep 1
+done
+
+echo "Starting web spider..."
+cd "$DEST"
+muffet -i 'http://localhost:1313/.*' --accepted-status-codes=200 --max-redirections=0 http://localhost:1313/
