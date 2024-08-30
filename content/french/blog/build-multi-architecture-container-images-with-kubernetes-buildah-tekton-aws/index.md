@@ -1,6 +1,7 @@
 ---
 title: "Construction d'images de conteneur multi-architecture avec OpenShift, Buildah et Tekton dans le cloud AWS"
 date: 2024-05-02T00:00:00+02:00
+lastMod: 2024-08-30T00:00:00+02:00
 opensource:
 - Kubernetes
 - Tekton
@@ -420,6 +421,12 @@ La [documentation OpenShift 4.15](https://docs.openshift.com/container-platform/
 Installer l'**AWS EFS CSI Driver Operator**.
 
 ```yaml
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: aws-efs-csi-driver-operator
+  namespace: openshift-cluster-csi-drivers
+---
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
