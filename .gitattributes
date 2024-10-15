@@ -3,3 +3,4 @@
 *.jpg filter=lfs diff=lfs merge=lfs -text
 *.rnote filter=lfs diff=lfs merge=lfs -text
 *.xcf filter=lfs diff=lfs merge=lfs -text
+*.mkv filter=lfs diff=lfs merge=lfs -text
