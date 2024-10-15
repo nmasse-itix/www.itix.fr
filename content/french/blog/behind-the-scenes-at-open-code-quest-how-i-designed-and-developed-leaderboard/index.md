@@ -1,0 +1,612 @@
+---
+title: "Dans les coulisses de l'Open Code Quest : comment j'ai conçu et développé le Leaderboard"
+date: 2024-10-11T00:00:00+02:00
+#lastMod: 2024-10-11T00:00:00+02:00
+opensource:
+- Kubernetes
+- Prometheus
+- Grafana
+- Octave
+topics:
+- Observability
+# Featured images for Social Media promotion (sorted from by priority)
+images:
+- counting-scheme-with-time.png
+resources:
+- '*.png'
+- '*.svg'
+- '*.gif'
+---
+
+Lors du {{< internalLink path="/speaking/red-hat-summit-connect-france-2024/index.md" >}}, j'ai animé un atelier pour les développeurs intitulé "**Open Code Quest**".
+Dans cet atelier, les développeurs devaient coder des micro-services en utilisant Quarkus, OpenShift et un service d'Intelligence Artificielle : le modèle Granite d'IBM.
+L'atelier était conçu sous la forme d'une compétition de vitesse : les premiers à valider les trois exercices ont reçu une récompense.
+
+J'ai conçu et développé le **Leaderboard** qui affiche la progression des participants et les départage en fonction de leur rapidité.
+Facile ?
+Pas tant que ça car je me suis imposé une figure de style : utiliser **Prometheus** et **Grafana**.
+
+Suivez-moi dans les coulisse de l'Open Code Quest : comment j'ai conçu et développé le Leaderboard !
+
+<!--more-->
+
+## Description de l'atelier
+
+L'atelier **Open Code Quest** a été conçu pour accueillir 96 participants devant réaliser **et valider** 3 exercices.
+Valider la bonne réalisation d'un exercice n'implique pas de lire le code du participant : si le micro-service démarre et répond aux requêtes, c'est validé !
+Il n'y a donc pas de dimension créative, c'est une course de vitesse et d'attention (il faut juste bien lire [l'énoncé](https://cescoffier.github.io/quarkus-openshift-workshop/)).
+
+Le coeur de l'atelier est une application web de simulation de combat entre [super-héros](https://fr.wikipedia.org/wiki/Super-h%C3%A9ros) et [super-vilains](https://fr.wikipedia.org/wiki/Super-vilain).
+Il y a trois exercices :
+
+- Développer et déployer le micro-service "**hero**"
+- Développer et déployer le micro-service "**villain**"
+- Développer et déployer le micro-service "**fight**"
+
+Pour plus de détails, je vous renvoie à l'[énoncé de l'atelier](https://cescoffier.github.io/quarkus-openshift-workshop/overview/).
+
+## Besoins
+
+Le **Leaderboard** doit permettre deux choses :
+
+- **encourager les participants** en introduisant une dose de compétition
+- **déterminer les 30 participants les plus rapides** pour leur remettre un prix
+
+Dans les précédentes éditions de cet atelier, on validait la bonne réalisation sur la base de captures d'écran envoyées sur un channel Slack.
+Les participants envoyaient les captures d'écran, l'animateur les validait dans l'ordre, notait les points dans une feuille Google Sheet et annonçait la progression à interval régulier.
+Un animateur était dédié à la gestion du leaderboard.
+
+Cette année, il était attendu que le processus soit **entièrement automatisé** pour éviter ces tâches administratives chronophages.
+
+## Principe de fonctionnement
+
+Je le disais en introduction, pour la réalisation de ce **Leaderboard** je me suis imposé une figure de style : utiliser **Prometheus** et **Grafana**.
+Prometheus est une base de données **time series**.
+C'est à dire qu'il est optimisé pour stocker l'évolution de données numériques au cours du temps et faire des statistiques sur ces données.
+Grafana permet de présenter les données de Prometheus sous la forme de tableaux de bord.
+
+Ces deux outils sont beaucoup utilisés dans deux produits que l'on a utilisés pour cet atelier : **Red Hat OpenShift Container Platform** et **Red Hat Advanced Cluster Management**.
+
+Prometheus est très efficace pour savoir que "*le Pod X dans le namespace Y vient de passer à l'état Running*".
+Et c'est justement ce qui nous intéresse :
+
+- Si le Pod **hero-database-1** est créé dans le namespace **batman-workshop-prod** alors on sait que l'utilisateur **batman** vient de terminer le déploiement de la base de donnée de l'exercice **hero** dans l'environnement de **prod**.
+- Si le Deployment **hero** dans le namespace **batman-workshop-prod** passe à l'état **Available**, alors on sait que l'utilisateur vient de déployer avec succès son micro-service **hero**.
+- Si un Pod **batman-hero-run-*\<random>*-resync-pod** dans le namespace **batman-workshop-dev** passe à l'état **Completed**, alors on sait que le dernier pipeline Tekton l'utilisateur vient de terminer avec succès.
+
+Et si les trois conditions précédentes sont vraies, on peut en déduire que l'utilisateur a terminé et validé l'exercice **hero**.
+Au cours du temps, ces *time series* progressent telles que représentées sur la figure suivante.
+
+{{< attachedFigure src="exercise-validation.png" title="Lorsque les trois conditions sont réunies, l'exercice est validé." >}}
+
+C'est un bon début, non ?
+Si on fait la même chose pour les trois exercices, on peut savoir qui a terminé l'atelier dans son ensemble.
+
+Vu que certains exercices prennent plus de temps que d'autres, on peut imaginer attribuer plus de points aux exercices longs et moins aux exercices courts.
+C'est ce que j'ai essayé de modéliser dans la figure ci-dessous avec un poids de 55 pour le premier exercice, 30 pour le second et 45 pour le dernier.
+L'idée étant d'approcher une progression linéaire des points au cours du temps (1 point par minute).
+
+{{< attachedFigure src="counting-scheme-no-time.png" title="Progression du nombre de points pour un utilisateur normal, lent et rapide au cours du temps et avec pondération de chaque exercise en fonction de la durée nominale de l'exercise." >}}
+
+Ça commence à prendre forme.
+Mais si on regarde bien, à la fin de l'atelier (à la 150ème minute), tous les participants ont terminé et ont le même score.
+
+Et cela me pose deux problèmes :
+
+- Pour commencer, **trier des participants par ordre d'arrivée, Prometheus ne sait pas faire**.
+  Et je n'ai pas envie, au moment de la remise des prix de devoir analyser les résultats minute par minute pour noter manuellement l'ordre d'arrivée des participants.
+- Ensuite, si tous les participants ayant validé un exercice ont le même score, **où est le frisson de la compétition** ?
+
+Je sais bien qu'avec n'importe quel base de données SQL on aurait juste à faire un `SELECT * FROM users ORDER BY ex3_completion_timestamp ASC` pour avoir le résultat.  
+Je sais bien que j'essaye d'utiliser Prometheus pour une tâche qui n'est pas vraiment la sienne.
+
+Mais, soyons fous...  
+Rêvons deux minutes...  
+**Et si on essayait de contourner cette limitation de Prometheus ?**
+
+Est-ce qu'on ne pourrait pas modérer ou accentuer la pondération d'un exercice en fonction du temps qu'a mis l'utilisateur à réaliser l'exercice ?  
+Est-ce qu'on ne pourrait pas activer un accélérateur à chaque validation d'un exercice qui donnerait quelques points en plus à chaque minute qui passe ?
+
+Voilà qui rendrait la compétition plus engageante et plus amusante !  
+Et c'est ce que j'ai essayé de modéliser sur le schéma ci-dessous.
+
+{{< attachedFigure src="counting-scheme-with-time.png" title="Progression du nombre de points pour un utilisateur normal, lent et rapide au cours du temps et avec accélérateur et pondération de chaque exercise en fonction du temps que met l'utilisateur à réaliser l'exercice." >}}
+
+Maintenant, la question est : est-ce qu'un utilisateur qui prend la tête dans le premier exercice acquiert un avantage significatif qui rendrait la compétition déséquilibrée ?
+La réponse, nous l'avons obtenue lors des différentes répétitions qui ont eu lieu chez Red Hat avant le Jour J.
+
+{{< attachedFigure src="counting-scheme-dry-run.png" title="Validation du modèle de comptage des points lors d'un dry-run." >}}
+
+Dans la capture d'écran ci-dessus, on voit que Batman a terminé l'exercice "hero" **tardivement**.  
+Mais en terminant l'exercice "villain" **très rapidement**, il a pu reprendre la tếte... **temporairement**.  
+Catwoman qui menait le jeu, lui repasse devant avant que Batman ne reprenne la tête et ne conserve son avance jusqu'au dernier moment.  
+Ouf ! Quel suspense !  
+
+Donc, **il est définitivement possible de partir en retard et de rattraper son retard.**
+
+Le principe est validé !
+Et maintenant, comment est-ce qu'on implémente ça dans Prometheus ?
+
+## Implémentation dans Prometheus
+
+Si j'avais dû mettre au point ce système de comptage des points dans un Prometheus pré-configuré pour de la production, j'aurais fait face à deux difficultés :
+
+1. Par défaut, la résolution temporelle du couple Prometheus + Grafana inclus dans **Red Hat Advanced Cluster Management** est de 5 minutes (ça correspond au pas de temps minimum entre deux mesures).
+   Valider le bon comptage des points avec une résolution de 5 minutes sur un atlier de 2h30 prend 2h30 (**vitesse réelle**).
+2. Pour implémenter ce système de comptage des points, j'ai besoin d'utiliser des *recording rules*.
+   Or, la modification d'une *recording rule* **ne déclenche pas automatiquement la réécriture des *time series* calculées dans le passé**.
+
+Pour ces deux raisons, j'ai décidé de passer par un banc d'essai spécifique.
+
+### Utilisation d'un banc d'essai
+
+Les spécificités de ce banc d'essai sont les suivantes :
+
+- La périodicité de *scrapping* de Prometheus est configurée à **5 secondes**.
+  Ainsi, valider le bon comptage des points se fait **60 fois plus vite**: 2h30 d'atelier se valide en 2m30, avec une résolution de 5 minutes.
+- À chaque itération, le Prometheus est reconfiguré avec les nouvelles *recording rules*, les *times series* passées sont effacées et **Prometheus démarre immédiatement l'enregistrement des nouvelles *time series* à partir d'un jeu de données de test standardisé**.
+
+La mise au point est donc grandement facilitée !
+
+Le banc d'essai est disponible dans l'entrepôt Git [opencodequest-leaderboard](https://github.com/nmasse-itix/opencodequest-leaderboard) et ne nécessite que peu de pré-requis : `git`, `bash`, `podman`, `podman-compose` ainsi que la commande `envsubst`. Ces dépendances sont habituellement installable avec les paquets de votre distribution (`dnf install git bash podman podman-compose gettext-envsubst` sur Fedora).
+
+Récupérez le code du banc d'essai et démarrez-le :
+
+```sh
+git clone https://github.com/nmasse-itix/opencodequest-leaderboard.git
+cd opencodequest-leaderboard
+./run.sh
+```
+
+Au premier démarrage, connectez-vous à l'interface de Grafana (`http://localhost:3000`) et réalisez ces 4 actions :
+
+- S'authentifier avec le login **admin** et le mot de passe **admin**.
+- Définir un nouveau mot de passe administrateur (ou juste cliquer sur **Skip**...)
+- Configurer une source de données par défaut de type **Prometheus** avec les valeurs suivantes :
+  - **Prometheus server URL**: `http://prometheus:9090`
+  - **Scrape interval**: `5s`
+- Créer un nouveau *dashboard* depuis le fichier **grafana/leaderboard.json** qui est dans l'entrepôt Git.
+
+Des données doivent normalement apparaître dans le tableau de bord Grafana.
+Pour en profiter pleinement, arrêtez le script `run.sh` avec un appui sur **Ctrl + C** et relancez le !
+Au bout de quelques secondes, vous devriez voir apparaitre sur le tableau de bord des données toutes fraiches, comme dans la vidéo ci-dessous.
+
+{{< attachedFigure src="leaderboard-simulation.gif" title="Simulation de l'atelier Open Code Quest sur le banc d'essai afin de valider le système de comptage de points (vidéo accélérée 10x)." >}}
+
+### Requêtes Prometheus
+
+Les requêtes Prometheus que j'ai utilisées sont stockées dans le fichier `prometheus/recording_rules.yaml.template`.
+C'est un *template* qui contient des variables.
+Ces variables sont remplacées par leur valeur lors de l'exécution du script `run.sh`.
+
+Toutes les requêtes sont enregistrées sous la forme de *recording rules* Prometheus.
+Elles sont réparties en trois groupes :
+
+1. Les requêtes `opencodequest_leaderboard_*` représentent l'état de complétude d'un exercice par un utilisateur.
+2. Les requêtes `opencodequest_leaderboard_*_onetime_bonus` représentent le bonus temps qu'acquiert un utilisateur qui termine un exercice.
+3. Les requêtes `opencodequest_leaderboard_*_lifetime_bonus` représentent le report à nouveau du bonus temps qu'acquiert un utilisateur qui termine un exercice.
+
+#### Requêtes `opencodequest_leaderboard_*`
+
+Les trois requêtes qu'il faut comprendre en premier sont :
+
+- `opencodequest_leaderboard_hero:prod` : état de complétude de l'exercice **hero** (0 = non terminé, 1 = terminé)
+- `opencodequest_leaderboard_villain:prod` : état de complétude de l'exercice **villain** (*idem*)
+- `opencodequest_leaderboard_fight:prod` : état de complétude de l'exercice **fight** (*idem*)
+
+Ces trois requêtes sont conçues sur le même modèle.
+J'ai pris la première que j'ai légèrement adaptée et formattée pour qu'elle soit plus compréhensible.
+C'est presque une requète valide.
+Il faudra juste, avant de l'exécuter, remplacer $EPOCHSECONDS par le *timestamp unix* de l'heure courante.
+
+```
+sum(
+  timestamp(
+    label_replace(up{instance="localhost:9090"}, "user", "superman", "","")
+  ) >= bool ($EPOCHSECONDS + 55)
+  or 
+  timestamp(
+    label_replace(up{instance="localhost:9090"}, "user", "catwoman", "","")
+  ) >= bool ($EPOCHSECONDS + 50)
+  or
+  timestamp(
+    label_replace(up{instance="localhost:9090"}, "user", "invisibleman", "","")
+  ) >= bool ($EPOCHSECONDS + 60)
+  or
+  timestamp(
+    label_replace(up{instance="localhost:9090"}, "user", "batman", "","")
+  ) >= bool ($EPOCHSECONDS + 65)
+) by (user)
+```
+
+Pour remplacer `$EPOCHSECONDS` par le *timestamp unix* de l'heure courante, vous pouvez passer par un *here-doc* dans votre Shell préféré :
+
+```sh
+cat << EOF
+Requète Prometheus
+EOF
+```
+
+Copiez-collez la requète dans la section **Explore** de Grafana et vous devriez obtenir le graphe suivant.
+
+{{< attachedFigure src="grafana-explore-opencodequest-leaderboard-hero.png" title="La métrique \"opencodequest_leaderboard_hero:prod\" représente l'état de complétude de l'exercice \"hero\" dans l'environnement \"prod\"." >}}
+
+Il faut le lire de la manière suivante (note : 1728646377 = 13:32:57) :
+
+- **Superman** termine l'exercice hero **50 secondes** après le démarrage de l'atelier.
+- **Catwoman** termine l'exercice hero **55 secondes** après le démarrage de l'atelier.
+- **Invisible Man** termine l'exercice hero **60 secondes** après le démarrage de l'atelier.
+- **Batman** termine l'exercice hero **65 secondes** après le démarrage de l'atelier.
+
+Cette requête fonctionne de la manière suivante :
+
+- `up{instance="localhost:9090"}` est une *time serie* qui retourne toujours **1**, accompagnée de plein de *labels* qui nous sont inutiles pour notre besoin.
+- `label_replace(TIMESERIE, "user", "superman", "","")` ajoute l'étiquette **user=superman** à la *time serie*.
+- `timestamp(TIMESERIE) >= bool TS` retourne **1** pour toute mesure prise **après** le timestamp TS, 0 sinon.
+- `TIMESERIE1 or TIMESERIE2` fusionne les deux *time series*.
+- `sum(TIMESERIE) by (user)` supprime toutes les étiquettes, sauf `user`.
+  J'aurais pu utiliser `min`, `max`, etc. à la place de `sum` car je n'ai qu'une seule timeserie par valeur de **user**.
+
+Le résultat de ces trois requêtes est stocké dans Prometheus sous la forme de *time series* grace aux *recording rules* qui les définissent.
+
+**Elles représentent le jeu de données de test qui me sert à valider le bon fonctionnement du Leaderboard**.
+Dans l'environnement **Open Code Quest**, elles seront remplacées par des vraies métriques en provenance des *clusters* OpenShift.
+
+#### Requêtes `opencodequest_leaderboard_*_onetime_bonus`
+
+Les requêtes suivantes calculent un bonus temps pour les utilisateurs qui terminent un exercice.
+Plus l'utilisateur termine tôt l'exercice (par rapport à l'heure de fin prévue), plus le bonus est conséquent.
+Et inversement, plus l'utilisateur est en retard par rapport à l'heure de fin prévue, moins le bonus est conséquent.
+
+- `opencodequest_leaderboard_hero_onetime_bonus:prod` représente le bonus temps affecté à l'utilisateur qui termine l'exercice **hero**.
+- `opencodequest_leaderboard_villain_onetime_bonus:prod` représente le bonus temps affecté à l'utilisateur qui termine l'exercice **villain**.
+- `opencodequest_leaderboard_fight_onetime_bonus:prod` représente le bonus temps affecté à l'utilisateur qui termine l'exercice **fight**.
+
+Ces trois requêtes sont conçues sur le même modèle.
+Ça peut paraître complexe de prime abord mais en fait pas tant que ça.
+
+```
+(increase(opencodequest_leaderboard_hero:prod[10s]) >= bool 0.5)
+*
+(
+  55
+  +
+  sum(
+      (
+        ${TS_EXERCISE_HERO}
+        -
+        timestamp(
+          label_replace(up{instance="localhost:9090"}, "user", "superman", "","")
+          or 
+          label_replace(up{instance="localhost:9090"}, "user", "invisibleman", "","")
+          or
+          label_replace(up{instance="localhost:9090"}, "user", "catwoman", "","")
+          or
+          label_replace(up{instance="localhost:9090"}, "user", "batman", "","")
+        )
+      ) / 5
+  ) by (user)
+)
+```
+
+Pour bien comprendre comment fonctionne cette requête, je vous propose de la scinder en deux : la partie `increase(...)` d'un coté et le reste de l'autre.
+On superpose tout ça avec la requête précédente et ça donne la figure suivante.
+
+{{< attachedFigure src="grafana-opencodequest-leaderboard-onetime-bonus.png" title="La métrique \"opencodequest_leaderboard_hero_onetime_bonus:prod\" représente le bonus temps alloué à un utilisateur lorsqu'il termine l'exercice \"hero\" dans l'environnement \"prod\"." >}}
+
+De haut en bas, on peut observer :
+
+1. La requête `opencodequest_leaderboard_hero:prod`.
+   Elle représente l'état de complétude de l'exercice.
+2. La partie `increase(opencodequest_leaderboard_hero:prod[10s]) >= bool 0.5` détecte les changements d'état de la requête précédente.
+3. La partie `55 + sum(($TS - timestamp(...) / 5) by (user)` représente l'évolution du bonus temps au cours du temps.
+   Le terme **55** est le bonus nominal de l'exercice et le diviseur **5** permet de faire varier le bonus **d'une unité toutes les 5 secondes**.
+4. Le tout est l'application du bonus temps au moment où l'utilisateur termine l'exercice.
+
+#### Requêtes `opencodequest_leaderboard_*_lifetime_bonus`
+
+Les requêtes suivantes reportent le bonus temps de mesures en mesures jusqu'à la fin de l'atelier.
+
+- `opencodequest_leaderboard_hero_lifetime_bonus:prod` représente le report à nouveau du bonus temps affecté à l'utilisateur qui termine l'exercice **hero**.
+- `opencodequest_leaderboard_villain_lifetime_bonus:prod` représente le report à nouveau du bonus temps affecté à l'utilisateur qui termine l'exercice **villain**.
+- `opencodequest_leaderboard_fight_lifetime_bonus:prod` représente le report à nouveau du bonus temps affecté à l'utilisateur qui termine l'exercice **fight**.
+
+Ces trois requêtes sont conçues sur le même modèle :
+
+```
+sum_over_time(opencodequest_leaderboard_hero_onetime_bonus:prod[1h])
+```
+
+La fonction `sum_over_time(TIMESERIE)` effectue la somme des valeurs de la *time serie* au cours du temps.
+On peut le voir comme l'intégrale de la *time serie*.
+
+La figure suivante présente le fonctionnement de cette requête de manière plus parlante.
+
+{{< attachedFigure src="grafana-opencodequest-leaderboard-lifetime-bonus.png" title="La métrique \"opencodequest_leaderboard_hero_lifetime_bonus:prod\" représente le report à nouveau du bonus temps alloué à un utilisateur lorsqu'il termine l'exercice \"hero\" dans l'environnement \"prod\"." >}}
+
+De haut en bas, on peut observer :
+
+1. La requête `opencodequest_leaderboard_hero:prod`.
+   Elle représente l'état de complétude de l'exercice.
+2. La requête `opencodequest_leaderboard_hero_onetime_bonus:prod`.
+   Elle représente l'application du bonus temps au moment où l'utilisateur termine l'exercice.
+2. Le résultat est le report à nouveau du bonus temps depuis le moment où l'utilisateur termine l'exercice.
+
+Note: on voit un décalage d'une unité de temps entre la dernière requête et les deux premières
+Je pense que c'est une conséquence des dépendances entre les *recording rules*.
+
+#### La requête finale
+
+La requête finale qui détermine les points des utilisateurs est la somme de 6 composantes :
+
+- Le bonus temps de l'exercice **hero** (reporté)
+- L'accélérateur activé à la fin de l'exercice **hero**
+- Le bonus temps de l'exercice **villain** (reporté)
+- L'accélérateur activé à la fin de l'exercice **villain**
+- Le bonus temps de l'exercice **fight** (reporté)
+- L'accélérateur activé à la fin de l'exercice **fight**
+
+Dans le dialecte utilisé par Prometheus, cela s'écrit de la façon suivante :
+
+```
+opencodequest_leaderboard_hero_lifetime_bonus:prod
++ sum_over_time(opencodequest_leaderboard_hero:prod[1h])
++ opencodequest_leaderboard_villain_lifetime_bonus:prod
++ sum_over_time(opencodequest_leaderboard_villain:prod[1h])
++ opencodequest_leaderboard_fight_lifetime_bonus:prod
++ sum_over_time(opencodequest_leaderboard_fight:prod[1h])
+```
+
+Les bonus temps ont été décrit dans la section précédente.
+Il ne me reste donc qu'à vous expliquer le fonctionnement de l'accélérateur.
+
+Les *time series* `opencodequest_leaderboard_{hero,villain,fight}:prod` sont l'état de complétude de l'exercice (valeur binaire : 0 ou 1).
+Pour obtenir [une rampe](https://fr.wikipedia.org/wiki/Rampe_%28fonction%29), il faut prendre son intégrale.
+J'utilise donc la fonction `sum_over_time(TIMESERIE)` à cet effet.
+Pour corser le jeu, on pourrait imaginer changer la pente de la rampe via un coefficient multiplicateur mais j'ai jugé que ce n'était pas nécessaire.
+En effet, les 3 accélérateurs s'additionnent déjà, ce qui fait que l'utilisateur gagne 1 point toutes les 5 minutes qui passent après l'exercice **hero**, 2 points après l'exercice **villain** et 3 points après l'exercice **fight**.
+
+La figure suivante présente les 6 composantes de requête Prometheus permettant de calculer les points de l'utilisateur.
+
+{{< attachedFigure src="grafana-opencodequest-leaderboard.png" title="Les 6 composantes de la requête Prometheus calculant les scores des utilisateurs et le résultat." >}}
+
+### *Recording Rules*
+
+Les requêtes `opencodequest_leaderboard_*` s'appuient sur la fonction **increase** et les requêtes `opencodequest_leaderboard_*_lifetime_bonus` s'appuient sur la fonction **sum_over_time**.
+Ces deux fonctions Prometheus ont une contrainte : on ne peut les appliquer **que sur un *range vector***.
+
+Et un ***range vector* ne peut pas être le résultat d'un calcul**.
+
+C'est à dire que la requête suivante est valide :
+
+```cpp
+// OK
+sum_over_time(
+  opencodequest_leaderboard_hero:prod[1h]
+)
+```
+
+Mais celles-ci ne le sont pas :
+
+```cpp
+// parse error: ranges only allowed for vector selectors
+sum_over_time(
+  (1 + opencodequest_leaderboard_hero:prod)[1h]
+)
+
+// parse error: binary expression must contain only scalar and instant vector types
+sum_over_time(
+  1 + opencodequest_leaderboard_hero:prod[1h]
+)
+```
+
+Cela signifie qu'il n'est pas possible de construire une méga-requête qui calculerait le score de tous les participants au cours du temps.
+Il faut donc, à chaque utilisation d'une de ces fonctions nécessitant un *range vector*, passer par une *recording rule* pour matérialiser le résultat du calcul dans une *time serie* nommée.
+Et comme nos requêtes dépendent les unes des autres, il faut les placer dans des groupes de *recording rule* différents.
+
+C'est pour cette raison que vous retrouverez dans le fichier `prometheus/recording_rules.yaml.template`, trois groupes de *recording rules* :
+
+- `opencodequest_base` pour le jeu de données de test (qui n'existe que dans le banc d'essai).
+- `opencodequest_step1` pour les requêtes `opencodequest_leaderboard_*_onetime_bonus`.
+- `opencodequest_step2` pour les requêtes `opencodequest_leaderboard_*_lifetime_bonus`.
+
+Et vous verrez dans la section suivante que les *recording rules* dans une configuration **Red Hat Advanced Cluster Management** ont quelques subtilitées...
+
+## Observabilité dans Red Hat Advanced Cluster Management
+
+Maintenant que le principe est validé et que les requêtes ont été mises au point dans Prometheus, il est temps d'implémenter tout ça dans le module **Observabilité** de **Red Hat Advanced Cluster Management**.
+
+Lors de l'Open Code Quest, nous avions à notre disposition 8 clusters :
+
+- 1 cluster **central**
+- 1 cluster pour l'intelligence artificielle
+- 6 clusters répartis entre les participants (on avait prévu un cluster par table)
+
+**Red Hat Advanced Cluster Management** est installé sur le cluster **central** et à partir de là, il contrôle l'ensemble des clusters.
+
+L'observabilité est un module supplémentaire (dans le sens où il n'est pas installé par défaut) de **Red Hat Advanced Cluster Management** et ce module est basé sur les composants Open Source **Prometheus**, **Thanos** et **Grafana**.
+
+L'architecture du module d'observabilité, tel que décrit [dans la documentation Red Hat Advanced Cluster Management](https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.11/html/observability/observing-environments-intro#observing-environments-intro), est la suivante :
+
+{{< attachedFigure src="redhat-acm-observability-architecture.png" title="Architecture logique de l'observabilité dans Red Hat Advanced Cluster Management 2.11 ([source](https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.11/html/observability/observing-environments-intro#observing-environments-intro))" >}}
+
+**TODO**
+
+### Mise en place de l'observabilité
+
+Le déployement du module d'observabilité sur le cluster **central**, se fait très simplement en suivant [la documentation](https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.11/html/observability/observing-environments-intro#enabling-observability-service) :
+
+- Créer le namespace `open-cluster-management-observability`.
+- Créer le *pull secret* permettant de télécharger les images sur **registry.redhat.io**.
+- Créer un *bucket* S3.
+- Créer la *Custom Resource Definition* `MultiClusterObservability`.
+
+Pour effectuer ces opérations, j'ai utiliser les commandes suivantes :
+
+```sh
+AWS_ACCESS_KEY_ID="REDACTED"
+AWS_SECRET_ACCESS_KEY="REDACTED"
+S3_BUCKET_NAME="REDACTED"
+AWS_REGION="eu-west-3"
+
+# Create the open-cluster-management-observability namespace
+oc create namespace open-cluster-management-observability
+
+# Copy the pull secret from the openshift namespace
+DOCKER_CONFIG_JSON=`oc extract secret/pull-secret -n openshift-config --to=-`
+echo $DOCKER_CONFIG_JSON
+oc create secret generic multiclusterhub-operator-pull-secret \  
+   -n open-cluster-management-observability \  
+   --from-literal=.dockerconfigjson="$DOCKER_CONFIG_JSON" \  
+   --type=kubernetes.io/dockerconfigjson
+
+# Create an S3 bucket
+aws s3api create-bucket --bucket "$S3_BUCKET_NAME" --create-bucket-configuration "LocationConstraint=$AWS_REGION" --region "$AWS_REGION" --output json
+
+# Deploy the observability add-on
+oc apply -f - <<EOF
+apiVersion: v1
+kind: Secret
+metadata:
+  name: thanos-object-storage
+  namespace: open-cluster-management-observability
+type: Opaque
+stringData:
+  thanos.yaml: |
+    type: s3
+    config:
+      bucket: $S3_BUCKET_NAME
+      endpoint: s3.$AWS_REGION.amazonaws.com
+      insecure: false
+      access_key: $AWS_ACCESS_KEY_ID
+      secret_key: $AWS_SECRET_ACCESS_KEY
+EOF
+oc apply -f - <<EOF
+apiVersion: observability.open-cluster-management.io/v1beta2
+kind: MultiClusterObservability
+metadata:
+  name: observability
+  namespace: open-cluster-management-observability
+spec:
+  observabilityAddonSpec: {}
+  storageConfig:
+    metricObjectStorage:
+      name: thanos-object-storage
+      key: thanos.yaml
+EOF
+```
+
+Après installation du module d'observabilité, les clusters managés sont automatiquement configurés pour remonter les métriques Prometheus les plus importantes sur le cluster **central**.
+
+L'atelier **Open Code Quest** tire parti de métriques *custom* que j'utilise dans le Leaderboard pour savoir quels sont les participants qui ont fait marcher leurs micro-services.
+Pour collecter ces métriques, j'active la fonction **User Workload Monitoring** d'**OpenShift** dans chaque cluster managé.
+
+```sh
+oc -n openshift-monitoring get configmap cluster-monitoring-config -o yaml | sed -r 's/(\senableUserWorkload:\s).*/\1true/' | oc apply -f -
+```
+
+### Implémentation des *Recording rules*
+
+Les recording rules peuvent être calculées à deux moments différents :
+
+- Dans chaque cluster managé, avant envoi sur le cluster central.
+- Dans le cluster central, après réception.
+
+Mais il y a une petite subtilité : ce choix est vrai pour les métriques standard d'OpenShift.
+
+Les *recording rules* faisant appel à des métriques *custom* (ie. le **User Workload Monitoring**) ne sont calculées **qu'après réception sur le cluster central**.
+Il n'est pas possible de les calculer avant envoi sur le cluster central.
+On peut spécifier des métriques *custom* à envoyer telles quelles.
+
+Elles ne se configurent pas non plus au même endroit en fonction de si c'est une métrique *custom* ou une métrique standard et de si c'est fait avant ou après envoi.
+
+Pour vous aider, j'ai fait un tableau récapitulatif :
+
+| Type de métrique     | Calcul de la *recording rule*     | Emplacement de la configuration                                                | Nom de la ConfigMap                      | Clé                     |
+| -------------------- | --------------------------------- | ------------------------------------------------------------------------------ | ---------------------------------------- | ----------------------- |
+| standard             | avant envoi                       | *namespace* `open-cluster-management-observability` sur le cluster **central** | `observability-metrics-custom-allowlist` | `metrics_list.yaml`     |
+| *custom*             | **pas de calcul**, envoi tel quel | *namespace* `open-cluster-management-observability` sur le cluster **central** | `observability-metrics-custom-allowlist` | `uwl_metrics_list.yaml` |
+| standard ou *custom* | à réception                       | *namespace* `open-cluster-management-observability` sur le cluster **central** | `thanos-ruler-custom-rules`              | `custom_rules.yaml`     |
+
+#### *Recording Rules* avant envoi
+
+Pour l'envoi des métriques et le calcul des *recording rules* **avant envoi** sur le cluster **central**, ça se configure dans le *namespace* `open-cluster-management-observability` sur le cluster **central** via une ConfigMap :
+
+```yaml
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: observability-metrics-custom-allowlist
+  namespace: open-cluster-management-observability
+data:
+  uwl_metrics_list.yaml: |
+    names:
+    - fights_total
+  metrics_list.yaml: |
+    names:
+    - kube_deployment_status_replicas_ready
+    - kube_pod_status_phase
+    - kube_namespace_status_phase
+    rules:
+    - record: opencodequest_hero_quarkus_pod:dev
+      expr: kube_deployment_status_condition{namespace=~\"[a-zA-Z0-9]+-workshop-dev\",deployment=\"hero\",condition=\"Available\",status=\"true\"}
+```
+
+La configuration ci-dessus permet de :
+
+- Envoyer la métrique *custom* `fights_total` telle quelle
+- Envoyer les métriques standard `kube_deployment_status_replicas_ready`, `kube_pod_status_phase` et `kube_namespace_status_phase` telles quelles
+- Créer une métrique `opencodequest_hero_quarkus_pod:dev` à partir de la requête Prometheus `kube_deployment_status_condition{...}` et envoyer le résultat
+
+#### *Recording Rules* à réception
+
+Pour le calcul des *recording rules* **à réception** sur le cluster **central**, ça se configure aussi dans le *namespace* `open-cluster-management-observability` sur le cluster **central** mais via une autre ConfigMap :
+
+```yaml
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: thanos-ruler-custom-rules
+  namespace: open-cluster-management-observability
+data:
+  custom_rules.yaml: |
+    groups:
+      - name: opencodequest
+        rules:
+        - record: opencodequest_hero_quarkus_pod:dev
+          expr: kube_deployment_status_condition{namespace=~"[a-zA-Z0-9]+-workshop-dev",deployment="hero",condition="Available",status="true"}
+```
+
+On notera que les syntaxes des deux ConfigMap ne sont pas identiques.
+
+- Dans la ConfigMap `observability-metrics-custom-allowlist`, les *double quotes* doivent être échappées par un *backslash*.
+  Ce n'est pas le cas dans l'autre ConfigMap.
+- La syntaxe de la ConfigMap `thanos-ruler-custom-rules` permet de spécifier des groupes de *recording rules* alors que l'autre ConfigMap ne permet pas de le faire.
+
+Note: les noms des métriques dans les exemples ci-dessus sont plus ou moins fictif.
+Ce ne sont pas ces configurations que j'ai utilisées au final.
+
+### Déploiement d'une instance Grafana de développement
+
+Déployer une instance de dev de Grafana.
+
+```sh
+# Deploy a Grafana development instance
+git clone https://github.com/stolostron/multicluster-observability-operator.git
+cd multicluster-observability-operator/tools
+./setup-grafana-dev.sh --deploy
+
+# Login on Grafana
+GRAFANA_DEV_HOSTNAME="$(oc get route grafana-dev -n open-cluster-management-observability -o jsonpath='{.status.ingress[0].host}')"
+echo "Now login to Grafana with your openshift user at https://$GRAFANA_DEV_HOSTNAME"
+read -q "?press any key to continue "
+./switch-to-grafana-admin.sh "$(oc whoami)"
+```
+
+Créer le dashboard "Red Hat Summit Connect 2024"
+
+```sh
+./generate-dashboard-configmap-yaml.sh "Red Hat Summit Connect 2024"
+./setup-grafana-dev.sh --clean
+```
+
