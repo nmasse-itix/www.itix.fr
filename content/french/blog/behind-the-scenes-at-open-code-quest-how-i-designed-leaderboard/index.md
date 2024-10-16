@@ -25,7 +25,7 @@ J'ai conçu et développé le **Leaderboard** qui affiche la progression des par
 Facile ?
 Pas tant que ça car je me suis imposé une figure de style : utiliser **Prometheus** et **Grafana**.
 
-Suivez-moi dans les coulisse de l'Open Code Quest : comment j'ai conçu le Leaderboard !
+Suivez-moi dans les coulisses de l'Open Code Quest : comment j'ai conçu le Leaderboard !
 
 <!--more-->
 

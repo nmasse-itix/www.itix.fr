@@ -17,24 +17,202 @@ resources:
 - '*.gif'
 ---
 
-Lors du {{< internalLink path="/speaking/red-hat-summit-connect-france-2024/index.md" >}}, j'ai animé un atelier pour les développeurs intitulé "**Open Code Quest**".
-Dans cet atelier, les développeurs devaient coder des micro-services en utilisant Quarkus, OpenShift et un service d'Intelligence Artificielle : le modèle Granite d'IBM.
-L'atelier était conçu sous la forme d'une compétition de vitesse : les premiers à valider les trois exercices ont reçu une récompense.
+Après avoir révélé les coulisses de la conception du Leaderboard pour l'atelier "Open Code Quest" lors du {{< internalLink path="/speaking/red-hat-summit-connect-france-2024/index.md" >}}, il est temps de plonger plus en détail dans son implémentation pratique !
 
-J'ai conçu et développé le **Leaderboard** qui affiche la progression des participants et les départage en fonction de leur rapidité.
-Facile ?
-Pas tant que ça car je me suis imposé une figure de style : utiliser **Prometheus** et **Grafana**.
+Dans cet article, je vais vous guider à travers la configuration de **Red Hat Advanced Cluster Management** ainsi que les différentes adapatations nécessaires pour connecter le *Leaderboard* créé précédemment avec l'infrastructure de l'**Open Code Quest**.
 
-Suivez-moi dans les coulisse de l'Open Code Quest : comment j'ai implémenté le Leaderboard dans **Red Hat Advanced Cluster Management** !
+Embarquez avec moi pour cette nouvelle étape, plus technique que la précédente, j'ai dû faire preuve de créativité pour câbler un tableau de bord Grafana très "conceptuel" avec la réalité des clusters OpenShift !
 
 <!--more-->
 
 Cet article est la suite de {{< internalLink path="/blog/behind-the-scenes-at-open-code-quest-how-i-designed-leaderboard/index.md" >}}.
 Si vous ne l'avez pas lu, je vous conseille de le lire avant pour mieux comprendre le contexte.
 
-## Observabilité dans Red Hat Advanced Cluster Management
+## Requêtes Prometheus
 
-Maintenant que le principe est validé et que les requêtes ont été mises au point dans Prometheus, il est temps d'implémenter tout ça dans le module **Observabilité** de **Red Hat Advanced Cluster Management**.
+Dans l'article précédent, j'avais évoqué a manière dont ont pouvait détecter les actions d'un utilisateur dans son environnement :
+
+- Si le Pod **hero-database-1** est créé dans le namespace **batman-workshop-prod** alors on sait que l'utilisateur **batman** vient de terminer le déploiement de la base de donnée de l'exercice **hero** dans l'environnement de **prod**.
+- Si le Deployment **hero** dans le namespace **batman-workshop-prod** passe à l'état **Available**, alors on sait que l'utilisateur vient de déployer avec succès son micro-service **hero**.
+- Si un Pod **batman-hero-run-*\<random>*-resync-pod** dans le namespace **batman-workshop-dev** passe à l'état **Completed**, alors on sait que le dernier pipeline Tekton l'utilisateur vient de terminer avec succès.
+
+Si les trois conditions précédentes sont vraies, on peut en déduire que l'utilisateur a terminé et validé l'exercice **hero**.
+
+La réalité est en fait un peu plus compliquée car entre le *Leaderboard* de l'article précédent, très conceptuel et ces éléments très techniques, il a fallu faire pas mal d'adaptation.
+
+Au final, pour chaque exercice j'ai eu à implémenter trois requêtes Prometheus pour détecter les trois conditions ci-dessus.
+Fort heureusement, les trois exercices sont sur le même modèle donc le jeu de requêtes est très similaire pour les trois exercices.
+
+### Détection du micro-service Quarkus
+
+Je détecte le déploiement du micro-service Quarkus **hero** dans l'environnement de **dev** à l'aide de la requête suivante que je persiste sous la forme d'une *recording rule* nommée **opencodequest_hero_quarkus_pod:dev**.
+
+```
+clamp_max(
+  sum(
+    label_replace(kube_deployment_status_condition{namespace=~"[a-zA-Z0-9]+-workshop-dev",deployment="hero",condition="Available",status="true"}, "user", "$1", "namespace", "([a-zA-Z0-9]+)-workshop-dev")
+  ) by (user),
+1)
+or
+clamp(
+  sum(
+    label_replace(kube_namespace_status_phase{namespace=~"[a-zA-Z0-9]+-workshop-(dev|preprod|prod)",phase="Active"}, "user", "$1", "namespace", "([a-zA-Z0-9]+)-workshop-(dev|preprod|prod)")
+  ) by (user),
+0, 0)
+```
+
+Cette requête est en deux parties.
+La première partie fonctionne de la manière suivante :
+
+- `kube_deployment_status_condition{namespace=~"[a-zA-Z0-9]+-workshop-dev",deployment="hero",condition="Available",status="true"}` retourne le nombre de **Deployment** kubernetes ayant le nom **hero**, dans un namespace se terminant par **-workshop-dev** et étant dans un état **Available**.
+- `label_replace(TIMESERIE, "user", "$1", "namespace", "([a-zA-Z0-9]+)-workshop-dev")` extrait le nom de l'utilisateur depuis le *label* **namespace** à l'aide d'une expression régulière et le stocke dans un *label* **user**.
+- `sum(TIMESERIE) by (user)` supprime toutes les étiquettes sauf **user** (j'aurais pu utiliser les fonctions `min`, `max`, etc, ça marche aussi).
+- `clamp_max(TIMESERIE, 1)` plafonne le résultat à 1 pour garantir que le résultat est binaire.
+
+Cette première partie retourne l'état du micro-service Quarkus **dès lors que le Deployment kubernetes existe**.
+Tant que le Deployment kubernetes n'existe pas, aucune donnée n'est retournée par cette partie de la requête.
+
+Et la deuxième partie de la requête est là pour palier à ce problème :
+
+- `kube_namespace_status_phase{namespace=~"[a-zA-Z0-9]+-workshop-(dev|preprod|prod)",phase="Active"}` retourne les namespaces des participants étant dans un état actif (ils le sont tous durant la durée de l'atelier).
+- `label_replace(TIMESERIE, "user", "$1", "namespace", "([a-zA-Z0-9]+)-workshop-(dev|preprod|prod)")` extrait le nom de l'utilisateur depuis le *label* **namespace** à l'aide d'une expression régulière et le stocke dans un *label* **user**.
+- `sum(TIMESERIE) by (user)` supprime toutes les étiquettes sauf **user** (j'aurais pu utiliser les fonctions `min`, `max`, etc, ça marche aussi).
+- `clamp(TIMESERIE, 0, 0)` force toutes les valeurs de la *time serie* à 0.
+
+Cette deuxième partie permet d'avoir une valeur par défaut (0) pour l'ensemble des participants, même lorsque les Deployment kubernetes ne sont pas encore présents.
+
+Le mot clé `or` au milieu des deux requêtes permet de fusionner les deux parties, la première ayant la priorité sur la seconde.
+
+Les micro-services **villain** et **fight**, ainsi que les environnements de **preprod** et **prod** sont sur le même principe.
+Au total, ce sont 9 *time series* qui sont enregistrées sous la forme de *recording rules* :
+
+- `opencodequest_hero_quarkus_pod:dev`
+- `opencodequest_hero_quarkus_pod:preprod`
+- `opencodequest_hero_quarkus_pod:prod`
+- `opencodequest_villain_quarkus_pod:dev`
+- `opencodequest_villain_quarkus_pod:preprod`
+- `opencodequest_villain_quarkus_pod:prod`
+- `opencodequest_fight_quarkus_pod:dev`
+- `opencodequest_fight_quarkus_pod:preprod`
+- `opencodequest_fight_quarkus_pod:prod`
+
+### Détection de la base de données
+
+Je détecte le déploiement de la base de données **hero** dans l'environnement de **dev** à l'aide de la requête suivante que je persiste sous la forme d'une *recording rule* nommée **opencodequest_hero_db_pod:dev**.
+
+```
+clamp_max(
+  sum(
+    label_replace(kube_pod_status_phase{namespace=~"[a-zA-Z0-9]+-workshop-dev",pod="hero-database-1",phase="Running"}, "user", "$1", "namespace", "([a-zA-Z0-9]+)-workshop-dev")
+  ) by (user),
+1)
+or
+clamp(
+  sum(
+    label_replace(kube_namespace_status_phase{namespace=~".*-workshop-(dev|preprod|prod)",phase="Active"}, "user", "$1", "namespace", "(.*)-workshop-(dev|preprod|prod)")
+  ) by (user),
+0, 0)
+```
+
+La requête est très similaire à la précédente, excepté que je me base sur l'état du **Pod** nommé **hero-database-1**.
+C'est pour cette raison que j'utilise la timeserie **kube_pod_status_phase**.
+
+Le micro-service **villain**, ainsi que les environnements de **preprod** et **prod** sont sur le même principe.
+Au total, ce sont 6 *time series* qui sont enregistrées sous la forme de *recording rules* (**fight** n'a pas de base de données) :
+
+- `opencodequest_hero_db_pod:dev`
+- `opencodequest_hero_db_pod:preprod`
+- `opencodequest_hero_db_pod:prod`
+- `opencodequest_villain_db_pod:dev`
+- `opencodequest_villain_db_pod:preprod`
+- `opencodequest_villain_db_pod:prod`
+
+Les *recording rules* de l'environnement **prod** sont un peu différentes car dans cet environnement la base de données est mutualisée entre tous les participants et déployée avant le démarrage de l'atelier avec le reste de l'infrastructure.
+Par conséquent, je force la valeur des *time series* `opencodequest_hero_db_pod:prod` et `opencodequest_villain_db_pod:prod` à 1 en utilisant une variante de la deuxième partie de la requête expliquée plus haut :
+
+```
+clamp(
+  sum(
+    label_replace(kube_namespace_status_phase{namespace=~".*-workshop-(dev|preprod|prod)",phase="Active"}, "user", "$1", "namespace", "(.*)-workshop-(dev|preprod|prod)")
+  ) by (user),
+1, 1)
+```
+
+### Détection de la fin du Pipeline Tekton
+
+Détecter la fin du pipeline Tekton m'a demandé plus de travail car il n'existe pas de métrique standard pour connaître l'état d'un Pipeline.
+Je me suis donc basé sur la présence d'un pod `<user>-hero-run-<random>-resync-pod` dans l'environnement **dev** de l'utilisateur.
+Ce Pod correspond à la dernière étape du Pipeline Tekton.
+Donc si ce pod est dans un état **Completed**, c'est que le Pipeline s'est terminé avec succès.
+
+Je détecte l'état du Pipeline Tekton **hero** dans l'environnement de **dev** à l'aide de la requête suivante que je persiste sous la forme d'une *recording rule* nommée **opencodequest_hero_pipeline**.
+
+```
+clamp_max(
+  sum(
+    label_replace(kube_pod_status_phase{namespace=~"[a-zA-Z0-9]+-workshop-dev",pod=~"[a-zA-Z0-9]+-hero-run-.*-resync-pod",phase="Succeeded"}, "user", "$1", "namespace", "([a-zA-Z0-9]+)-workshop-dev")
+  ) by (user),
+1)
+or
+clamp(
+  sum(
+    label_replace(kube_namespace_status_phase{namespace=~".*-workshop-(dev|preprod|prod)",phase="Active"}, "user", "$1", "namespace", "(.*)-workshop-(dev|preprod|prod)")
+  ) by (user),
+0, 0)
+```
+
+La requête est très similaire à la précédente, excepté que l'état attendu du Pod est différent (**Completed**) et le nom du Pod est différent.
+
+Les micro-services **villain** et **fight** sont sur le même principe.
+Au total, ce sont 3 *time series* qui sont enregistrées sous la forme de *recording rules* (les pipelines n'existent que dans l'environnement **dev**) :
+
+- `opencodequest_hero_pipeline`
+- `opencodequest_villain_pipeline`
+- `opencodequest_fight_pipeline`
+
+### Détection de la fin de l'exercice
+
+Pour détecter la fin de l'exercice **hero** dans l'environnement de **dev**, je combine le résultat des trois requêtes précédentes à l'aide de la requète suivante que je persiste sous la forme d'une *recording rule* nommée **opencodequest_leaderboard_hero:dev**.
+
+```
+max(
+  (opencodequest_hero_quarkus_pod:dev + opencodequest_hero_db_pod:dev + opencodequest_hero_pipeline) == bool 3
+) by (user, cluster)
+```
+
+Cette requête fonctionne de la manière suivante :
+
+- `(opencodequest_hero_quarkus_pod:dev + opencodequest_hero_db_pod:dev + opencodequest_hero_pipeline) == bool 3` retourne 1 quand les trois composantes de l'exercice sont validées, 0 sinon.
+  L'opérateur **bool** est important car sans lui, la requête ne retournerait aucun résultat tant que les trois composantes de l'exercice ne sont pas validées.
+- `max(TIMESERIE) by (user, cluster)` élimine tous les *labels* sauf **cluster** et **user**.
+  Ici, l'utilisation de la fonction `max` est intéressante pour conserver le niveau maximum de complétude de l'exercice si par exemple l'utilisateur a commencé l'exercice sur un cluster et l'a refait et terminé sur un autre cluster.
+  C'est un cas qui ne doit pas arriver mais dans le doute...
+
+L'exercice **fight** n'a que deux composantes car il n'a pas de base de données.
+Les requêtes le concernant seront donc plus simples :
+
+```
+max(
+  (opencodequest_fight_quarkus_pod:prod + opencodequest_fight_pipeline) == bool 2
+) by (user, cluster)
+```
+
+C'est un total de 9 *recording rules* qui enregistrent l'état de complétude des 3 exercices au travers des 3 environnements des participants.
+
+- `opencodequest_leaderboard_hero:dev`
+- `opencodequest_leaderboard_hero:preprod`
+- `opencodequest_leaderboard_hero:prod`
+- `opencodequest_leaderboard_villain:dev`
+- `opencodequest_leaderboard_villain:preprod`
+- `opencodequest_leaderboard_villain:prod`
+- `opencodequest_leaderboard_fight:dev`
+- `opencodequest_leaderboard_fight:preprod`
+- `opencodequest_leaderboard_fight:prod`
+
+Et avec ces dernières *recording rules* nous venons de raccorder le Leaderboard avec les environnements OpenShift utilisés pour l'Open Code Quest.
+Voyons maintenant comment l'observabilité a été implémentée dans **Red Hat Advanced Cluster Management** !
+
+## Observabilité dans Red Hat Advanced Cluster Management
 
 Lors de l'Open Code Quest, nous avions à notre disposition 8 clusters :
 
