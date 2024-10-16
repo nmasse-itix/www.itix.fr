@@ -404,8 +404,7 @@ Je vois un avantage à cette approche : calculer les trois composantes de chaque
 À l'inverse, j'ai dû calculer sous la forme de *recording rules* au niveau du **cluster central** les requêtes Prometheus du Leaderboard décrites en première partie de cet article.
 Effectivement, je n'ai pas trop eu le choix : j'avais besoin d'avoir plusieurs groupes de *recording rules* et cette fonction n'est disponible que dans la ConfigMap qui configure les *recording rules* du cluster **central**.
 
-### Adaptation des requêtes Prometheus
-
+Vous pouvez retrouver l'ensemble des *recording rules* utilisées pour l'Open Code Quest dans le dossier [acm](https://github.com/nmasse-itix/opencodequest-leaderboard/tree/main/acm).
 
 ### Déploiement d'une instance Grafana de développement
 
