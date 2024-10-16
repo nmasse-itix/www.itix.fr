@@ -1,9 +1,8 @@
 ---
-title: "Dans les coulisses de l'Open Code Quest : comment j'ai conçu et développé le Leaderboard"
+title: "Dans les coulisses de l'Open Code Quest : comment j'ai conçu le Leaderboard"
 date: 2024-10-11T00:00:00+02:00
 #lastMod: 2024-10-11T00:00:00+02:00
 opensource:
-- Kubernetes
 - Prometheus
 - Grafana
 - Octave
@@ -26,7 +25,7 @@ J'ai conçu et développé le **Leaderboard** qui affiche la progression des par
 Facile ?
 Pas tant que ça car je me suis imposé une figure de style : utiliser **Prometheus** et **Grafana**.
 
-Suivez-moi dans les coulisse de l'Open Code Quest : comment j'ai conçu et développé le Leaderboard !
+Suivez-moi dans les coulisse de l'Open Code Quest : comment j'ai conçu le Leaderboard !
 
 <!--more-->
 
@@ -373,9 +372,9 @@ La figure suivante présente les 6 composantes de requête Prometheus permettant
 ### *Recording Rules*
 
 Les requêtes `opencodequest_leaderboard_*` s'appuient sur la fonction **increase** et les requêtes `opencodequest_leaderboard_*_lifetime_bonus` s'appuient sur la fonction **sum_over_time**.
-Ces deux fonctions Prometheus ont une contrainte : on ne peut les appliquer **que sur un *range vector***.
+Ces deux fonctions Prometheus ont une contrainte : on ne peut les appliquer **que sur un *range vector*** (c'est la syntaxe `timeserie[range]` que vous avez aperçue dans les exemples ci-dessus).
 
-Et un ***range vector* ne peut pas être le résultat d'un calcul**.
+Et **un *range vector* ne peut pas être le résultat d'un calcul**.
 
 C'est à dire que la requête suivante est valide :
 
@@ -410,203 +409,39 @@ C'est pour cette raison que vous retrouverez dans le fichier `prometheus/recordi
 - `opencodequest_step1` pour les requêtes `opencodequest_leaderboard_*_onetime_bonus`.
 - `opencodequest_step2` pour les requêtes `opencodequest_leaderboard_*_lifetime_bonus`.
 
-Et vous verrez dans la section suivante que les *recording rules* dans une configuration **Red Hat Advanced Cluster Management** ont quelques subtilitées...
+Et vous verrez dans l'article suivant que les *recording rules* dans une configuration **Red Hat Advanced Cluster Management** ont quelques subtilités...
 
-## Observabilité dans Red Hat Advanced Cluster Management
+## Création du tableau de bord Grafana
 
-Maintenant que le principe est validé et que les requêtes ont été mises au point dans Prometheus, il est temps d'implémenter tout ça dans le module **Observabilité** de **Red Hat Advanced Cluster Management**.
+### Variables
 
-Lors de l'Open Code Quest, nous avions à notre disposition 8 clusters :
+### Classement
 
-- 1 cluster **central**
-- 1 cluster pour l'intelligence artificielle
-- 6 clusters répartis entre les participants (on avait prévu un cluster par table)
+### Explication du classement
 
-**Red Hat Advanced Cluster Management** est installé sur le cluster **central** et à partir de là, il contrôle l'ensemble des clusters.
+### Progression des points au cours du temps
 
-L'observabilité est un module supplémentaire (dans le sens où il n'est pas installé par défaut) de **Red Hat Advanced Cluster Management** et ce module est basé sur les composants Open Source **Prometheus**, **Thanos** et **Grafana**.
+### Classement final
 
-L'architecture du module d'observabilité, tel que décrit [dans la documentation Red Hat Advanced Cluster Management](https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.11/html/observability/observing-environments-intro#observing-environments-intro), est la suivante :
+## Le jour de l'Open Code Quest
 
-{{< attachedFigure src="redhat-acm-observability-architecture.png" title="Architecture logique de l'observabilité dans Red Hat Advanced Cluster Management 2.11 ([source](https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.11/html/observability/observing-environments-intro#observing-environments-intro))" >}}
+Le jour de l'Open Code Quest, le Leaderboard a bien fonctionné et nous a permis de déterminer les 30 participants les plus rapides.
+Ils sont montés sur scène pour recevoir une récompense.
 
-**TODO**
+Quant à la question qui est sur toutes les lèvres : est-ce qu'il y a eu de la baston entre super héros pour le podium ?
+La réponse est un grand **OUI** !
+Et il y a eu du frisson lors de l'annonce des résultats...
 
-### Mise en place de l'observabilité
+{{< attachedFigure src="grafana-opencodequest-points.png" title="Progression des points des 74 participants lors de l'Open Code Quest." >}}
 
-Le déployement du module d'observabilité sur le cluster **central**, se fait très simplement en suivant [la documentation](https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.11/html/observability/observing-environments-intro#enabling-observability-service) :
+Observez toutes ces courbes qui se croisent, tous ces super-héros en compétition pour la première place !
 
-- Créer le namespace `open-cluster-management-observability`.
-- Créer le *pull secret* permettant de télécharger les images sur **registry.redhat.io**.
-- Créer un *bucket* S3.
-- Créer la *Custom Resource Definition* `MultiClusterObservability`.
+## Conclusion
 
-Pour effectuer ces opérations, j'ai utiliser les commandes suivantes :
+En conclusion, l’Open Code Quest a été une expérience aussi stimulante pour les participants que pour moi en tant qu'organisateur.
+Ce projet a non seulement mis en lumière des technologies comme Quarkus, OpenShift et l’IA Granite d’IBM, mais il a également démontré à quel point des outils comme Prometheus et Grafana peuvent être utilisés de manière créative pour répondre à des problématiques bien concrètes.
 
-```sh
-AWS_ACCESS_KEY_ID="REDACTED"
-AWS_SECRET_ACCESS_KEY="REDACTED"
-S3_BUCKET_NAME="REDACTED"
-AWS_REGION="eu-west-3"
+Concevoir le Leaderboard, bien que complexe, a ajouté une dimension compétitive motivante à l’atelier.
+Le jour J, voir les participants rivaliser de rapidité tout en explorant les solutions Red Hat a été incroyablement gratifiant.
 
-# Create the open-cluster-management-observability namespace
-oc create namespace open-cluster-management-observability
-
-# Copy the pull secret from the openshift namespace
-DOCKER_CONFIG_JSON=`oc extract secret/pull-secret -n openshift-config --to=-`
-echo $DOCKER_CONFIG_JSON
-oc create secret generic multiclusterhub-operator-pull-secret \  
-   -n open-cluster-management-observability \  
-   --from-literal=.dockerconfigjson="$DOCKER_CONFIG_JSON" \  
-   --type=kubernetes.io/dockerconfigjson
-
-# Create an S3 bucket
-aws s3api create-bucket --bucket "$S3_BUCKET_NAME" --create-bucket-configuration "LocationConstraint=$AWS_REGION" --region "$AWS_REGION" --output json
-
-# Deploy the observability add-on
-oc apply -f - <<EOF
-apiVersion: v1
-kind: Secret
-metadata:
-  name: thanos-object-storage
-  namespace: open-cluster-management-observability
-type: Opaque
-stringData:
-  thanos.yaml: |
-    type: s3
-    config:
-      bucket: $S3_BUCKET_NAME
-      endpoint: s3.$AWS_REGION.amazonaws.com
-      insecure: false
-      access_key: $AWS_ACCESS_KEY_ID
-      secret_key: $AWS_SECRET_ACCESS_KEY
-EOF
-oc apply -f - <<EOF
-apiVersion: observability.open-cluster-management.io/v1beta2
-kind: MultiClusterObservability
-metadata:
-  name: observability
-  namespace: open-cluster-management-observability
-spec:
-  observabilityAddonSpec: {}
-  storageConfig:
-    metricObjectStorage:
-      name: thanos-object-storage
-      key: thanos.yaml
-EOF
-```
-
-Après installation du module d'observabilité, les clusters managés sont automatiquement configurés pour remonter les métriques Prometheus les plus importantes sur le cluster **central**.
-
-L'atelier **Open Code Quest** tire parti de métriques *custom* que j'utilise dans le Leaderboard pour savoir quels sont les participants qui ont fait marcher leurs micro-services.
-Pour collecter ces métriques, j'active la fonction **User Workload Monitoring** d'**OpenShift** dans chaque cluster managé.
-
-```sh
-oc -n openshift-monitoring get configmap cluster-monitoring-config -o yaml | sed -r 's/(\senableUserWorkload:\s).*/\1true/' | oc apply -f -
-```
-
-### Implémentation des *Recording rules*
-
-Les recording rules peuvent être calculées à deux moments différents :
-
-- Dans chaque cluster managé, avant envoi sur le cluster central.
-- Dans le cluster central, après réception.
-
-Mais il y a une petite subtilité : ce choix est vrai pour les métriques standard d'OpenShift.
-
-Les *recording rules* faisant appel à des métriques *custom* (ie. le **User Workload Monitoring**) ne sont calculées **qu'après réception sur le cluster central**.
-Il n'est pas possible de les calculer avant envoi sur le cluster central.
-On peut spécifier des métriques *custom* à envoyer telles quelles.
-
-Elles ne se configurent pas non plus au même endroit en fonction de si c'est une métrique *custom* ou une métrique standard et de si c'est fait avant ou après envoi.
-
-Pour vous aider, j'ai fait un tableau récapitulatif :
-
-| Type de métrique     | Calcul de la *recording rule*     | Emplacement de la configuration                                                | Nom de la ConfigMap                      | Clé                     |
-| -------------------- | --------------------------------- | ------------------------------------------------------------------------------ | ---------------------------------------- | ----------------------- |
-| standard             | avant envoi                       | *namespace* `open-cluster-management-observability` sur le cluster **central** | `observability-metrics-custom-allowlist` | `metrics_list.yaml`     |
-| *custom*             | **pas de calcul**, envoi tel quel | *namespace* `open-cluster-management-observability` sur le cluster **central** | `observability-metrics-custom-allowlist` | `uwl_metrics_list.yaml` |
-| standard ou *custom* | à réception                       | *namespace* `open-cluster-management-observability` sur le cluster **central** | `thanos-ruler-custom-rules`              | `custom_rules.yaml`     |
-
-#### *Recording Rules* avant envoi
-
-Pour l'envoi des métriques et le calcul des *recording rules* **avant envoi** sur le cluster **central**, ça se configure dans le *namespace* `open-cluster-management-observability` sur le cluster **central** via une ConfigMap :
-
-```yaml
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: observability-metrics-custom-allowlist
-  namespace: open-cluster-management-observability
-data:
-  uwl_metrics_list.yaml: |
-    names:
-    - fights_total
-  metrics_list.yaml: |
-    names:
-    - kube_deployment_status_replicas_ready
-    - kube_pod_status_phase
-    - kube_namespace_status_phase
-    rules:
-    - record: opencodequest_hero_quarkus_pod:dev
-      expr: kube_deployment_status_condition{namespace=~\"[a-zA-Z0-9]+-workshop-dev\",deployment=\"hero\",condition=\"Available\",status=\"true\"}
-```
-
-La configuration ci-dessus permet de :
-
-- Envoyer la métrique *custom* `fights_total` telle quelle
-- Envoyer les métriques standard `kube_deployment_status_replicas_ready`, `kube_pod_status_phase` et `kube_namespace_status_phase` telles quelles
-- Créer une métrique `opencodequest_hero_quarkus_pod:dev` à partir de la requête Prometheus `kube_deployment_status_condition{...}` et envoyer le résultat
-
-#### *Recording Rules* à réception
-
-Pour le calcul des *recording rules* **à réception** sur le cluster **central**, ça se configure aussi dans le *namespace* `open-cluster-management-observability` sur le cluster **central** mais via une autre ConfigMap :
-
-```yaml
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: thanos-ruler-custom-rules
-  namespace: open-cluster-management-observability
-data:
-  custom_rules.yaml: |
-    groups:
-      - name: opencodequest
-        rules:
-        - record: opencodequest_hero_quarkus_pod:dev
-          expr: kube_deployment_status_condition{namespace=~"[a-zA-Z0-9]+-workshop-dev",deployment="hero",condition="Available",status="true"}
-```
-
-On notera que les syntaxes des deux ConfigMap ne sont pas identiques.
-
-- Dans la ConfigMap `observability-metrics-custom-allowlist`, les *double quotes* doivent être échappées par un *backslash*.
-  Ce n'est pas le cas dans l'autre ConfigMap.
-- La syntaxe de la ConfigMap `thanos-ruler-custom-rules` permet de spécifier des groupes de *recording rules* alors que l'autre ConfigMap ne permet pas de le faire.
-
-Note: les noms des métriques dans les exemples ci-dessus sont plus ou moins fictif.
-Ce ne sont pas ces configurations que j'ai utilisées au final.
-
-### Déploiement d'une instance Grafana de développement
-
-Déployer une instance de dev de Grafana.
-
-```sh
-# Deploy a Grafana development instance
-git clone https://github.com/stolostron/multicluster-observability-operator.git
-cd multicluster-observability-operator/tools
-./setup-grafana-dev.sh --deploy
-
-# Login on Grafana
-GRAFANA_DEV_HOSTNAME="$(oc get route grafana-dev -n open-cluster-management-observability -o jsonpath='{.status.ingress[0].host}')"
-echo "Now login to Grafana with your openshift user at https://$GRAFANA_DEV_HOSTNAME"
-read -q "?press any key to continue "
-./switch-to-grafana-admin.sh "$(oc whoami)"
-```
-
-Créer le dashboard "Red Hat Summit Connect 2024"
-
-```sh
-./generate-dashboard-configmap-yaml.sh "Red Hat Summit Connect 2024"
-./setup-grafana-dev.sh --clean
-```
-
+Et pour savoir comment j'ai implémenté ce Leaderboard dans une architecture multi-cluster avec Red Hat ACM, c'est par ici : {{< internalLink path="/blog/behind-the-scenes-at-open-code-quest-how-i-implemented-leaderboard-with-acm/index.md" >}}.
