@@ -413,15 +413,62 @@ Et vous verrez dans l'article suivant que les *recording rules* dans une configu
 
 ## Création du tableau de bord Grafana
 
-### Variables
+Une fois toutes les requêtes Prometheus mises au point, la création du tableau de bord Grafana est relativement simple :
 
-### Classement
+- Créer deux variables : **env** (l'environnement des participants sur lequel calculer le score) et **user** (la liste des utilisateurs à inclure dans le leaderboard).
+- Ajouter deux visualisations : une pour le classement instantané et une pour la progression des points au cours du temps.
 
-### Explication du classement
+La variable **user** est multi-valuée (on peut sélectionner tous les utilisateurs ou décocher les utilisateurs qu'on ne veut pas voir... comme ceux ayant servi à la recette la veille !) et les valeurs possibles sont extraites des *labels* d'une *time serie* Prometheus (peu importe laquelle, tant que tous les utilisateurs sont représentés).
 
-### Progression des points au cours du temps
+La variable **env** a trois valeurs possibles ("dev", "preprod" ou "prod") mais on ne peut sélectionner qu'une valeur à la fois.
 
-### Classement final
+Ces deux variables s'utilisent ensuite dans la requète du Leaderboard de la manière suivante :
+
+```
+max(
+  opencodequest_leaderboard_hero_lifetime_bonus:${env:text}{user=~"${user:regex}"}
+  + sum_over_time(opencodequest_leaderboard_hero:${env:text}{user=~"${user:regex}"}[1h])
+  + opencodequest_leaderboard_villain_lifetime_bonus:${env:text}{user=~"${user:regex}"}
+  + sum_over_time(opencodequest_leaderboard_villain:${env:text}{user=~"${user:regex}"}[1h])
+  + opencodequest_leaderboard_fight_lifetime_bonus:${env:text}{user=~"${user:regex}"}
+  + sum_over_time(opencodequest_leaderboard_fight:${env:text}{user=~"${user:regex}"}[1h])
+) by (user)
+```
+
+La syntaxe `${user:regex}` permet à Grafana de remplacer `user=~"${user:regex}"` par `user=~"(batman|catwoman|invisibleman|superman)"` lorsque plusieurs valeurs sont sélectionnées dans la liste déroulante.
+
+### Visualisation du classement instantané
+
+Pour montrer le classement instantané, j'ai utilisé la visualisation **Bar Chart** avec une transformation de type **Sort by** sur le champ **Value**.
+
+{{< attachedFigure src="grafana-opencodequest-leaderboard-instant-snapshot.png" title="Paramètres de la visualisation Grafana pour le classement instantané." >}}
+
+Les paramètres importants de cette visualisation sont :
+
+- **Format** : `Table`
+- **Type** : `Instant`
+- **Legend** : `{{user}}` (pour afficher le nom du participant en face de son score)
+
+### Visualisation des points au cours du temps
+
+Pour suivre la progression des points au cours du temps, j'ai opté pour la visualisation **Time series**.
+
+{{< attachedFigure src="grafana-opencodequest-leaderboard-points-over-time.png" title="Paramètres de la visualisation Grafana pour la progression des points." >}}
+
+Les paramètres importants de cette visualisation sont :
+
+- **Format** : `Time series`
+- **Type** : `Range`
+- **Min step** : `5s` lors de la mise au point sur le banc d'essai et `5m` en vrai.
+
+### Résultat
+
+Le tableau de bord utilisé le jour de l'Open Code Quest était peu ou prou ce que l'on voit sur la figure 5 (le gif animé) :
+
+- Le classement instanané, projeté par moment sur le vidéo projecteur pour annoncer les scores intermédiaires.
+- La progression des points au cours du temps, affichée sur un deuxième écran pour garder un oeil sur la compétition.
+
+Vous retrouverez tous les tableaux de bord Grafana présentés ici dans le dossier [grafana](https://github.com/nmasse-itix/opencodequest-leaderboard/tree/main/grafana).
 
 ## Le jour de l'Open Code Quest
 
@@ -439,7 +486,7 @@ Observez toutes ces courbes qui se croisent, tous ces super-héros en compétiti
 ## Conclusion
 
 En conclusion, l’Open Code Quest a été une expérience aussi stimulante pour les participants que pour moi en tant qu'organisateur.
-Ce projet a non seulement mis en lumière des technologies comme Quarkus, OpenShift et l’IA Granite d’IBM, mais il a également démontré à quel point des outils comme Prometheus et Grafana peuvent être utilisés de manière créative pour répondre à des problématiques bien concrètes.
+Ce projet a non seulement mis en lumière des technologies comme Quarkus, OpenShift et le modèle Granite d’IBM, mais il a également démontré à quel point des outils comme Prometheus et Grafana peuvent être utilisés de manière créative pour répondre à des problématiques bien concrètes.
 
 Concevoir le Leaderboard, bien que complexe, a ajouté une dimension compétitive motivante à l’atelier.
 Le jour J, voir les participants rivaliser de rapidité tout en explorant les solutions Red Hat a été incroyablement gratifiant.
