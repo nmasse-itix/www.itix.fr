@@ -224,84 +224,15 @@ Lors de l'Open Code Quest, nous avions à notre disposition 8 clusters :
 
 L'observabilité est un module supplémentaire (dans le sens où il n'est pas installé par défaut) de **Red Hat Advanced Cluster Management** et ce module est basé sur les composants Open Source **Prometheus**, **Thanos** et **Grafana**.
 
-L'architecture du module d'observabilité, tel que décrit [dans la documentation Red Hat Advanced Cluster Management](https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.11/html/observability/observing-environments-intro#observing-environments-intro), est la suivante :
+Le schéma suivant présente l'architecture du module d'observabilité dans **Red Hat Advanced Cluster Management**.
+Je l'ai créé en observant les relations entre les composants à partir d'une installation d'ACM en version 2.11.
 
-{{< attachedFigure src="redhat-acm-observability-architecture.png" title="Architecture logique de l'observabilité dans Red Hat Advanced Cluster Management 2.11 ([source](https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.11/html/observability/observing-environments-intro#observing-environments-intro))" >}}
+{{< attachedFigure src="redhat-acm-observability-architecture.svg" title="Architecture logique de l'observabilité dans Red Hat Advanced Cluster Management 2.11" >}}
 
-**TODO**
+Les composants déployés sur le cluster central sont en **vert**, ceux déployés sur les clusters managés sont en **bleu** et les éléments de configuration en **gris**.
+J'ai aussi illustré les deux endroits possibles pour le calcul des *recording rules*, en **jaune**.
 
-### Mise en place de l'observabilité
-
-Le déployement du module d'observabilité sur le cluster **central**, se fait très simplement en suivant [la documentation](https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.11/html/observability/observing-environments-intro#enabling-observability-service) :
-
-- Créer le namespace `open-cluster-management-observability`.
-- Créer le *pull secret* permettant de télécharger les images sur **registry.redhat.io**.
-- Créer un *bucket* S3.
-- Créer la *Custom Resource Definition* `MultiClusterObservability`.
-
-Pour effectuer ces opérations, j'ai utiliser les commandes suivantes :
-
-```sh
-AWS_ACCESS_KEY_ID="REDACTED"
-AWS_SECRET_ACCESS_KEY="REDACTED"
-S3_BUCKET_NAME="REDACTED"
-AWS_REGION="eu-west-3"
-
-# Create the open-cluster-management-observability namespace
-oc create namespace open-cluster-management-observability
-
-# Copy the pull secret from the openshift namespace
-DOCKER_CONFIG_JSON=`oc extract secret/pull-secret -n openshift-config --to=-`
-echo $DOCKER_CONFIG_JSON
-oc create secret generic multiclusterhub-operator-pull-secret \  
-   -n open-cluster-management-observability \  
-   --from-literal=.dockerconfigjson="$DOCKER_CONFIG_JSON" \  
-   --type=kubernetes.io/dockerconfigjson
-
-# Create an S3 bucket
-aws s3api create-bucket --bucket "$S3_BUCKET_NAME" --create-bucket-configuration "LocationConstraint=$AWS_REGION" --region "$AWS_REGION" --output json
-
-# Deploy the observability add-on
-oc apply -f - <<EOF
-apiVersion: v1
-kind: Secret
-metadata:
-  name: thanos-object-storage
-  namespace: open-cluster-management-observability
-type: Opaque
-stringData:
-  thanos.yaml: |
-    type: s3
-    config:
-      bucket: $S3_BUCKET_NAME
-      endpoint: s3.$AWS_REGION.amazonaws.com
-      insecure: false
-      access_key: $AWS_ACCESS_KEY_ID
-      secret_key: $AWS_SECRET_ACCESS_KEY
-EOF
-oc apply -f - <<EOF
-apiVersion: observability.open-cluster-management.io/v1beta2
-kind: MultiClusterObservability
-metadata:
-  name: observability
-  namespace: open-cluster-management-observability
-spec:
-  observabilityAddonSpec: {}
-  storageConfig:
-    metricObjectStorage:
-      name: thanos-object-storage
-      key: thanos.yaml
-EOF
-```
-
-Après installation du module d'observabilité, les clusters managés sont automatiquement configurés pour remonter les métriques Prometheus les plus importantes sur le cluster **central**.
-
-L'atelier **Open Code Quest** tire parti de métriques *custom* que j'utilise dans le Leaderboard pour savoir quels sont les participants qui ont fait marcher leurs micro-services.
-Pour collecter ces métriques, j'active la fonction **User Workload Monitoring** d'**OpenShift** dans chaque cluster managé.
-
-```sh
-oc -n openshift-monitoring get configmap cluster-monitoring-config -o yaml | sed -r 's/(\senableUserWorkload:\s).*/\1true/' | oc apply -f -
-```
+On notera que les ConfigMap sur les clusters managés peuvent être déployées automatiquement depuis le cluster **central** via un **ManifestWork**.
 
 ### Implémentation des *Recording rules*
 
@@ -406,27 +337,117 @@ Effectivement, je n'ai pas trop eu le choix : j'avais besoin d'avoir plusieurs g
 
 Vous pouvez retrouver l'ensemble des *recording rules* utilisées pour l'Open Code Quest dans le dossier [acm](https://github.com/nmasse-itix/opencodequest-leaderboard/tree/main/acm).
 
-### Déploiement d'une instance Grafana de développement
+### Mise en place de l'observabilité
 
-Déployer une instance de dev de Grafana.
+Le déployement du module d'observabilité sur le cluster **central**, se fait très simplement en suivant [la documentation](https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.11/html/observability/observing-environments-intro#enabling-observability-service) :
+
+- Créer le namespace `open-cluster-management-observability`.
+- Créer le *pull secret* permettant de télécharger les images sur **registry.redhat.io**.
+- Créer un *bucket* S3.
+- Créer la *Custom Resource Definition* `MultiClusterObservability`.
+
+Pour effectuer ces opérations, j'ai utiliser les commandes suivantes :
 
 ```sh
-# Deploy a Grafana development instance
+AWS_ACCESS_KEY_ID="REDACTED"
+AWS_SECRET_ACCESS_KEY="REDACTED"
+S3_BUCKET_NAME="REDACTED"
+AWS_REGION="eu-west-3"
+
+# Create the open-cluster-management-observability namespace
+oc create namespace open-cluster-management-observability
+
+# Copy the pull secret from the openshift namespace
+DOCKER_CONFIG_JSON=`oc extract secret/pull-secret -n openshift-config --to=-`
+echo $DOCKER_CONFIG_JSON
+oc create secret generic multiclusterhub-operator-pull-secret \  
+   -n open-cluster-management-observability \  
+   --from-literal=.dockerconfigjson="$DOCKER_CONFIG_JSON" \  
+   --type=kubernetes.io/dockerconfigjson
+
+# Create an S3 bucket
+aws s3api create-bucket --bucket "$S3_BUCKET_NAME" --create-bucket-configuration "LocationConstraint=$AWS_REGION" --region "$AWS_REGION" --output json
+
+# Deploy the observability add-on
+oc apply -f - <<EOF
+apiVersion: v1
+kind: Secret
+metadata:
+  name: thanos-object-storage
+  namespace: open-cluster-management-observability
+type: Opaque
+stringData:
+  thanos.yaml: |
+    type: s3
+    config:
+      bucket: $S3_BUCKET_NAME
+      endpoint: s3.$AWS_REGION.amazonaws.com
+      insecure: false
+      access_key: $AWS_ACCESS_KEY_ID
+      secret_key: $AWS_SECRET_ACCESS_KEY
+EOF
+oc apply -f - <<EOF
+apiVersion: observability.open-cluster-management.io/v1beta2
+kind: MultiClusterObservability
+metadata:
+  name: observability
+  namespace: open-cluster-management-observability
+spec:
+  observabilityAddonSpec: {}
+  storageConfig:
+    metricObjectStorage:
+      name: thanos-object-storage
+      key: thanos.yaml
+EOF
+```
+
+Après installation du module d'observabilité, les clusters managés sont automatiquement configurés pour remonter les métriques Prometheus les plus importantes sur le cluster **central**.
+
+L'atelier **Open Code Quest** tire parti de métriques *custom* que j'utilise dans le Leaderboard pour savoir quels sont les participants qui ont fait marcher leurs micro-services.
+Pour collecter ces métriques, j'active la fonction **User Workload Monitoring** d'**OpenShift** dans chaque cluster managé.
+
+```sh
+oc -n openshift-monitoring get configmap cluster-monitoring-config -o yaml | sed -r 's/(\senableUserWorkload:\s).*/\1true/' | oc apply -f -
+```
+
+### Déploiement d'une instance Grafana de développement
+
+Une instance Grafana est déployée automatiquement avec le module d'observabilité mais cette instance est en lecture seule : on peut consulter les tableaux de bord standard mais pas en mettre au point de nouveaux.
+Pour en créer de nouveaux, il faut déployer en parallèle une instance de développement de Grafana.
+
+```sh
 git clone https://github.com/stolostron/multicluster-observability-operator.git
 cd multicluster-observability-operator/tools
 ./setup-grafana-dev.sh --deploy
+```
 
-# Login on Grafana
+Une fois l'instance déployée, il faut s'y connecter avec n'importe quel utilisateur OpenShift et donner les privilèges **administrateur** à cet utilisateur.
+
+```sh
 GRAFANA_DEV_HOSTNAME="$(oc get route grafana-dev -n open-cluster-management-observability -o jsonpath='{.status.ingress[0].host}')"
 echo "Now login to Grafana with your openshift user at https://$GRAFANA_DEV_HOSTNAME"
 read -q "?press any key to continue "
 ./switch-to-grafana-admin.sh "$(oc whoami)"
 ```
 
-Créer le dashboard "Red Hat Summit Connect 2024"
+Puis, créer le tableau de bord "Red Hat Summit Connect 2024", comme expliqué dans l'article {{< internalLink path="/blog/behind-the-scenes-at-open-code-quest-how-i-designed-leaderboard/index.md" >}}.
+
+Et enfin, exporter le tableau de bord sous la forme d'une ConfigMap.
 
 ```sh
 ./generate-dashboard-configmap-yaml.sh "Red Hat Summit Connect 2024"
-./setup-grafana-dev.sh --clean
 ```
 
+Un fichier `red-hat-summit-connect-2024.yaml` est créé.
+Il suffit de l'appliquer sur le cluster **central** pour que le tableau de bord apparaisse dans l'instance Grafana de production.
+
+```sh
+oc apply -f red-hat-summit-connect-2024.yaml
+```
+
+## Conclusion
+
+Pour conclure, l'implémentation du Leaderboard dans Red Hat Advanced Cluster Management m'a permis de mieux comprendre le fonctionnement de l'observabilité, en particulier les *recording rules*.
+Au final, j'ai réussi à mettre en place un tableau de bord qui suit en temps réel l'avancée des participants.
+
+Retrouvez l'ensemble des *recording rules* utilisées pour l'Open Code Quest dans le dossier [acm](https://github.com/nmasse-itix/opencodequest-leaderboard/tree/main/acm) de l'entrepôt Git.
