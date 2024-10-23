@@ -1,0 +1,21 @@
+<!-- This shortcode renders an HTML video based on a page resource -->
+{{- $filename := .Get "src" -}}
+{{- $video := .Page.Resources.GetMatch (printf "%s" $filename) -}}
+{{- $autoplay := default false (.Get "autoplay") -}}
+{{- $loop := default false (.Get "loop") -}}
+{{- $muted := default false (.Get "muted") -}}
+{{- $controls := default false (.Get "controls") -}}
+{{- $preload := default "metadata" (.Get "preload") -}}
+{{- $height := .Get "height" -}}
+{{- $width := .Get "width" -}}
+<video
+{{- with $autoplay }} autoplay{{ end -}}
+{{- with $loop }} loop{{ end -}}
+{{- with $muted }} muted{{ end -}}
+{{- with $controls }} controls{{ end -}}
+{{- with $preload }} preload="{{ . }}"{{ end -}}
+{{- with $height }} height="{{ . }}"{{ end -}}
+{{- with $width }} width="{{ . }}"{{ end -}}
+>
+  <source src="{{ $video.RelPermalink }}" type="{{ $video.MediaType.Type }}">
+</video>
