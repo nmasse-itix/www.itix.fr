@@ -18,7 +18,7 @@ topics:
 - Edge Computing
 ---
 
-Le 8 Octobre 2024, j'ai participé au [Red Hat Summit Connect France 2024](https://www.redhat.com/fr/summit/connect/emea/paris-2024) à double titre :
+Le 8 Octobre 2024, j'ai participé au [Red Hat Summit Connect France 2024](https://www.redhat.com/fr/summit/connect/emea/paris-2024) [💾](TODO) à double titre :
 
 - Je me suis occupé du Leaderboard de l'atelier **Open Code Quest** et j'ai assuré le rôle de SRE pour la plateforme de cet atelier.
 - J'étais présent sur le stand RHEL pour présenter notre démo "Mission Impossible" avec le train Lego.
@@ -84,23 +84,77 @@ Tout est expliqué dans ces deux articles :
 
 ## Démo "Mission Impossible" : Lego, AI & Edge Computing
 
-### Scénario
+Une partie de la journée, j'étais sur le stand RHEL, accompagné de [Adrien](https://www.linkedin.com/in/adrien-legros-78674a133/), [Mourad](https://www.linkedin.com/in/mourad-ouachani-0734218/) et [Pauline](https://www.linkedin.com/in/trg-pauline/) pour installer la démo "Mission Impossible" et répondre aux questions du public.
+
+Cette démo, nous l'avons conçue pour l'événement {{< internalLink path="/speaking/platform-day-2024/index.md" >}} sur le thème du dernier opus du film **Mission Impossible: Dead Reckoning**.
+Dans cette démo, **Ethan Hunt** a besoin d'aide pour arrêter le train **Lego City #60337** avant qu'il ne soit trop tard !
+Rien de moins que le sort de l'humanité est en jeu !
 
 {{< attachedFigure src="mission-impossible-plot.png" >}}
+
+Le scénario nécessite que **Ethan Hunt** monte à bord du train pour y connecter une carte **Nvidia Jetson Orin Nano** au réseau informatique du train et y déploie une IA qui reconnaitra les panneaux de signalisation et arrêtera le train à temps avant qu'il ne déraille !
+Une console permettra d'avoir une vue déportée de la caméra de vidéo surveillance du train, avec les résultats de l'inférence du modèle d'IA incrustés.
+
 {{< attachedFigure src="mission-impossible-scenario.png" >}}
 
-### Sous le capot
+Pour mettre en oeuvre cette démo, nous avons équipé le train **Lego** d'une carte **Nvidia Jetson Orin Nano**, d'une webcam et d'une batterie portable.
+La carte Nvidia Jetson Orin est un System On Chip (SoC), elle comprend tout le matériel dont **Ethan Hunt** a besoin pour sa mission : CPU, RAM, stockage...
+Ainsi qu'un un GPU pour accélérer les calculs !
+Le Jetson reçoit le flux vidéo de la caméra embarquée et transmet les ordres au Hub **Lego** via le protocole **Bluetooth Low Energy**.
+Il est alimenté via une batterie portable pour la durée de la mission.
 
-{{< attachedFigure src="mission-impossible-hardware-architecture.png" >}}
-{{< attachedFigure src="mission-impossible-software-architecture.png" >}}
-{{< attachedFigure src="mission-impossible-ai.png" >}}
-
-### Action !
-
-{{< embeddedVideo src="mission-impossible-demo.mp4" autoplay="true" loop="true" muted="true" width="1920" height="1080" >}}
 {{< attachedFigure src="rhel-booth-mission-impossible-demo.jpeg" >}}
 
+Nous sommes dans un contexte de Edge Computing.
+Sur le Jetson, on a installé **Red Hat Device Edge**.
+C’est une variante de Red Hat Enterprise Linux adaptée aux contraintes du **Edge Computing**.
+On y a installé **Microshift**, le Kubernetes de Red Hat taillée pour le Edge.
+Et dans Microshift, on a déployé *over-the-air* les microservices, un **broker MQTT** et le modèle d’intelligence artificielle.
+
+Le Jetson est relié, pour la durée de la mission, à un cluster OpenShift dans le cloud AWS via une connexion 5G.
+Dans le cloud AWS, on a une VM RHEL 9 qui nous permet de construire les images **Red Hat Device Edge** pour le SoC Jetson.
+Dans le cluster OpenShift, l'application application de vidéo surveillance qui diffuse le flux vidéo de la caméra embarquée du train.
+Le flux vidéo est relayé depuis le Jetson au travers d’un **broker Kafka** !
+Il faut ajouter à cela des pipelines MLops pour entraîner le modèle d’IA.
+Et enfin des pipelines CI/CD pour construire les images de conteneur de nos micro-services pour les architectures x86 et ARM.
+
+{{< attachedFigure src="mission-impossible-hardware-architecture.png" >}}
+
+Pour permettre à **Ethan Hunt** de mener à bien sa mission, il a fallu garantir la transmission de la donnée de bout en bout.
+Pour cela, nous avons implémenté cinq services qui communiquent via un système d’envoi de messages asynchrone (**MQTT**).
+
+Le premier service capture dix images par seconde à intervalle régulier.
+Chaque image est redimensionnée en 600x400 pixels et encapsulée dans un événement avec un identifiant unique.
+Cet événement est transmis au modèle d'IA qui l’enrichit avec le résultat de la prédiction.
+Ce dernier est transmis à un service de transformation qui a pour rôle d'extraire l'action du train, la transmettre au contrôleur de train pour ralentir ou stopper le train et en parallèle envoyer l'événement au service de streaming (**Kafka**) déployé sur un Openshift distant, qui affiche en temps réel, les images et la prédiction.
+
+{{< attachedFigure src="mission-impossible-software-architecture.png" >}}
+
+Et enfin, il nous a fallu construire d’un modèle d’intelligence artificielle.
+Pour cela, nous avons suivi les bonnes pratiques pour gérer le cycle de vie du modèle, c’est ce qu’on appelle le **MLOps** :
+
+- **Acquérir la donnée** : Nous avons utilisé un jeu de donnée open source comprenant des données provenant d’une caméra embarqué sur une voiture, qui ont été annotées avec les panneaux rencontrés sur son trajet.
+  Les photos ont été prises sur des routes dans l’union européenne et montrent donc des panneaux de signalisation "normalisés" (potentiellement un peu différents des panneaux **Lego**).
+- **Développer un modèle d’IA** : Nous avons choisi un algorithme d’apprentissage et procédé à l'entraînement du modèle sur un cluster OpenShift avec des GPU pour accélérer le calcul.
+- **Déployer le modèle** : Nous avons déployé le modèle dans un serveur d’inférence pour le consommer via des APIs.
+  Il a fallu intégrer le modèle à l’architecture logicielle (via MQTT).
+- **Mesurer les performances et ré-entraîner** : En observer le comportement du modèle, nous avons pu mesurer la qualité des prédictions et constater que tous les panneaux **Lego** n'était pas bien reconnus.
+  Nous avons pris la décision de réentrainer le modèle en l’affinant avec un jeu de données enrichi.
+
+{{< attachedFigure src="mission-impossible-ai.png" >}}
+
+Si vous n'avez pas pu venir nous voir sur le stand, je vous propose une session de rattrapage dans la vidéo ci-dessous (capturée lors du {{< internalLink path="/speaking/platform-day-2024/index.md" >}}).
+On y voit le train s'arrêter lorsqu'il détecte le panneau de signalisation correspondant.
+
+{{< embeddedVideo src="mission-impossible-demo.mp4" autoplay="true" loop="true" muted="true" width="1920" height="1080" >}}
+
+Cette démonstration permet de démontrer la pertinence des solutions Red Hat pour mener à bien des projets informatique combinant **Intelligence Artificielle** et **Edge Computing**, et ce à large échelle.
 
 ## Conclusion
 
-À l'année prochaine !
+À travers l'atelier **Open Code Quest** et la démonstration captivante du train **Lego**, les participants ont pu explorer des solutions innovantes pour le développement d’applications, l'Intelligence Artificielle, le *Edge Computing* et la sécurité de la *Supply Chain*.
+Tout le travail autour de la plateforme ainsi que l'originalité du Leaderboard ont permis de dynamiser l’événement, renforçant la compétition amicale entre les participants tout en leur offrant une expérience technique et humaine que l'on espère inoubliable.
+
+Pour moi, ce Red Hat Summit Connect a été l'occasion de mettre en valeur l'importance de technologies comme Quarkus et OpenShift, mais aussi de partager une aventure collective où chaque participant a pu repartir avec de nouvelles compétences, de l'inspiration, et l'envie de continuer à explorer ces solutions.
+Nous espérons pouvoir continuer à faire évoluer cet événement pour offrir toujours plus de défis et d'innovations aux communautés de développeurs, architectes, et ingénieurs.
+À très bientôt pour de nouvelles aventures technologiques !
