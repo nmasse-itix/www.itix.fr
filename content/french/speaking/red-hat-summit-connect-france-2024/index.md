@@ -18,7 +18,7 @@ topics:
 - Edge Computing
 ---
 
-Le 8 Octobre 2024, j'ai participé au [Red Hat Summit Connect France 2024](https://www.redhat.com/fr/summit/connect/emea/paris-2024) [💾](TODO) à double titre :
+Le 8 Octobre 2024, j'ai participé au [Red Hat Summit Connect France 2024](https://www.redhat.com/fr/summit/connect/emea/paris-2024) à double titre :
 
 - Je me suis occupé du Leaderboard de l'atelier **Open Code Quest** et j'ai assuré le rôle de SRE pour la plateforme de cet atelier.
 - J'étais présent sur le stand RHEL pour présenter notre démo "Mission Impossible" avec le train Lego.
@@ -38,13 +38,13 @@ Lors de cet atelier, les participants devaient développer pas moins de quatre m
 Les micro-services ont été développés en Quarkus, le framework Java natif pour le cloud, en démontrant comment il peut transformer le développement d’applications en alliant rapidité de développement, légèreté et performance.
 En particulier, Quarkus réduit considérablement l'empreinte mémoire des applications, tout en permettant un démarrage quasi instantané.
 
-Nous avons également positionné en tête de pont **Red Hat Developer Hub**, la distribution Red Hat de **Backstage**, une plateforme open source développée par Spotify pour améliorer la gestion des environnements complexes.
+Nous avons également positionné en tête de pont [Red Hat Developer Hub](https://developers.redhat.com/rhdh/overview), la distribution Red Hat de **Backstage**, une plateforme open source développée par Spotify pour améliorer la gestion des environnements complexes.
 **Red Hat Developer Hub** a captivé l'attention des participants en offrant une interface unifiée pour centraliser la gestion des microservices, pipelines CI/CD et autres outils essentiels au développement.
 Son extensibilité a permis d'intégrer facilement des plugins adaptés aux besoins de l'atelier, simplifiant ainsi le cycle de vie des applications.
 Pour les développeurs comme pour les architectes, **Red Hat Developer Hub** s'est révélé être un outil précieux, facilitant la collaboration et apportant une vision claire de l'infrastructure tout en améliorant la productivité.
 
-Lors de l'**Open Code Quest**, nous avons également mis en lumière **Red Hat Trusted Application Pipelines**, un produit conçu pour sécuriser et automatiser la chaîne de construction des applications.
-Basé sur les technologies **Tekton Chains** et **SBOM** (Software Bill of Materials), ce produit offre une traçabilité complète et garantit l'intégrité des composants logiciels à chaque étape du pipeline CI/CD.
+Lors de l'**Open Code Quest**, nous avons également mis en lumière [Red Hat Trusted Application Pipelines](https://www.redhat.com/en/products/trusted-application-pipeline), un produit conçu pour sécuriser et automatiser la chaîne de construction des applications.
+Basé sur les technologies **Tekton Chains** et **Sigstore**, ce produit offre une traçabilité complète et garantit l'intégrité des composants logiciels à chaque étape du pipeline CI/CD.
 Les participants ont pu découvrir comment ces outils permettent de renforcer la sécurité des déploiements en fournissant des preuves de conformité et en assurant la transparence sur les dépendances utilisées dans les applications.
 
 Je vous laisse découvrir la liste complète de l'outillage utilisé dans l'atelier **Open Code Quest** :
@@ -106,13 +106,13 @@ Il est alimenté via une batterie portable pour la durée de la mission.
 {{< attachedFigure src="rhel-booth-mission-impossible-demo.jpeg" >}}
 
 Nous sommes dans un contexte de Edge Computing.
-Sur le Jetson, on a installé **Red Hat Device Edge**.
+Sur le Jetson, nous avons installé **Red Hat Device Edge**.
 C’est une variante de Red Hat Enterprise Linux adaptée aux contraintes du **Edge Computing**.
-On y a installé **Microshift**, le Kubernetes de Red Hat taillée pour le Edge.
-Et dans Microshift, on a déployé *over-the-air* les microservices, un **broker MQTT** et le modèle d’intelligence artificielle.
+Nous y avons installé **Microshift**, le Kubernetes de Red Hat taillée pour le Edge.
+Et dans Microshift, nous avons déployé *over-the-air* les microservices, un **broker MQTT** et le modèle d’intelligence artificielle.
 
 Le Jetson est relié, pour la durée de la mission, à un cluster OpenShift dans le cloud AWS via une connexion 5G.
-Dans le cloud AWS, on a une VM RHEL 9 qui nous permet de construire les images **Red Hat Device Edge** pour le SoC Jetson.
+Dans le cloud AWS, il y a une VM RHEL 9 qui nous permet de construire les images **Red Hat Device Edge** pour le SoC Jetson.
 Dans le cluster OpenShift, l'application application de vidéo surveillance qui diffuse le flux vidéo de la caméra embarquée du train.
 Le flux vidéo est relayé depuis le Jetson au travers d’un **broker Kafka** !
 Il faut ajouter à cela des pipelines MLops pour entraîner le modèle d’IA.
