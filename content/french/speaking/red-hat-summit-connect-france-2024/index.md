@@ -113,7 +113,7 @@ Et dans Microshift, nous avons déployé *over-the-air* les microservices, un **
 
 Le Jetson est relié, pour la durée de la mission, à un cluster OpenShift dans le cloud AWS via une connexion 5G.
 Dans le cloud AWS, il y a une VM RHEL 9 qui nous permet de construire les images **Red Hat Device Edge** pour le SoC Jetson.
-Dans le cluster OpenShift, l'application application de vidéo surveillance qui diffuse le flux vidéo de la caméra embarquée du train.
+Dans le cluster OpenShift, l'application de vidéo surveillance qui diffuse le flux vidéo de la caméra embarquée du train.
 Le flux vidéo est relayé depuis le Jetson au travers d’un **broker Kafka** !
 Il faut ajouter à cela des pipelines MLops pour entraîner le modèle d’IA.
 Et enfin des pipelines CI/CD pour construire les images de conteneur de nos micro-services pour les architectures x86 et ARM.
@@ -130,10 +130,10 @@ Ce dernier est transmis à un service de transformation qui a pour rôle d'extra
 
 {{< attachedFigure src="mission-impossible-software-architecture.png" >}}
 
-Et enfin, il nous a fallu construire d’un modèle d’intelligence artificielle.
+Et enfin, il nous a fallu construire un modèle d’intelligence artificielle.
 Pour cela, nous avons suivi les bonnes pratiques pour gérer le cycle de vie du modèle, c’est ce qu’on appelle le **MLOps** :
 
-- **Acquérir la donnée** : Nous avons utilisé un jeu de donnée open source comprenant des données provenant d’une caméra embarqué sur une voiture, qui ont été annotées avec les panneaux rencontrés sur son trajet.
+- **Acquérir la donnée** : Nous avons utilisé un jeu de données open source comprenant des données provenant d’une caméra embarquée sur une voiture, qui ont été annotées avec les panneaux rencontrés sur son trajet.
   Les photos ont été prises sur des routes dans l’union européenne et montrent donc des panneaux de signalisation "normalisés" (potentiellement un peu différents des panneaux **Lego**).
 - **Développer un modèle d’IA** : Nous avons choisi un algorithme d’apprentissage et procédé à l'entraînement du modèle sur un cluster OpenShift avec des GPU pour accélérer le calcul.
 - **Déployer le modèle** : Nous avons déployé le modèle dans un serveur d’inférence pour le consommer via des APIs.

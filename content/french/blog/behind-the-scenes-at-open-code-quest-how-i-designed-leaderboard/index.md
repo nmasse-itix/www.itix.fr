@@ -52,7 +52,7 @@ Le **Leaderboard** doit permettre deux choses :
 - **déterminer les 30 participants les plus rapides** pour leur remettre un prix
 
 Dans les précédentes éditions de cet atelier, on validait la bonne réalisation sur la base de captures d'écran envoyées sur un channel Slack.
-Les participants envoyaient les captures d'écran, l'animateur les validait dans l'ordre, notait les points dans une feuille Google Sheet et annonçait la progression à interval régulier.
+Les participants envoyaient les captures d'écran, l'animateur les validait dans l'ordre, notait les points dans une feuille Google Sheet et annonçait la progression à intervalle régulier.
 Un animateur était dédié à la gestion du leaderboard.
 
 Cette année, il était attendu que le processus soit **entièrement automatisé** pour éviter ces tâches administratives chronophages.
