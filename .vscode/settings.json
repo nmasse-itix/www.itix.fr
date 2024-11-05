@@ -1,9 +1,8 @@
 {
     "spellright.language": [
-        "en_GB"
+        "fr_FR"
     ],
     "spellright.documentTypes": [
-        "markdown",
         "latex",
         "plaintext"
     ]
