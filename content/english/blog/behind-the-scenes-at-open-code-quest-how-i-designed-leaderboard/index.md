@@ -1,6 +1,6 @@
 ---
 title: "Behind the scenes at Open Code Quest: how I designed the Leaderboard"
-date: 2024-10-11T00:00:00+02:00
+date: 2024-11-05T00:00:00+02:00
 #lastMod: 2024-10-11T00:00:00+02:00
 opensource:
 - Prometheus

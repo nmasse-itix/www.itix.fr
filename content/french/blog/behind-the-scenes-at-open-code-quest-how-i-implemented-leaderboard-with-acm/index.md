@@ -1,6 +1,6 @@
 ---
 title: "Dans les coulisses de l'Open Code Quest : comment j'ai implémenté le Leaderboard dans Red Hat Advanced Cluster Management"
-date: 2024-10-11T00:00:00+02:00
+date: 2024-11-05T00:00:00+02:00
 #lastMod: 2024-10-11T00:00:00+02:00
 opensource:
 - Kubernetes
