@@ -5,7 +5,6 @@ date: 2024-10-11T00:00:00+02:00
 opensource:
 - Prometheus
 - Grafana
-- Octave
 topics:
 - Observability
 # Featured images for Social Media promotion (sorted from by priority)
@@ -329,7 +328,7 @@ De haut en bas, on peut observer :
    Elle représente l'état de complétude de l'exercice.
 2. La requête `opencodequest_leaderboard_hero_onetime_bonus:prod`.
    Elle représente l'application du bonus temps au moment où l'utilisateur termine l'exercice.
-2. Le résultat est le report à nouveau du bonus temps depuis le moment où l'utilisateur termine l'exercice.
+3. Le résultat est le report à nouveau du bonus temps depuis le moment où l'utilisateur termine l'exercice.
 
 Note: on voit un décalage d'une unité de temps entre la dernière requête et les deux premières
 Je pense que c'est une conséquence des dépendances entre les *recording rules*.

@@ -5,7 +5,6 @@ date: 2024-10-11T00:00:00+02:00
 opensource:
 - Prometheus
 - Grafana
-- Octave
 topics:
 - Observability
 # Featured images for Social Media promotion (sorted from by priority)
