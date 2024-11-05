@@ -245,7 +245,7 @@ Mais il y a une petite subtilité : ce choix est vrai pour les métriques standa
 
 Les *recording rules* faisant appel à des métriques *custom* (ie. le **User Workload Monitoring**) ne sont calculées **qu'après réception sur le cluster central**.
 Il n'est pas possible de les calculer avant envoi sur le cluster central.
-On peut spécifier des métriques *custom* à envoyer telles quelles.
+On peut uniquement spécifier des métriques *custom* à envoyer telles quelles.
 
 Elles ne se configurent pas non plus au même endroit en fonction de si c'est une métrique *custom* ou une métrique standard et de si c'est fait avant ou après envoi.
 
