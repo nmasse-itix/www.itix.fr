@@ -1,5 +1,5 @@
 ---
-title: "Red Hat Open Demo: Mission impossible #1 - Stop the crazy Train with AI and Edge before it is too late"
+title: "Red Hat Open Demo: Mission impossible #1 - Stop the crazy Train with AI and Edge before it is too late!"
 date: 2024-11-05T00:00:00+02:00
 draft: false
 resources:
