@@ -8,7 +8,7 @@ resources:
 - '*.pdf'
 # Featured images for Social Media promotion (sorted from by priority)
 images:
-#- mission-impossible-crazy-train-cover.png
+- slide-cover.png
 topics:
 - Artificial Intelligence
 - Edge Computing
