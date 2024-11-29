@@ -3,10 +3,10 @@ title: "Red Hat Open Tour 2024 à Toulouse"
 date: 2024-11-28T00:00:00+02:00
 # Featured images for Social Media promotion (sorted from by priority)
 images:
-- cover1.jpeg
-- cover2.jpeg
-- cover3.jpeg
-- cover4.jpeg
+- cover1.webp
+- cover2.webp
+- cover3.webp
+- cover4.webp
 resources:
 - '*.jpeg'
 - '*.webp'
