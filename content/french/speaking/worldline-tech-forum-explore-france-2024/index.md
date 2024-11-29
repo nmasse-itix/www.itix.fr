@@ -1,6 +1,7 @@
 ---
 title: "Worldline Tech Forum eXplore France 2024"
 date: 2024-06-18T00:00:00+02:00
+lastMod: 2024-11-29T00:00:00+02:00
 draft: false
 resources:
 - '*.jpeg'
@@ -30,7 +31,7 @@ Les échanges ont été riches et dynamiques, et ont permis de démontrer concr�
 
 ## Un accueil enthousiaste, même des hauts responsables !
 
-L'animation du stand n'a pas seulement attiré des passionnés de technologie et des experts du secteur, mais aussi des responsables de Worldline, dont un directeur qui est venu passer un moment sur notre stand !
+L'animation du stand n'a pas seulement attiré des passionnés de technologie et des experts du secteur, mais aussi des responsables de Worldline, dont [Gilles Grapinet](https://www.linkedin.com/in/gilles-grapinet/), le Directeur Général de Worldline, qui est venu passer un moment sur notre stand !
 Ce type de rencontre, toujours inspirant, a été l'occasion de discuter plus en détail des solutions Red Hat et de leur impact potentiel sur les entreprises.
 
 Les visiteurs étaient curieux et enthousiastes, non seulement par la démonstration, mais aussi par la possibilité de discuter avec des experts du secteur. Ces échanges ont été l’un des moments les plus enrichissants de la journée, renforçant l'importance de l'événement comme point de rencontre entre l'innovation technologique et les besoins des entreprises.
