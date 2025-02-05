@@ -1,12 +1,29 @@
 ---
 title: "Devoxx France 2019"
 date: 2019-04-19T00:00:00+02:00
+opensource:
+- 3scale
+- Apicurio
+- Microcks
+draft: false
+images:
+- on-stage-4.jpg
+- on-stage-5.jpg
 resources:
 - '*.png'
-draft: false
+- '*.jpg'
 ---
 
 On the 19th April 2019, I spoke at Devoxx France on a session named _"Une API, de l'idée à la production, en mode agile avec Red Hat !"_.
+
+## Pictures
+
+{{< attachedFigure src="on-stage-1.jpg" >}}
+{{< attachedFigure src="on-stage-2.jpg" >}}
+{{< attachedFigure src="on-stage-4.jpg" >}}
+{{< attachedFigure src="on-stage-5.jpg" >}}
+
+## Attendees' reaction
 
 {{< screenshotOf src="tweet-lbroudoux.png" href="https://twitter.com/lbroudoux/status/1119221025466720256" >}}
 {{< screenshotOf src="tweet-gbloquel.png" href="https://twitter.com/gbloquel/status/1119170710696493056" >}}
