@@ -30,6 +30,7 @@ Considering that version 10 of qemu was released recently, this is a bit messy..
 ## TL;DR
 
 Two one-liners, one for building the image and one for executing it.
+
 Build the container image **localhost/qemu-user-static**:
 
 ```sh
