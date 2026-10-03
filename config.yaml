@@ -1,9 +1,9 @@
 baseURL: "/"
 title: "Nicolas Massé"
 author: "Nicolas Massé"
-theme: "itix"
 # pygmentsUseClasses implies a style sheet that can be generated as follow:
-# hugo gen chromastyles --style=borland > static/css/chroma.css
+# hugo gen chromastyles --style=borland > assets/css/chroma.css
+# (this is done automatically by the ./hugo script)
 pygmentsUseClasses: true
 pygmentsCodefences: true
 enableRobotsTXT: true
