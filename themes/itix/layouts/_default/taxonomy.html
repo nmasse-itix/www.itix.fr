@@ -1,0 +1,14 @@
+{{ define "main" }}
+<!-- the taxonomy.html layout is used to render the list of posts having a certain tag, topic, etc. -->
+<article class="article-list">
+    <header>
+        <h1>{{ .Title }}</h1>
+    </header>
+    {{ i18n "articles_related_to" }} <a href="{{.Parent.RelPermalink}}">{{.Parent.Title}}</a> / <a href="{{.RelPermalink}}">{{ .Title }}</a>:
+    {{ .Content }}
+    {{ range (.Paginate (sort .Pages "Date").Reverse).Pages }}
+    {{- partial "article-headline.html" (dict "current" . "parent" $.Page) -}}
+    {{ end }}
+    {{ template "_internal/pagination.html" . }}
+</article>
+{{ end }}

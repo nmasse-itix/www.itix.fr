@@ -1,0 +1,14 @@
+{{ define "main" }}
+<!-- the blog/list.html layout is used to render the list of posts under "blog" -->
+<article class="article-list">
+    <header>
+        <h1>Articles</h1>
+    </header>
+    {{ .Content }}
+
+    {{ range (.Paginate (sort .Pages "Date").Reverse).Pages }}
+    {{- partial "article-headline.html" (dict "current" . "parent" $.Page) -}}
+    {{ end }}
+    {{ template "_internal/pagination.html" . }}
+</article>
+{{ end }}

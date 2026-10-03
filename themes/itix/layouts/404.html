@@ -1,0 +1,9 @@
+{{ define "main" }}
+<!-- The "404" layout prints the classical 404 error -->
+<article class="post">
+    <header>
+        <h1>{{ i18n "not_found" }}</h1>
+    </header>
+    <p><a href="{{ .Site.Home.RelPermalink }}">{{ i18n "go_home" }}</a></p>
+</article>
+{{ end }}

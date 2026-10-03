@@ -1,0 +1,859 @@
+:root {
+  /*
+   * Theme colors 
+   */
+  --main-color: #1870c9; /* Adjusted to ensure a 4.5:1 contrast ratio for accessibility */
+  --main-background-color: #fcfcfc;
+  --alternate-text-color: #145ca4;
+  --main-text-color: #092949; /* 50% darker than main-color */
+  --active-menu-background-color: #f4f8fb;
+  --active-menu-color: #0e4377;
+  --active-menu-border-color: #74abe3;
+  --hover-menu-background-color: #f4f8fb;
+  --hover-menu-color: #0e4377;
+  --hover-menu-border-color: #74abe3;
+  --post-metadata-color: #555;
+  --text-selection-background-color: #a2c7ec;
+  --quote-background-color: #f0f5fa;
+  --quote-border-color: #589bdd;
+  --codeblock-background-color: #ebf2f9;
+  --toc-background-color: #f0f5fa;
+  --pagination-disabled-color: #555;
+  --table-border-color: #092949;
+
+  /*
+   * Layout
+   */
+  --menu-container-width: 25%;
+  --toolbar-container-width: 25%;
+
+  /*
+   * Fonts
+   */
+  --default-font-list: "Source Serif Pro", serif;
+  --mono-font-list: "JetBrains Mono", monospace;
+  --sans-preferred-font-list: "Source Sans Pro", sans-serif;
+
+}
+
+/*
+ * Fonts
+ */
+@font-face{
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrainsMono-Regular.woff2') format('woff2'),
+    url('/fonts/JetBrainsMono-Regular.woff') format('woff'),
+    url('/fonts/JetBrainsMono-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+
+  /* 
+   * Core Web Vitals / Cumulative Layout Shift.
+   *
+   * Avoid showing invisible text while custom fonts load.
+   */
+  font-display: swap;
+}
+
+@font-face{
+  font-family: 'Source Serif Pro';
+  src: url('/fonts/SourceSerifPro-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+
+  /* 
+   * Core Web Vitals / Cumulative Layout Shift.
+   *
+   * Avoid showing invisible text while custom fonts load.
+   */
+   font-display: swap;
+}
+
+@font-face{
+  font-family: 'Source Sans Pro';
+  src: url('/fonts/SourceSansPro-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+
+  /* 
+   * Core Web Vitals / Cumulative Layout Shift.
+   *
+   * Avoid showing invisible text while custom fonts load.
+   */
+   font-display: swap;
+}
+
+/*
+ * General settings
+ */
+
+::selection {
+  /* Text selection uses the theme main color with some transparency */
+  background: var(--text-selection-background-color);
+}
+
+body {
+  background: var(--main-background-color);
+  padding: 0;
+  margin: 0;
+  font-family: var(--default-font-list);
+  color: var(--main-text-color);
+}
+
+* {
+  /* By default in the CSS box model, the width and height you assign to an 
+   * element is applied only to the element's content box. If the element has
+   * any border or padding, this is then added to the width and height to arrive
+   * at the size of the box that's rendered on the screen. This means that when
+   * you set width and height, you have to adjust the value you give to allow
+   * for any border or padding that may be added.
+   *
+   * border-box tells the browser to account for any border and padding in the
+   * values you specify for an element's width and height. If you set an element's
+   * width to 100 pixels, that 100 pixels will include any border or padding you
+   * added, and the content box will shrink to absorb that extra width.
+   * This typically makes it much easier to size elements.
+   */
+  box-sizing: border-box;
+}
+
+/*
+ * Heading and figure numbering
+ */
+
+main, #TableOfContents {
+  /*
+   * all counters need to be specified on one single line
+   * and they have to be reset on an enclosing element
+   */
+  counter-reset: h2 figcaption;
+}
+
+h2::before, #TableOfContents > ul > li::before {
+  content: counter(h2) ".\0000a0\0000a0"; /* \0000a0 => Non-breakable space */
+  counter-increment: h2;
+}
+
+h2, #TableOfContents > ul > li {
+  counter-reset: h3;
+}
+
+h3::before, #TableOfContents > ul > li > ul > li::before {
+  content: counter(h2) "." counter(h3) ".\0000a0\0000a0";
+  counter-increment: h3;
+}
+
+figcaption::before {
+  /*
+   * When the numbering is done in CSS, we cannot honor typographical
+   * conventions of the user language. So, here I chose the english convention
+   * with no space before the colon and a space after.
+   */
+  content: "Figure " counter(figcaption) ": ";
+  counter-increment: figcaption;
+
+}
+
+/*
+ * Main content formatting
+ */
+
+h1, h2, h3 {
+  font-weight: bold;
+  line-height: 1.5em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 20px 0;
+}
+
+h1 {
+  font-size: 30px;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+h3 {
+  font-size: 21px;
+}
+
+h4 {
+  font-size: 21px;
+}
+
+h5 {
+  font-size: 20px;
+}
+
+h6 {
+  font-size: 19px;
+}
+
+figure {
+  margin: 0;
+}
+
+figure figcaption {
+  font-style: italic;
+}
+
+ul {
+  list-style-type: "\2013\0000a0";
+  list-style-position: outside;
+}
+
+textarea,
+select,
+input,
+button {
+  outline: none !important;
+}
+
+main table {
+    table-layout: fixed;
+    overflow-x: scroll;
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: auto;
+}
+
+main table td, main table th {
+  border: 1px solid var(--table-border-color);
+  padding: 0.2rem 0.5rem;
+}
+
+button {
+  cursor: pointer;
+}
+
+blockquote {
+  padding: 10px 20px;
+  border-left: 3px solid var(--quote-border-color);
+  color: var(--alternate-text-color);
+  background: var(--quote-background-color);
+}
+
+blockquote p {
+  margin-bottom: 0;
+}
+
+blockquote * {
+  color: var(--alternate-text-color);
+}
+
+a {
+  color: var(--main-color);
+}
+
+a:hover {
+  color: var(--alternate-text-color);
+}
+
+/*
+ * Code block
+ */
+
+pre.chroma {
+  /* Overide the default chroma background color with ours */
+  background: var(--codeblock-background-color);
+}
+
+/* Code block (three backticks in markdown) */
+pre {
+  background: var(--codeblock-background-color);
+  padding: 12px 15px;
+  border-radius: 5px;
+  font-family: var(--mono-font-list);
+
+  /* Do not wrap lines of code */
+  overflow-x: hidden;
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+pre::-webkit-scrollbar {
+  display: none;
+}
+
+/* Inline code (single backticks in markdown) */
+code {
+  color: var(--alternate-text-color);
+  background: var(--codeblock-background-color) !important;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-family: var(--mono-font-list);
+}
+
+/*
+ * And because there is a code tag inside a pre tag for Markdown code blocks,
+ * we need to overide some properties
+ */
+pre code {
+  background: none !important;
+  font-family: var(--mono-font-list) !important;
+  padding: 0;
+}
+
+/*
+ * Highlighted file has a wrapping div. Some properties are redefined for it
+ * and reset to their default value for its children.
+ */
+.highlightedFile {
+  background: var(--codeblock-background-color);
+  border-radius: 5px;
+}
+
+.highlightedFile .filename {
+  border-bottom: 2px solid var(--hover-menu-border-color);
+  font-family: var(--sans-preferred-font-list) !important;
+  font-size: larger;
+  padding: 12px 15px;
+}
+
+.highlightedFile pre {
+  background: inherit;
+  border-radius: inherit;
+  padding: 12px 15px;
+  margin: 0;
+}
+
+
+pre:hover {
+  /* Show the horizontal scroll bar when hovering code (if needed) */
+  overflow-x: auto;
+}
+
+/*
+ * i18n
+ */
+.tiny-flag {
+  vertical-align: middle;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+/*
+ * Pagination
+ */
+.pagination {
+  list-style: none;
+  padding: 0;
+  text-align: center;
+  font-size: larger;
+}
+
+.pagination .page-item {
+  display: inline;
+  margin: 5px;
+}
+
+.pagination .disabled {
+  color: var(--pagination-disabled-color);
+}
+
+.pagination .active {
+  font-weight: bold;
+}
+
+/*
+ * Article list
+ */
+
+.article-list p {
+  /* Move the excerpt closer to the metadata */
+  margin-top: 0.5em;
+  /* Add spacing around each item of the list */
+  margin-bottom: 2.5em;
+}
+
+.article-list h4 {
+  /* Move the title closer to the metadata */
+  margin-bottom: 0.5em;
+}
+
+.article-list .post-metadata {
+  /* Fade the metadata */
+  color: var(--post-metadata-color);
+}
+
+.article-list .continue-reading {
+  /* Leave some space between the excerpt and the "continue reading" link */
+  margin-left: 0.5em;
+}
+
+/*
+ * Post Metadata (valid for the "list" and "single" views) 
+ */
+.post-metadata .material-icons {
+  vertical-align: sub;
+  margin-right: 3px;
+  margin-left: 5px;
+  max-height: 1rem;
+}
+
+.post-metadata time {
+  /* Leave some space between publication date and taxonomies */
+  margin-right: 20px;
+}
+
+
+article .post-metadata {
+  /* Leave some space between the metadata and the title */
+  margin-top: 20px;
+}
+
+/*
+ * Single post layout
+ */
+article {
+  padding: 50px 35px 20px 35px;
+  font-size: 16px;
+  line-height: 1.5em;
+}
+
+article img, article video {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+article p {
+  text-align: justify;
+  text-justify: inter-word;        
+}
+
+article header {
+  padding-bottom: 30px;
+  font-style: normal;
+  line-height: 1.5em;
+
+  /* Align the site title with the article title */
+  padding-top: 11px;
+}
+
+/* Article title */
+article header h1 {
+  font-size: 30px;
+  margin: 0;
+}
+
+/* Article subtitle */
+article header h4 {
+  font-size: 18px;
+  opacity: 0.6;
+  padding: 0px 0 8px 0;
+}
+
+/*
+ * Menu (left side)
+ */
+.menu-lang {
+  padding-right: 28px;
+}
+
+.menu-head, .menu-link-list a, .menu-head:hover, .menu-link-list a:hover {
+  display: block;
+  text-decoration: none !important;
+  cursor: pointer;
+  border-right: 2px solid transparent;
+}
+
+.menu-head.active, .menu-link-list a.active {
+  border-right: 2px solid var(--active-menu-border-color);
+  background: var(--active-menu-background-color);
+  color: var(--active-menu-color);
+}
+
+.menu-head:hover, .menu-link-list a:hover {
+  border-right: 2px solid var(--hover-menu-border-color);
+  background: var(--hover-menu-background-color);
+  color: var(--hover-menu-color);
+}
+
+.menu-footer {
+  padding: 20px 30px 0 20px;
+  font-size: 12px;
+}
+
+.menu-head {
+  padding: 30px 28px 30px 20px;
+  margin-bottom: 10px;
+  color: var(--main-text-color);
+}
+
+.menu-title {
+  --menu-title-size: 30px;
+  font-size: var(--menu-title-size);
+  line-height: calc(var(--menu-title-size) * 1.4);
+}
+
+.menu-subtitle {
+  margin-top: 8px;
+  font-size: 18px;
+}
+
+
+.menu-link-list {
+  flex-grow: 1;
+}
+
+.menu-link-list a {
+  font-size: 20px;
+  margin-bottom: 10px;
+  padding: 8px 28px 8px 30px;
+  color: var(--main-text-color);
+}
+
+.menu-content {
+  position: fixed;
+  top: 0;
+  height: 100vh;
+  width: var(--menu-container-width);
+  text-align: right;
+  font-family: var(--sans-preferred-font-list);
+  padding: 20px 0 50px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  /* Below the hamburger menu but on top of the overlay */
+  z-index: 253;
+}
+
+/*
+ * Hamburger menu
+ */
+.menu input.hamburger-menu {
+  display: block;
+  width: 80px;
+  height: 72px;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  margin: 0;
+
+  cursor: pointer;
+   
+  opacity: 0; /* hide this */
+  z-index: 255; /* and place it over the hamburger */
+   
+  -webkit-touch-callout: none;
+}
+
+/*
+ * Draw the hamburger
+ */
+.menu div.hamburger-menu {
+  width: 32px;
+  height: 4px;
+  position: fixed;
+  left: 24px;
+
+  background: var(--main-text-color);
+  border-radius: 3px;
+  
+  z-index: 254;
+  
+  transform-origin: center;
+  transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
+              opacity 0.55s ease;
+}
+
+.menu div.hamburger-menu:nth-child(2) {
+  top: 25px;
+}
+
+.menu div.hamburger-menu:nth-child(3) {
+  top: 34px;
+}
+
+.menu div.hamburger-menu:nth-child(4) {
+  top: 43px;
+}
+
+/* Transform all the slices of hamburger into a crossmark. */
+.menu input.hamburger-menu:checked ~ div.hamburger-menu:nth-child(2) {
+  opacity: 1;
+  transform: translate(0, 9px) rotate(45deg);
+}
+ 
+/* But let's hide the middle one. */
+.menu input.hamburger-menu:checked ~ div.hamburger-menu:nth-child(3) {
+  opacity: 0;
+  transform: rotate(0deg) scale(0.2, 0.2);
+}
+ 
+/* And the last one should go the other direction */
+.menu input.hamburger-menu:checked ~ div.hamburger-menu:nth-child(4) {
+  transform: translate(0, -9px) rotate(-45deg);
+}
+
+/* On mobile browsers, keep a title displayed on top */
+.menu .mobile-title {
+  padding: 20px 80px 20px 80px;
+  margin: 0;
+  width: 100%;
+  height: 80px;
+  line-height: 40px; /* line-height = height - padding-top - padding-bottom */
+  text-align: center;
+  font-size: calc(var(--heading1-size) - 3 * var(--heading-diff));
+  font-weight: bold;
+  position: fixed;
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.12);
+  background-color: var(--main-background-color);
+}
+
+/* But hide them by default. They will be uncovered when needed by media queries */
+.menu .hamburger-menu, .menu .mobile-title {
+  display: none;
+}
+
+/*
+ * Toolbar (right side)
+ */
+.toolbar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: var(--toolbar-container-width);
+  font-family: var(--sans-preferred-font-list);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.actions {
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 50px;
+  margin-left: 30px;
+}
+
+.actions .action {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.actions a {
+  text-decoration: none;
+  color: var(--main-text-color);
+}
+
+.actions a:visited {
+  color: var(--main-text-color);
+}
+
+.actions .material-icons {
+  height: 2rem;
+  width: auto;
+}
+
+/*
+ * Search page
+ */
+.search input {
+  width: 100%;
+}
+
+@media screen {
+  /*
+   * Main part of the page (center)
+   * 
+   * Enclosed in @media screen block because this style is not desired for
+   * printing.
+   */
+  main {
+    padding-left: var(--menu-container-width);
+    padding-right: var(--toolbar-container-width);
+    width: 100%;
+    
+    min-height: 100vh;
+  }
+
+  /* Immediate children of main gets a left/right shadow */
+  main > * {
+    box-shadow: 0 0 16px rgba(0, 0, 0, 0.12);
+    min-height: 100vh;
+  }
+}
+
+/*
+ * Table of content (within the toolbar on the right)
+ */
+.toc {
+  float: right;
+  border-radius: 5px;
+  margin-left: 30px;
+  margin-right: 60px;
+  margin-top: 30px;
+  max-width: 260px;
+  max-height: 80vh;
+  overflow: auto;
+  background: var(--toc-background-color);
+  padding: 20px;
+  font-size: 16px;
+}
+
+.toc ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  line-height: 1.7em;
+}
+  
+.toc h4 {
+  text-align: center;
+  margin: 0 0 10px 0;
+}
+
+/* Mathjax container */
+mjx-container {
+  overflow-y: hidden !important;
+}
+
+/*
+ * Reactive tweaks
+ */
+@media screen and (max-width: 1440px) {
+  :root {
+    --menu-container-width: 20%;
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  .toc {
+    display: none;
+  }
+  :root {
+    --toolbar-container-width: 5%;
+  }
+}
+
+@media screen and (max-width: 1140px) {
+  article {
+    padding: 30px 20px 20px 20px;
+  }
+
+  main {
+    padding: 0;
+    min-height: unset;
+  }
+
+  .toolbar {
+    display: none;
+  }
+
+  .toc {
+    line-height: 2em;
+    float: none;
+    margin-top: 30px;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  /*
+   * On mobile devices, there are no :hover events. So we must always
+   * propose horizontal scrollbars when needed.
+   */
+  pre {
+    overflow-x: auto;
+  }
+
+  .menu .hamburger-menu, .menu .mobile-title {
+    display: block;
+  }
+
+  /*
+   * On mobile, leave some room above the article so that the title + hamburger
+   * menu do not hide the article title.
+   */
+  main > *:first-child {
+    padding-top: 110px;
+  }
+
+  .menu .menu-content {
+    width: 300px;
+    left: -300px;
+    height: 100vh;
+    background-color: var(--main-background-color);
+    position: fixed;
+    transform: none;
+    transition: transform 0.2s linear;
+  }
+
+  .menu .menu-overlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    transition: background-color 0.2s linear;
+    
+    /* 
+     * Put the overlay on the bottom of the stack so that it does not catch
+     * click events.
+     */
+     z-index: -1;
+  }
+  
+
+  /*
+   * When the hamburger menu is clicked, show the menu content and enable
+   * the overlay that hides the article content.
+   */
+  .menu input.hamburger-menu:checked ~ .menu-content {
+    transform: translate(300px, 0);
+  }
+
+  .menu input.hamburger-menu:checked ~ .menu-overlay {
+    /* Semi transparent background */
+    background-color: rgba(0, 0, 0, 0.5);
+
+    /* Below the hamburger menu, the menu content but over the article content */
+    z-index: 250;  
+  }
+
+  /*
+   * Leave some room between the list items in the term pages so that it is
+   * easier to click on mobile. Also makes Google happy.
+   */
+  .terms ul li {
+    line-height: 2em;
+  }
+}
+
+@media screen and (max-width: 512px) {
+  /*
+   * On mobile, hide some post metadata
+   */
+  .post-metadata .opensource, .post-metadata .topic, .post-metadata .reading-time {
+    display: none;
+  }
+}
+
+/*
+ * Tweaks for printing
+ */
+@media print {
+  .menu, .menu-content, .hamburger-menu, .toolbar {
+    display: none !important;
+  }
+
+  /* Since you cannot scroll horizontally on a paper, wrap the code blocks */
+  pre {
+    white-space: pre-wrap;
+    word-break: break-all;
+    word-wrap: break-word;
+  }
+}

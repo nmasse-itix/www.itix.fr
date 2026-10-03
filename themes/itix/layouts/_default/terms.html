@@ -1,0 +1,14 @@
+{{ define "main" }}
+<!-- the terms.html layout is used to render the list of values of a certain tag, topic, etc. -->
+<article class="terms">
+    <header>
+        <h1>{{ .Title }}</h1>
+    </header>
+    {{ .Content }}
+    <ul>
+        {{ range sort .Pages "Title" }}
+            <li><a href="{{.RelPermalink}}">{{ .Title }}</a></li>
+        {{ end }}
+    </ul>
+</article>
+{{ end }}

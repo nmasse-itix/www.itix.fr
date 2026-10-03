@@ -1,0 +1,42 @@
+- id: last_modify_on
+  translation: Dernière modification le
+- id: published_on
+  translation: Publié le
+- id: date_format
+  translation: "02/01/2006"
+- id: toc
+  translation: Sommaire
+- id: back_to_top
+  translation: Retour en haut de la page
+- id: minutes
+  translation:
+    one: '{{ .Count }} minute'
+    other: '{{ .Count }} minutes'
+- id: continue_reading
+  translation: Continuer la lecture
+- id: articles_related_to
+  translation: Articles concernant 
+- id: recent_articles
+  translation: Articles récents
+- id: not_found
+  translation: Cette page n'existe pas !
+- id: go_home
+  translation: Retour à la page d'accueil
+- id: search
+  translation: Recherche
+- id: search_here
+  translation: Rechercher quelque chose...
+- id: type_blog
+  translation: Article
+- id: type_writing
+  translation: Publication
+- id: type_speaking
+  translation: Conférence
+- id: type_page
+  translation: Divers
+- id: show_menu
+  translation: Afficher le menu
+- id: file
+  translation: 'Fichier "%s"'
+- id: rss_feed
+  translation: 'Flux RSS'

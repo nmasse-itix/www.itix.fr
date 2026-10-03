@@ -1,0 +1,7 @@
+<!-- This shortcode renders an code block prefixed by a filename -->
+<div class="highlightedFile">
+{{- with .Get 0 -}}
+<div class="filename">{{ printf (i18n "file") . | safeHTML }}</div>
+{{- end -}}
+{{- highlight (trim .Inner "\n") (.Get 1) (.Get 2) -}}
+</div>

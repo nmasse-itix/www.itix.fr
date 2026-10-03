@@ -1,0 +1,24 @@
+{{ define "main" }}
+<!-- the index.html layout is used only to render the home page -->
+<div>
+<article class="bio">
+    <!--
+    <header>
+        <h1>{{ .Title }}</h1>
+        {{ if .Params.description }}
+        <h2>{{ .Params.description }}</h2>
+        {{ end }}
+    </header>
+    -->
+    {{ .Content }}
+</article>
+<article class="article-list">
+    <header>
+        <h1>{{ i18n "recent_articles" }}</h1>
+    </header>
+    {{ range first 5 (sort ((.Site.GetPage "/blog").Pages) "Date").Reverse }}
+    {{- partial "article-headline.html" (dict "current" . "parent" $.Page) -}}
+    {{ end }}
+</article>
+</div>
+{{ end }}

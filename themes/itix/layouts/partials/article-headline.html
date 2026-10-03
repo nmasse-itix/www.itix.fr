@@ -1,0 +1,11 @@
+
+<section>
+<h4><a href="{{ .current.RelPermalink }}">{{ .current.Title }}
+{{- partial "lang-detection.html" .current -}}
+{{ if .current.Scratch.Get "en_article_in_fr_site" }}
+{{- partial "icons/en.svg" . -}}
+{{ end }}
+</a></h4>
+{{- partial "post-metadata.html" . -}}
+<p>{{ .current.Summary | plainify | htmlUnescape }} <a href="{{ .current.RelPermalink }}" class="continue-reading">{{ i18n "continue_reading" }}</a></p>
+</section>

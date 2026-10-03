@@ -1,0 +1,65 @@
+
+<nav class="menu">
+    <!-- 
+      -- A fake / hidden checkbox is used as click reciever,
+      -- so you can use the :checked selector on it.
+      -->
+    <input type="checkbox" class="hamburger-menu" id="show-menu" />
+
+    <!-- Some spans to draw a hamburger. -->
+    <div class="hamburger-menu"></div>
+    <div class="hamburger-menu"></div>
+    <div class="hamburger-menu"></div>
+    
+    <!-- Add a label for accessibility -->
+    <label class="hamburger-menu" for="show-menu" style="display: none;" >{{ i18n "show_menu" }}</label>
+
+    <!-- And the site title for the mobile browsers -->
+    <div class="mobile-title">{{- .Site.Title -}}</div>
+
+    <div class="menu-content">
+        {{- if .IsHome }}
+        <a class="menu-head active" href="{{ .Site.Home.RelPermalink }}">
+        {{ else }}
+        <a class="menu-head" href="{{ .Site.Home.RelPermalink }}">
+        {{ end -}}
+            <div class="menu-title">
+                {{- .Site.Title -}}
+            </div>
+            {{- with .Site.Params.subtitle -}}
+            <div class="menu-subtitle">
+                {{- . -}}
+            </div>
+            {{- end -}}
+        </a>
+
+        <div class="menu-link-list">
+            {{- $currentPage := . -}}
+            {{- range .Site.Menus.main }}
+                <a class="{{ if $currentPage.IsMenuCurrent "main" . }}active{{ end }}" href="{{ .URL| relLangURL }}">
+                    {{- .Name -}}
+                </a>
+            {{- end }}
+        </div>
+
+        <div class="menu-lang">
+            {{- if .IsTranslated -}}
+            <!-- Try to redirect the user to the translated page if possible -->
+            {{- range .AllTranslations }}
+            <a href="{{ .RelPermalink }}">{{- partial (printf "icons/%s.svg" .Lang) . -}}</a>
+            {{- end -}}
+            {{- else -}}
+            <!-- Otherwise, redirect it to the homepage -->
+            {{- range site.Sites }}
+            <a href="{{ .Home.RelPermalink }}">{{- partial (printf "icons/%s.svg" .Language.Lang) . -}}</a>
+            {{- end -}}
+            {{- end }}
+        </div>
+
+        <div class="menu-footer">
+            &copy; {{ .Site.Home.Date.Year }} {{.Site.Title}}
+        </div>
+    </div>
+    <div class="menu-overlay">
+    </div>
+</nav>

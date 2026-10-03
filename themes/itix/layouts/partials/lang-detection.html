@@ -1,0 +1,15 @@
+{{ if and .IsTranslated (eq .Lang "fr") }}
+  <!-- Try to compare files by SH256 fingerprint. -->
+  {{ if and (index .AllTranslations 0).File (index .AllTranslations 1).File }}
+    {{ $file0 := readFile (index .AllTranslations 0).File.Filename }}
+    {{ $file1 := readFile (index .AllTranslations 1).File.Filename }}
+    {{ if eq (sha256 $file0) (sha256 $file1) }}
+      {{ .Scratch.Set "en_article_in_fr_site" true }}
+    {{ end }}
+  {{ else }}
+    <!-- Sometimes there is no file though. In that case, compare the content. -->
+    {{ if eq (index .AllTranslations 0).Plain (index .AllTranslations 1).Plain }}
+      {{ .Scratch.Set "en_article_in_fr_site" true }}
+    {{ end }}
+  {{ end }}
+{{ end }}

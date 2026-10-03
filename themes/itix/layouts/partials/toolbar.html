@@ -1,0 +1,23 @@
+<aside class="toolbar">
+    <!-- Sometimes Hugo will generate an empty TOC enclosed within a nav element. -->
+    <!--  32 is the length of this empty output. -->
+    {{- if gt (len .TableOfContents) 32 }}
+    <div class="toc">
+        <h4>{{ i18n "toc" }}</h4>
+        {{ .TableOfContents }}
+    </div>
+    {{- end }}
+    <div class="actions">
+        <a href="#top" class="action" title="{{ i18n "back_to_top" }}">
+            {{- partial "icons/vertical_align_top.svg" . -}}
+        </a>
+        <a href="{{ relref . "/search/index.md" }}" class="action" title="{{ i18n "search" }}">
+            {{- partial "icons/search.svg" . -}}
+        </a>
+        {{ with .OutputFormats.Get "rss" -}}
+        <a href="{{ .Permalink }}" class="action" title="{{ i18n "rss_feed" }}">
+            {{- partial "icons/rss_feed.svg" . -}}
+        </a>
+        {{ end }}
+    </div>
+</aside>

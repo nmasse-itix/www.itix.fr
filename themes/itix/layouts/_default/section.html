@@ -1,0 +1,14 @@
+{{ define "main" }}
+<!-- the section.html layout is used to render a list of articles under writing, speaking, etc. -->
+<article class="section">
+    <header>
+        <h1>{{ .Title }}</h1>
+    </header>
+    {{ .Content }}
+    <ul>
+        {{ range (sort .Pages "Date").Reverse }}
+            <li><a href="{{.RelPermalink}}">{{ .Title }}</a></li>
+        {{ end }}
+    </ul>
+</article>
+{{ end }}

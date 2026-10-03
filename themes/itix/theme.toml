@@ -1,0 +1,19 @@
+name = "ITIX"
+license = "MIT"
+licenselink = "https://github.com/nmasse-itix/hugo-theme-itix/blob/master/LICENSE"
+description = "Theme of my personal site: www.itix.fr"
+homepage = "https://www.itix.fr/"
+tags = ["blog"]
+features = ["mobile","elegant"]
+min_version = "0.59.0"
+
+[author]
+  name = "Nicolas Massé"
+  homepage = "https://www.itix.fr/"
+
+
+# If porting an existing theme
+[original]
+  name = "amazingrise"
+  homepage = "https://amazingrise.net/"
+  repo = "https://github.com/amazingrise/hugo-theme-diary"

@@ -1,0 +1,18 @@
+{{ define "main" }}
+<!-- The "single" layout prints a single post -->
+{{- partial "lang-detection.html" . -}}
+<article class="post" {{ if .Scratch.Get "en_article_in_fr_site" }}lang="en"{{ end }}>
+    <header>
+        <h1>{{ .Title }}</h1>
+        {{- with .Description }}
+        <h4>{{ . }}</h4>
+        {{- end }}
+        {{ partial "post-metadata.html" (dict "current" . "parent" .) -}}
+    </header>
+    {{ .Content }}
+    {{- if and (not .Lastmod.IsZero) (ne .Lastmod .PublishDate) }}
+        <hr width="100%" id="EOF">
+        <p>{{ i18n "last_modify_on" }} {{ .Lastmod.Format (i18n "date_format") }}</p>
+    {{- end }}
+</article>
+{{ end }}

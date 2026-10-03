@@ -1,0 +1,43 @@
+<div class="post-metadata">
+    <!-- Article publication date -->
+    {{- with .current.PublishDate }}
+    <span class="publication-date">
+        {{ i18n "published_on" }}
+        <time itemprop="published-on" date-time="{{ .Format "2006-01-02" }}">{{ .Format (i18n "date_format") }}</time>
+    </span>
+    {{- end }}
+
+    <!-- Expertise / Topics -->
+    {{ range .current.Params.topics -}}
+    <!-- Skip the item if we are on the term page presenting this item -->
+    {{- if or (not $.parent.Data.topic) (ne . $.parent.Data.Term) }}
+    <span class="topic">
+        {{- partial "icons/link.svg" . -}}<a href="{{ "/topics/" | relLangURL }}{{ . | urlize }}/">{{ . }}</a>
+    </span>
+    {{- end -}}
+    {{- end }}
+
+    <!-- Open Source communities -->
+    {{ range .current.Params.opensource -}}
+    <!-- Skip the item if we are on the term page presenting this item -->
+    {{- if or (not $.parent.Data.opensource) (ne . $.parent.Data.Term) }}
+    <span class="opensource">
+        {{- partial "icons/label.svg" . -}}<a href="{{ "/opensource/" | relLangURL }}{{ . | urlize }}/">{{ . }}</a>
+    </span>
+    {{- end -}}
+    {{- end }}
+
+    <!--
+      -- The reading time is only displayed on blog posts. Other kind of
+      -- articles are too short to be relevant.
+      -->
+    {{- if eq .current.Type "blog" }}
+        <span class="reading-time">
+        {{- partial "icons/schedule.svg" . -}}
+        {{- $minutes := .current.ReadingTime -}}
+        {{- if gt $minutes 0 -}}
+        {{- i18n "minutes" $minutes -}}
+        {{- end -}}
+        </span>
+    {{- end }}
+</div>

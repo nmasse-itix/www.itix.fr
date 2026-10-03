@@ -1,0 +1,14 @@
+{{ define "main" }}
+<!-- the writing/list.html layout is used to render the list of posts under "writing" -->
+<article class="article-list">
+    <header>
+        <h1>{{ .Title }}</h1>
+    </header>
+    {{ .Content }}
+    <ul>
+        {{ range (sort .Pages "Date").Reverse }}
+            <li>{{ .Date.Format "January 2006" }} - <a href="{{.RelPermalink}}">{{ .Title }}</a></li>
+        {{ end }}
+    </ul>
+</article>
+{{ end }}
