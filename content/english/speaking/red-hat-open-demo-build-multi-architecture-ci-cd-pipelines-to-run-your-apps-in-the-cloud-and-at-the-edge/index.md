@@ -21,7 +21,7 @@ On September 5, 2024, I presented a webinar named [Red Hat Open Demo-Build multi
 In the rapidly advancing field of edge computing, deploying applications across diverse hardware platforms, such as ARM and x86_64, has become essential.
 Multi-architecture container images have emerged as a powerful solution, supporting multiple processor architectures within a single image package and simplifying the deployment process across platforms.
 
-{{< attachedFigure src="slide-arm-devices.png" >}}
+![](slide-arm-devices.png)
 
 During this demonstration, I explored how these multi-architecture images work seamlessly across different CPU architectures, automatically selecting the appropriate client architecture from a registry.
 Using tools like Podman, Buildah, and Tekton, I showcased how easy it is to build these images.
@@ -40,7 +40,7 @@ Here’s what was covered during the demo:
 
 - **Tekton Task Binding to the Right Node**: I also demonstrated how Tekton tasks could be directed to specific nodes based on architecture, ensuring efficient execution across mixed environments.
 
-{{< attachedFigure src="slide-architecture.png" >}}
+![](slide-architecture.png)
 
 Key Highlights from the Demo:
 
@@ -50,11 +50,11 @@ Key Highlights from the Demo:
 
 3. **Building and Pushing Multi-Architecture Container Images to quay.io**: I concluded with a real-time demonstration of building and pushing multi-architecture images to the quay.io registry, emphasizing the role of registry support in deploying cross-platform applications efficiently.
 
-4. **Running the same container on two different CPU architectures**: I ran a container image built with the multi-architecture pipeline on both my Laptop (x86_64) and {{< internalLink path="/blog/homelab-server-2u-short-depth-front-io-ampere-altra-arm64-architecture/index.md" title="my Ampere Altra server" >}} (ARM64).
+4. **Running the same container on two different CPU architectures**: I ran a container image built with the multi-architecture pipeline on both my Laptop (x86_64) and [my Ampere Altra server](/blog/homelab-server-2u-short-depth-front-io-ampere-altra-arm64-architecture/index.md) (ARM64).
 
 This demo has been designed for DevOps professionals, cloud architects, and developers looking to leverage OpenShift and AWS in multi-architecture container image creation.
 The session provided them with both a high-level understanding and practical skills to implement and manage these capabilities in their environments.
 
-If you have not been able to attend the live session, I invite you to [watch the replay](https://events.redhat.com/profile/form/index.cfm?PKformID=0x11759490001) and [download the slides]({{< attachedFileLink src="slides.pdf" >}})!
+If you have not been able to attend the live session, I invite you to [watch the replay](https://events.redhat.com/profile/form/index.cfm?PKformID=0x11759490001) and [download the slides](slides.pdf)!
 
-If you are ready to dive deeper, have a look at the article I wrote on this subject: {{< internalLink path="/blog/build-multi-architecture-container-images-with-kubernetes-buildah-tekton-aws/index.md" >}}!
+If you are ready to dive deeper, have a look at the article I wrote on this subject: [](/blog/build-multi-architecture-container-images-with-kubernetes-buildah-tekton-aws/index.md)!

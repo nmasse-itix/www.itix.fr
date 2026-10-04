@@ -14,7 +14,7 @@ Au travers d'une série de trois vidéos, je présente Red Hat Single Sign On (l
 Je commence par l'installation, la fédération des identités, puis vient la sécurisation d'une application NodeJS.
 Et enfin, on termine par la sécurisation d'une application Quarkus.
 
-{{< screenshotOf src="tweet-RedHatFrance.png" href="https://twitter.com/RedHatFrance/status/1390660299011895296" >}}
+[![Tweet de @RedHatFrance](tweet-RedHatFrance.png)](https://twitter.com/RedHatFrance/status/1390660299011895296)
 
 Retrouvez ci-dessous tous les liens vers les vidéos !
 

@@ -33,8 +33,8 @@ Quelques constats chiffrés :
 
 Mon intervention a été reprise par les journalistes dans certains tweets :
 
-{{< screenshotOf src="tweet-ITforB-01.png" href="https://twitter.com/ITforB/status/1544241974848487425" >}}
-{{< screenshotOf src="tweet-ITforB-02.png" href="https://twitter.com/thierryderouet/status/1544240686303744002" >}}
-{{< screenshotOf src="tweet-ITforB-03.png" href="https://twitter.com/thierryderouet/status/1544240966097375233" >}}
-{{< screenshotOf src="tweet-ITforB-04.png" href="https://twitter.com/thierryderouet/status/1544241464326201345" >}}
-{{< screenshotOf src="tweet-ITforB-05.png" href="https://twitter.com/thierryderouet/status/1544241708271116289" >}}
+[![Tweet de @ITforB](tweet-ITforB-01.png)](https://twitter.com/ITforB/status/1544241974848487425)
+[![Tweet de @ITforB](tweet-ITforB-02.png)](https://twitter.com/thierryderouet/status/1544240686303744002)
+[![Tweet de @ITforB](tweet-ITforB-03.png)](https://twitter.com/thierryderouet/status/1544240966097375233)
+[![Tweet de @ITforB](tweet-ITforB-04.png)](https://twitter.com/thierryderouet/status/1544241464326201345)
+[![Tweet de @ITforB](tweet-ITforB-05.png)](https://twitter.com/thierryderouet/status/1544241708271116289)

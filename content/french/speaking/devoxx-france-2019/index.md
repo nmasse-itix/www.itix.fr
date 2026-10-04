@@ -20,15 +20,18 @@ Le replay est sur la [chaîne YouTube de DevoxxFR](https://www.youtube.com/watch
 
 ## Photos
 
-{{< attachedFigure src="on-stage-1.jpg" >}}
-{{< attachedFigure src="on-stage-2.jpg" >}}
-{{< attachedFigure src="on-stage-4.jpg" >}}
-{{< attachedFigure src="on-stage-5.jpg" >}}
+![](on-stage-1.jpg)
+
+![](on-stage-2.jpg)
+
+![](on-stage-4.jpg)
+
+![](on-stage-5.jpg)
 
 ## Réactions du public
 
-{{< screenshotOf src="tweet-lbroudoux.png" href="https://twitter.com/lbroudoux/status/1119221025466720256" >}}
-{{< screenshotOf src="tweet-gbloquel.png" href="https://twitter.com/gbloquel/status/1119170710696493056" >}}
-{{< screenshotOf src="tweet-sebi2706.png" href="https://twitter.com/sebi2706/status/1119169813392314368" >}}
-{{< screenshotOf src="tweet-cgodard.png" href="https://twitter.com/cgodard/status/1119159971835289600" >}}
-{{< screenshotOf src="tweet-PetitMel_issa.png" href="https://twitter.com/PetitMel_issa/status/1119170065289678848" >}}
+[![Tweet de @lbroudoux](tweet-lbroudoux.png)](https://twitter.com/lbroudoux/status/1119221025466720256)
+[![Tweet de @gbloquel](tweet-gbloquel.png)](https://twitter.com/gbloquel/status/1119170710696493056)
+[![Tweet de @sebi2706](tweet-sebi2706.png)](https://twitter.com/sebi2706/status/1119169813392314368)
+[![Tweet de @cgodard](tweet-cgodard.png)](https://twitter.com/cgodard/status/1119159971835289600)
+[![Tweet de @PetitMel_issa](tweet-PetitMel_issa.png)](https://twitter.com/PetitMel_issa/status/1119170065289678848)

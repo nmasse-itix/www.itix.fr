@@ -51,12 +51,12 @@ Je l'ai déniché pour 660 € sur eBay avec les caractéristiques suivantes :
 - 48 Go de DDR4 ECC
 - Carte réseau supplémentaire Intel I350 au format "FlexibleLOM", avec 4 ports RJ-45
 
-{{< attachedFigure src="hp-dl20-gen9.png" title="Serveur HP DL20 Gen9, vue de face, vue de dos." >}}
+![Serveur HP DL20 Gen9, vue de face, vue de dos.](hp-dl20-gen9.png "Serveur HP DL20 Gen9, vue de face, vue de dos.")
 
 Pour me raccorder au réseau fibre optique d'Orange, j'ai conservé l'ONT (*Optical Network Termination*) qui m'a été fourni avec la Livebox.
 D'un coté, je branche la jarretière optique, et de l'autre je branche le câble RJ-45 qui va jusqu'au serveur HP.
 
-{{< attachedFigure src="Boitier-Fibre-Orange.jpeg" title="Boitier Fibre Orange. Source: [Wikipedia](https://commons.wikimedia.org/wiki/File:Boitier-Fibre-Orange_-_IMG_6456.jpg)" >}}
+![Boitier Fibre Orange. Source: Wikipedia](Boitier-Fibre-Orange.jpeg "Boitier Fibre Orange. Source: [Wikipedia](https://commons.wikimedia.org/wiki/File:Boitier-Fibre-Orange_-_IMG_6456.jpg)")
 
 ## Logiciel
 
@@ -106,10 +106,10 @@ sudo dnf install dhcp-client-orange-isp
 
 Configurer NetworkManager pour qu'il utilise dhclient plutôt que son client DHCP interne.
 
-{{< highlightFile "/etc/NetworkManager/conf.d/dhclient.conf" "ini" "hl_lines=2" >}}
+```ini {filename="/etc/NetworkManager/conf.d/dhclient.conf" hl_lines="2"}
 [main]
 dhcp=dhclient
-{{< / highlightFile >}}
+```
 
 Redémarrer NetworkManager.
 
@@ -127,7 +127,7 @@ Pour configurer le client DHCP pour l'authentification Orange, il vous faudra tr
 
 Saisir le contenu du fichier /etc/dhcp/dhclient.conf.
 
-{{< highlightFile "/etc/dhcp/dhclient.conf" "c" "hl_lines=4 7-8" >}}
+```c {filename="/etc/dhcp/dhclient.conf" hl_lines="4 7-8"}
 option rfc3118-authentication code 90 = string;
 option dhcp-client-identifier code 61 = string;
 
@@ -138,7 +138,7 @@ interface "eno2.832" {
     send rfc3118-authentication 00:00:00:00:00:00:00:00:00:00:00:1a:09:00:00:05:58:01:03:41:01:0B:66:74:69:2F:64:75:6D:6D:79:3c:12:31:32:33:34:35:36:37:38:39:30:31:32:33:34:35:36:03:13:41:b9:80:f2:ea:3f:06:3b:2b:e7:08:ac:ec:9c:38:9e:ba;
     request subnet-mask,routers,domain-name,broadcast-address,dhcp-lease-time,dhcp-renewal-time,dhcp-rebinding-time,rfc3118-authentication;
 }
-{{< / highlightFile >}}
+```
 
 ## Configuration de l'interface réseau pour utiliser le VLAN 832
 
@@ -163,12 +163,12 @@ Aussi, considérez la comme une indication plus qu'un tutoriel pas à pas.
 Activer le routage des paquets IPv4 et IPv6.
 Ne pas oublier d'adapter le nom de l'interface réseau !
 
-{{< highlightFile "/etc/sysctl.d/99-fibre-orange.conf" "ini" "hl_lines=3" >}}
+```ini {filename="/etc/sysctl.d/99-fibre-orange.conf" hl_lines="3"}
 net.ipv4.ip_forward=1
 net.ipv6.conf.all.forwarding=1
 net/ipv6/conf/eno2.832/accept_ra=2
 net.ipv4.conf.all.src_valid_mark=1
-{{< / highlightFile >}}
+```
 
 Recharger les paramètres noyaux avec la commande **sysctl**.
 
@@ -185,7 +185,7 @@ Même mode opératoire que pour IPv4, il vous faudra trois choses :
 
 Saisir le contenu du fichier /etc/dhcp/dhclient6.conf.
 
-{{< highlightFile "/etc/dhcp/dhclient.conf" "c" "hl_lines=5 9-10" >}}
+```c {filename="/etc/dhcp/dhclient.conf" hl_lines="5 9-10"}
 option dhcp6.auth code 11 = string;
 option dhcp6.vendorclass code 16 = string;
 option dhcp6.userclass code 15 = string;
@@ -198,13 +198,13 @@ interface "eno2.832" {
     send dhcp6.auth 00:00:00:00:00:00:00:00:00:00:00:1a:09:00:00:05:58:01:03:41:01:0B:66:74:69:2F:64:75:6D:6D:79:3c:12:31:32:33:34:35:36:37:38:39:30:31:32:33:34:35:36:03:13:41:b9:80:f2:ea:3f:06:3b:2b:e7:08:ac:ec:9c:38:9e:ba;
     also request dhcp6.name-servers, dhcp6.vendorclass, dhcp6.userclass, dhcp6.auth;
 }
-{{< / highlightFile >}}
+```
 
 Créer le script de *dispatch* pour NetworkManager.
 Ce script sera appelé automatiquement par NetworkManager après un *up* ou un *down* de l'interface réseau et lancera le client DHCPv6 en mode *Prefix Delegation*.
 Ne pas oublier d'adapter le nom de l'interface réseau !
 
-{{< highlightFile "/etc/NetworkManager/dispatcher.d/99-orange-ipv6" "sh" "hl_lines=5" >}}
+```sh {filename="/etc/NetworkManager/dispatcher.d/99-orange-ipv6" hl_lines="5"}
 #!/bin/bash
 
 set -Eeuo pipefail
@@ -238,7 +238,7 @@ down)
 esac
 
 exit 0
-{{< / highlightFile >}}
+```
 
 Créer le répertoire **/etc/dhcp/dhclient-exit-hooks.d**.
 
@@ -250,7 +250,7 @@ Créer le script de *hook* pour dhclient.
 Il sera appelé par le client DHCPv6 après obtention d'un préfixe IPv6 et a pour tâche d'affecter les adresses IPv6 aux différentes interfaces du serveur.
 Ne pas oublier d'adapter le nom de l'interface réseau et le nom de vos interfaces réseaux internes (chez moi, elles s'appelle ivs1, ivs2, etc.) !
 
-{{< highlightFile "/etc/dhcp/dhclient-exit-hooks.d/99-orange-ipv6" "sh" "hl_lines=5 12" >}}
+```sh {filename="/etc/dhcp/dhclient-exit-hooks.d/99-orange-ipv6" hl_lines="5 12"}
 #!/bin/bash
 
 set -Eeuo pipefail
@@ -328,7 +328,7 @@ RELEASE)
 esac
 
 exit 0
-{{< / highlightFile >}}
+```
 
 N'oubliez pas de rendre ces deux scripts exécutables.
 
@@ -351,7 +351,7 @@ sudo systemctl mask firewalld
 
 Éditer le contenu du fichier **/etc/sysconfig/nftables.conf**.
 
-{{< highlightFile "/etc/sysconfig/nftables.conf" "ini" "hl_lines=" >}}
+```ini {filename="/etc/sysconfig/nftables.conf"}
 # Uncomment the include statement here to load the default config sample
 # in /etc/nftables for nftables service.
 
@@ -360,11 +360,11 @@ include "/etc/nftables/itix.nft"
 # To customize, either edit the samples in /etc/nftables, append further
 # commands to the end of this file or overwrite it after first service
 # start by calling: 'nft list ruleset >/etc/sysconfig/nftables.conf'.
-{{< / highlightFile >}}
+```
 
 Créer le fichier **/etc/nftables/update.nft**.
 
-{{< highlightFile "/etc/nftables/update.nft" "ini" "hl_lines=" >}}
+```ini {filename="/etc/nftables/update.nft"}
 #!/usr/sbin/nft -f
 
 flush table inet itix-fw
@@ -373,11 +373,11 @@ flush table ip itix-nat
 delete table ip itix-nat
 
 include "/etc/nftables/itix.nft"
-{{< / highlightFile >}}
+```
 
 Créer le fichier **/etc/nftables/itix.nft**.
 
-{{< highlightFile "/etc/nftables/itix.nft" "c" "hl_lines=42 45 57 72 74 76 86" >}}
+```c {filename="/etc/nftables/itix.nft" hl_lines="42 45 57 72 74 76 86"}
 #!/usr/sbin/nft -f
 
 table inet itix-fw {
@@ -467,7 +467,7 @@ table ip itix-nat {
     }
 
 }
-{{< / highlightFile >}}
+```
 
 Activer et démarrer le service **nftables**.
 
@@ -488,7 +488,7 @@ Rien n'est documenté officiellement, mais sur le forum [lafibre.info](https://l
 Pour mettre en oeuvre ces règles, j'ai développé un script qui vérifie que les piles IPv4 et IPv6 sont opérationnelles et force un nouveau cycle DHCPv4 + DHCPv6 si nécessaire.
 Pour éviter tout problème, je force également un renouvellement des baux DHCP toutes les 12 heures.
 
-{{< highlightFile "/usr/local/bin/fibre-orange" "sh" "hl_lines=5" >}}
+```sh {filename="/usr/local/bin/fibre-orange" hl_lines="5"}
 #!/bin/bash
 
 set -Eeuo pipefail
@@ -613,7 +613,7 @@ help)
 esac
 
 exit 0
-{{< / highlightFile >}}
+```
 
 Rendre le script exécutable.
 
@@ -623,10 +623,10 @@ sudo chmod 755 /usr/local/bin/fibre-orange
 
 Créer la crontab associée pour lancer ce script périodiquement.
 
-{{< highlightFile "/etc/cron.d/fibre-orange" "crontab" "hl_lines=" >}}
+```crontab {filename="/etc/cron.d/fibre-orange"}
 */5 * * * * root /usr/local/bin/fibre-orange health-check
 0 */12 * * * root /usr/local/bin/fibre-orange renew
-{{< / highlightFile >}}
+```
 
 ## Conclusion
 

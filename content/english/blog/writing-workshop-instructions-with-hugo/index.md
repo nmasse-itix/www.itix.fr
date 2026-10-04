@@ -201,7 +201,7 @@ git push -u origin master
 Congratulations! You now have your training instructions neatly organised and
 clearly presented. Maintenance and collaboration have been greatly simplified!
 
-{{< attachedFigure src="hugo-screenshot.png" title="Screenshot of our mini-training." >}}
+![Screenshot of our mini-training.](hugo-screenshot.png "Screenshot of our mini-training.")
 
 In this first part of the series, we presented a very light introduction to
 Hugo and its application to workshop instructions. Be sure to read [part 2: Writing workshop instructions with Hugo, with variables in your content](../writing-workshop-instructions-with-hugo-variables/) to discover advanced usages.

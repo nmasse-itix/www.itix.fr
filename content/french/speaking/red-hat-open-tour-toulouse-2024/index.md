@@ -21,9 +21,9 @@ opensource:
 
 Le 28 Novembre 2024, j'ai participé à l'événement [Red Hat Open Tour](https://events.redhat.com/profile/form/index.cfm?PKformID=0x1275737abcd) durant lequel j'ai animé, avec mes collègues Adrien et Mourad, un atelier de travaux pratiques combinant **Edge Computing** et **Intelligence Artificielle**.
 
-{{< attachedFigure src="mas-tolosa.jpeg" title="L'événement s'est déroulé au Mas Tolosa, à proximité de Toulouse." >}}
+![L'événement s'est déroulé au Mas Tolosa, à proximité de Toulouse.](mas-tolosa.jpeg "L'événement s'est déroulé au Mas Tolosa, à proximité de Toulouse.")
 
-[L'énoncé de l'atelier](https://open-tour-2024.netlify.app/fr/) est basé sur ce que nous avions présenté lors du {{< internalLink path="/speaking/riviera-dev-2024/index.md" >}} : le scénario du 7ème opus de la saga **Mission Impossible: Dead Reckoning**... avec un train Lego !
+[L'énoncé de l'atelier](https://open-tour-2024.netlify.app/fr/) est basé sur ce que nous avions présenté lors du [](/speaking/riviera-dev-2024/index.md) : le scénario du 7ème opus de la saga **Mission Impossible: Dead Reckoning**... avec un train Lego !
 **Ethan Hunt** a besoin d'aide pour arrêter le train.
 Grâce un modèle d'intelligence artificielle conçu dans **OpenShift AI** et déployé sur un **Nvidia Jetson Orin** faisant tourner **Red Hat Device Edge**, le train reconnait les panneaux de signalisation et s'arrête tout seul !
 
@@ -41,7 +41,7 @@ L’accent a été mis sur l’utilisation des fonctionnalités d’**OpenShift 
 
 Cette approche a permis de démystifier les étapes clés d'un projet d'Intelligence Artificielle.
 
-{{< attachedFigure src="participants.jpeg" title="Les participants de cet atelier de travaux pratiques ont développé, durant 3 heures, le pilote automatique du train Lego." >}}
+![Les participants de cet atelier de travaux pratiques ont développé, durant 3 heures, le pilote automatique du train Lego.](participants.jpeg "Les participants de cet atelier de travaux pratiques ont développé, durant 3 heures, le pilote automatique du train Lego.")
 
 Pour rendre l’exercice accessible et réduire les prérequis matériels, la suite de l’atelier s’est appuyé sur une approche ingénieuse.
 Plutôt que d’exiger un set Lego complet plus une carte Jetson Orin Nano par participant, tout a été conteneurisé et bouchonné :

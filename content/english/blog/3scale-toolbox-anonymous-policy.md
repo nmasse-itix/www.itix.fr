@@ -89,7 +89,7 @@ Import an OpenAPI Specification file that contains no security requirements.
 
 Confirm your API has been imported as an *Open API*: it contains the *Anonymous* policy.
 
-{{< highlight raw "hl_lines=4-11" >}}
+```raw {hl_lines="4-11"}
 $ curl -s "https://${TENANT}-admin.3scale.net/admin/api/nginx/spec.json?access_token=${TOKEN}"|jq '.services[]|select(.system_name == "toolbox_open_api")|.proxy.policy_chain'
 
 [
@@ -107,7 +107,7 @@ $ curl -s "https://${TENANT}-admin.3scale.net/admin/api/nginx/spec.json?access_t
     "configuration": {}
   }
 ]
-{{< / highlight >}}
+```
 
 Now, import an OpenAPI Specification file that contains a global security requirement **mandating API Key security**.
 

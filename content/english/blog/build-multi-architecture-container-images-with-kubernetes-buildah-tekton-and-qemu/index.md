@@ -93,7 +93,7 @@ kubectl -n ci apply -f https://raw.githubusercontent.com/tektoncd/catalog/main/t
 
 Create the **buildah** Task in the **ci** namespace as follow.
 
-{{< highlightFile "task.yaml" "yaml" "hl_lines=9-10 25-29 31 44-46 64-66" >}}
+```yaml {filename="task.yaml" hl_lines="9-10 25-29 31 44-46 64-66"}
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
@@ -164,7 +164,7 @@ spec:
       push "$TARGET_IMAGE:latest"
 
       exit 0
-{{< /highlightFile >}}
+```
 
 The important parts of the task have been highlighted:
 
@@ -175,7 +175,7 @@ The important parts of the task have been highlighted:
 Create the **buildah-multiarch** Tekton Pipeline in the **ci** namespace as follow.
 The highlighted part of the pipeline contains the list of the target architectures.
 
-{{< highlightFile "pipeline.yaml" "yaml" "hl_lines=9-13" >}}
+```yaml {filename="pipeline.yaml" hl_lines="9-13"}
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
@@ -228,13 +228,13 @@ spec:
       subPath: containers
     taskRef:
       name: buildah
-{{< /highlightFile >}}
+```
 
 If the target container registry requires authentication to push a container image, you will need to create a **Service Account** and a **Secret**.
 
 Create the **tekton-robot** Secret in the **ci** namespace as follow.
 
-{{< highlightFile "serviceaccount.yaml" "yaml" "" >}}
+```yaml {filename="serviceaccount.yaml"}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -243,11 +243,11 @@ secrets:
 - name: quay-authentication
 imagePullSecrets:
 - name: quay-authentication
-{{< /highlightFile >}}
+```
 
 Create the secret to authenticate against your target registry (quay.io in my case) as follow.
 
-{{< highlightFile "secret.yaml" "yaml" "" >}}
+```yaml {filename="secret.yaml"}
 apiVersion: v1
 kind: Secret
 metadata:
@@ -255,13 +255,13 @@ metadata:
 data:
   .dockerconfigjson: '[REDACTED]'
 type: kubernetes.io/dockerconfigjson
-{{< /highlightFile >}}
+```
 
 Note: you can get this secret, by creating a [Robot Account](https://docs.quay.io/glossary/robot-accounts.html) under your [Organization](https://docs.quay.io/glossary/organizations.html).
 Then, you can assign it **write** permissions on the target repository.
 Finally, you can click on your robot account and download the Kubernetes secret.
 
-{{< attachedFigure src="quay-robot-account.png" title="Download the Kubernetes secret of your Quay robot account." >}}
+![Download the Kubernetes secret of your Quay robot account.](quay-robot-account.png "Download the Kubernetes secret of your Quay robot account.")
 
 At this stage, if you run the pipeline, it will fail and complains it cannot run ARMv8 binaries on a x84_64 host (**Exec format error**).
 
@@ -269,7 +269,7 @@ At this stage, if you run the pipeline, it will fail and complains it cannot run
 
 Deploy **Qemu** on all the nodes of your Kubernetes cluster by creating the **multiarch-qemu** DaemonSet in the namespace of you choice as follow.
 
-{{< highlightFile "daemonset.yaml" "yaml" "" >}}
+```yaml {filename="daemonset.yaml"}
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -292,7 +292,7 @@ spec:
         - /register --reset --persistent yes && while :; do sleep 3600; done
         securityContext:
           privileged: true
-{{< /highlightFile >}}
+```
 
 This DaemonSet will run a container that will configure Qemu, on each node of your Kubernetes cluster.
 
@@ -323,7 +323,7 @@ That's the magic behind it!
 Create the **PipelineRun** in the **ci** namespace to start the pipeline.
 Do not forget to change the **outputContainerImage** parameter to match the URL of your container registry!
 
-{{< highlightFile "pipelinerun.yaml" "yaml" "hl_lines=13" >}}
+```yaml {filename="pipelinerun.yaml" hl_lines="13"}
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
@@ -346,7 +346,7 @@ spec:
         resources:
           requests:
             storage: 1Gi
-{{< /highlightFile >}}
+```
 
 You can follow the pipeline execution with the **tkn** command.
 
@@ -356,7 +356,7 @@ tkn -n ci pipelineruns logs -f
 
 Once the pipeline finished, on my registry (Quay.io), I could see the container images for both architectures under the "latest" tag.
 
-{{< attachedFigure src="quay-repository.png" title="On Quay.io, you can see the container images for both architectures: ARMv8 and x86_64." >}}
+![On Quay.io, you can see the container images for both architectures: ARMv8 and x8664.](quay-repository.png "On Quay.io, you can see the container images for both architectures: ARMv8 and x86_64.")
 
 ## Conclusion
 

@@ -33,9 +33,9 @@ Ce serveur **HP DL20 Gen9** est équipé de :
 - 2 disques 3,5" de 4 To chacun, configurés en RAID 1 par la carte RAID HP
 - 6 ports RJ-45 à 1 GbE
 
-{{< attachedFigure src="hp-dl20-gen9.webp" title="Le serveur HP DL20 Gen9 existant." >}}
+![Le serveur HP DL20 Gen9 existant.](hp-dl20-gen9.webp "Le serveur HP DL20 Gen9 existant.")
 
-Ce serveur est actuellement racké dans une baie informatique de 7U de haut, faible profondeur, au sous-sol de la maison et il fait actuellement tourner **CentOS Stream 8** que j'ai configuré en routeur (voir {{< internalLink path="/blog/fibre-orange-remplacer-livebox-routeur-centos-stream-8" >}}) et hyperviseur (avec **libvirt**).
+Ce serveur est actuellement racké dans une baie informatique de 7U de haut, faible profondeur, au sous-sol de la maison et il fait actuellement tourner **CentOS Stream 8** que j'ai configuré en routeur (voir [](/blog/fibre-orange-remplacer-livebox-routeur-centos-stream-8)) et hyperviseur (avec **libvirt**).
 
 L'hyperviseur fait tourner plusieurs VM :
 
@@ -68,7 +68,7 @@ Les capacités d'expansion du **HP DL20 Gen9** sont bien limitées : 2 emplaceme
 L'emplacement pleine hauteur est pris par le contrôleur RAID et l'emplacement demi hauteur est pris par la carte réseau 4 ports GbE.
 
 Dernier point, et non des moindres, la carte mère et le CPU du **HP DL20 Gen9** ne supportent pas le **SR-IOV**. Ça m'oblige actuellement à faire tourner les fonctions de routage réseau directement sur l'hyperviseur.
-La fonction SR-IOV me permettrait de mettre le {{<internalLink path="/blog/fibre-orange-remplacer-livebox-routeur-centos-stream-8" title="routeur CentOS Stream" >}} dans une VM sans perte de performance.
+La fonction SR-IOV me permettrait de mettre le [routeur CentOS Stream](/blog/fibre-orange-remplacer-livebox-routeur-centos-stream-8) dans une VM sans perte de performance.
 
 En résumé, j'ai besoin de :
 
@@ -143,7 +143,7 @@ Il sera alors toujours temps de passer sur un CPU plus puissant.
 
 Le CPU **Ampere Altra Q64-22** a un TDP de 69 W d'après la [fiche technique Ampere Altra](https://d1o0i0v5q5lp8h.cloudfront.net/ampere/live/assets/documents/Altra_Rev_A1_DS_v1.27_20220331.pdf).
 
-{{< attachedFigure src="ampere-altra-q64-22.jpeg" title="Le CPU Ampere Altra Q64-22, monté sur la carte mère ASRock Rack ALTRAD8UD-1L2T" >}}
+![Le CPU Ampere Altra Q64-22, monté sur la carte mère ASRock Rack ALTRAD8UD-1L2T](ampere-altra-q64-22.jpeg "Le CPU Ampere Altra Q64-22, monté sur la carte mère ASRock Rack ALTRAD8UD-1L2T")
 
 Autre difficulté, c'est que j'habite en France et Newegg ne livre pas en France...
 J'ai donc dû passer par un *reshipper* : une entreprise aux États-Unis qui réceptionne les colis et les réexpédie partout dans le monde.
@@ -186,7 +186,7 @@ Avant de me décider à acheter le boîtier [Innovision M24306](http://iovserver
 
 Le boîtier **Innovision M24306** est trouvable sur [Aliexpress](https://www.aliexpress.us/item/1005005856237609.html) et [Alibaba](https://www.alibaba.com/product-detail/Ultra-Short-2U-rackmount-Server-Chassis_1600636420062.html).
 
-{{< attachedFigure src="innovision-m24306.jpeg" title="Le boîtier Innovision M24306." >}}
+![Le boîtier Innovision M24306.](innovision-m24306.jpeg "Le boîtier Innovision M24306.")
 
 Quelques remarques utiles (j'ai demandé des clarifications avant de passer commande) :
 
@@ -199,7 +199,7 @@ Quelques remarques utiles (j'ai demandé des clarifications avant de passer comm
 Note : la prise VGA que l'on voit sur l'oreille droite du serveur n'est connectée à rien du tout.
 Mais ce n'est pas gênant dans le sens où le boîtier a ses entrées/sorties sur la face avant donc la prise VGA est déjà sur la face avant et n'a pas besoin d'être déportée.
 
-{{< attachedFigure src="vga-not-connected.jpeg" title="La prise VGA sur l'oreille droite du boîtier Innovision M24306 n'est pas connectée." >}}
+![La prise VGA sur l'oreille droite du boîtier Innovision M24306 n'est pas connectée.](vga-not-connected.jpeg "La prise VGA sur l'oreille droite du boîtier Innovision M24306 n'est pas connectée.")
 
 ## Alimentation CRPS FSP
 
@@ -227,7 +227,7 @@ Le modèle [FSP-FC250](https://www.fsp-group.com/download/pro/FSP-FC250_Datashee
 J'ai ensuite opté pour le module d'alimentation de la plus petite puissance disponible car 2 x 550W, ça fait déjà beaucoup pour un petit serveur !
 C'est le modèle [FSP550-20FM](https://www.fsp-group.com/download/pro/FSP550-20FM_Datasheet.pdf).
 
-{{< attachedFigure src="psu-fsp.webp" title="La composition de l'alimentation CRPS de marque FSP." >}}
+![La composition de l'alimentation CRPS de marque FSP.](psu-fsp.webp "La composition de l'alimentation CRPS de marque FSP.")
 
 Il est à noter que la *Power Distribution Board* n'est fixée au boîtier que par deux petites vis.
 Pour éviter qu'elle ne bouge, j'ai dû la caler avec un morceau de mousse.
@@ -256,7 +256,7 @@ La référence **CAB-8654/8654-8i-11-P0.5M-85** chez [10Gtek](https://www.10gtek
 - Enfin, il est possible d'opter pour des connecteurs coudés ou droits.
   J'ai pris les **connecteurs droits**.
 
-{{< attachedFigure src="slimsas-cables.webp" title="Cheminement des câbles SlimSAS / SFF-8654 dans le boîtier Innovision M24306." >}}
+![Cheminement des câbles SlimSAS / SFF-8654 dans le boîtier Innovision M24306.](slimsas-cables.webp "Cheminement des câbles SlimSAS / SFF-8654 dans le boîtier Innovision M24306.")
 
 ## Stockage
 
@@ -270,7 +270,7 @@ Ces SSD sont au format *Add-in Card (AIC)*, demi-hauteur, demi-longueur (**HHHL*
 Mais dans l'immédiat, ça me permet d'avancer.
 Et si je trouve une enchère eBay avec un lot de SSD Samsung PM1733 à bon prix, je n'aurais qu'à transférer les données sur les nouveaux SSD pour récupérer 3 emplacements PCIe.
 
-{{< attachedFigure src="nvme-storage.jpeg" title="Trois SSD Samsung PM1735 et un SSD Samsung 980 PRO installés dans le boîtier." >}}
+![Trois SSD Samsung PM1735 et un SSD Samsung 980 PRO installés dans le boîtier.](nvme-storage.jpeg "Trois SSD Samsung PM1735 et un SSD Samsung 980 PRO installés dans le boîtier.")
 
 Il est à noter que les SSD **Samsung PM1733A** ont été testés par la société **Ampere Computing** et ont montré de bonnes performances avec leur CPU ! Voir [Samsung FIO Performance - Solution Brief](https://amperecomputing.com/briefs/samsung-FIO-performance).
 
@@ -278,7 +278,7 @@ J'ai ajouté à cela un SSD NVMe au format M.2 pour héberger le système d'expl
 
 Par soucis du détail, j'ai quand même testé 6 SSD NVMe au format U.2 (PCIe 3.0) sur le *backplane NVMe* du boîtier. Ça fonctionne ! En revanche, je n'ai pas testé le branchage/débranchage à chaud (*hotplug*) car je ne pense pas que le *backplane* de ce boîtier ait implémenté la fonctionnalité.
 
-{{< attachedFigure src="more-nvme-storage.webp" title="Six SSD NVMe de plus, pour un total de 26.4 To de stockage NVMe !" >}}
+![Six SSD NVMe de plus, pour un total de 26.4 To de stockage NVMe !](more-nvme-storage.webp "Six SSD NVMe de plus, pour un total de 26.4 To de stockage NVMe !")
 
 ## Nomenclature
 
@@ -306,7 +306,7 @@ Et dans ce prix, je n'ai pas compté les frais de port, les droits de douane, et
 Il est à noter que, par défaut, le flux d'air des ventilateurs des alimentations **FSP 550-20FM** et du boîtier **Innovision M24306** sont inversés : les ventilateurs des alimentations soufflent dans le sens **avant -> arrière** alors que les ventilateurs du boîtier soufflent dans le sens **arrière -> avant**.
 Fort heureusement, les ventilateurs du boîtier sont réversibles.
 
-{{< attachedFigure src="fans-air-flow.webp" title="J'ai retourné les quatre ventilateurs du avoir un flux d'air avant -> arrière. Dans cette configuration, les étiquettes des ventilateurs ne sont pas visibles de l'intérieur du boîtier." >}}
+![J'ai retourné les quatre ventilateurs du avoir un flux d'air avant -> arrière. Dans cette configuration, les étiquettes des ventilateurs ne sont pas visibles de l'intérieur du boîtier.](fans-air-flow.webp "J'ai retourné les quatre ventilateurs du avoir un flux d'air avant -> arrière. Dans cette configuration, les étiquettes des ventilateurs ne sont pas visibles de l'intérieur du boîtier.")
 
 Je n'ai pas encore fait de test de performance, mais les températures mesurées sont plus basses avec ce flux d'air optimisé.
 C'est au niveau des 6 SSD NVMe à gauche que l'effet est le plus notable.
@@ -319,15 +319,15 @@ Les trois emplacements inutilisés peuvent être masqués pour forcer le flux d'
 
 L'aspect extérieur du produit est plutôt flatteur, presque professionnel.
 
-{{< attachedFigure src="final-product.webp" title="Serveur 2U basé sur un boîtier Innovision M24306, une carte mère ASRock Rack ALTRAD8UD-1L2T et un CPU Ampere Altra Q64-22. Face avant en haut, face arrière en bas." >}}
+![Serveur 2U basé sur un boîtier Innovision M24306, une carte mère ASRock Rack ALTRAD8UD-1L2T et un CPU Ampere Altra Q64-22. Face avant en haut, face arrière en bas.](final-product.webp "Serveur 2U basé sur un boîtier Innovision M24306, une carte mère ASRock Rack ALTRAD8UD-1L2T et un CPU Ampere Altra Q64-22. Face avant en haut, face arrière en bas.")
 
 L'intérieur est moins bien agencé qu'un serveur HP ou Dell mais je saurais m'en satisfaire. 😎
 
-{{< attachedFigure src="internal-layout.webp" title="Agencement interne du boîtier Innovision M24306 avec une carte mère ASRock Rack ALTRAD8UD-1L2T et un CPU Ampere Altra Q64-22." >}}
+![Agencement interne du boîtier Innovision M24306 avec une carte mère ASRock Rack ALTRAD8UD-1L2T et un CPU Ampere Altra Q64-22.](internal-layout.webp "Agencement interne du boîtier Innovision M24306 avec une carte mère ASRock Rack ALTRAD8UD-1L2T et un CPU Ampere Altra Q64-22.")
 
 Dernières photos, cette fois-ci avec le couvercle en place, prêt à être racké ! 🚀
 
-{{< attachedFigure src="perspective-view.webp" title="Boîtier Innovision M24306 avec une carte mère ASRock Rack ALTRAD8UD-1L2T et un CPU Ampere Altra Q64-22." >}}
+![Boîtier Innovision M24306 avec une carte mère ASRock Rack ALTRAD8UD-1L2T et un CPU Ampere Altra Q64-22.](perspective-view.webp "Boîtier Innovision M24306 avec une carte mère ASRock Rack ALTRAD8UD-1L2T et un CPU Ampere Altra Q64-22.")
 
 ## Conclusion
 

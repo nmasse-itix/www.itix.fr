@@ -12,7 +12,7 @@ topics:
 
 [Le 18 juin 2024](https://www.linkedin.com/posts/red-hat_worldline-techatworldline-worldlinetex-activity-7209161785776451584-7-Hx?utm_source=share&utm_medium=member_desktop), Seclin a accueilli un événement technologique majeur : le [Worldline Tech Forum eXplore France 2024](https://www.linkedin.com/posts/worldlineglobal_worldline-tech-forum-explore-france-2024-activity-7218612563469578240-fTZf/).
 Cet événement a rassemblé des employés Worldline et des partenaires technologiques (dont Red Hat), tous animés par une même volonté de partager les dernières innovations et leurs connaissances.
-Parmi les nombreuses animations proposées lors de cette journée, notre stand Red Hat a fait sensation, notamment grâce à une démonstration originale qui a attiré de nombreux visiteurs : le désormais bien connu train Lego *Mission Impossible*, que nous avons présenté lors du {{< internalLink path="/speaking/platform-day-2024/index.md" >}}.
+Parmi les nombreuses animations proposées lors de cette journée, notre stand Red Hat a fait sensation, notamment grâce à une démonstration originale qui a attiré de nombreux visiteurs : le désormais bien connu train Lego *Mission Impossible*, que nous avons présenté lors du [](/speaking/platform-day-2024/index.md).
 
 ## Une expérience immersive et ludique avec le train Lego
 

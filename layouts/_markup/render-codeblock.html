@@ -1,0 +1,24 @@
+{{- /*
+  -- Renders the fenced code blocks, optionally prefixed by a file name or a
+  -- title:
+  --
+  --   ```yaml {filename="config.yaml" hl_lines="3-5"}
+  --   ```sh {title="CoreOS"}
+  */ -}}
+{{- $result := transform.HighlightCodeBlock . -}}
+{{- $label := "" -}}
+{{- with .Attributes.filename -}}
+  {{- $label = printf (i18n "file") . -}}
+{{- else -}}
+  {{- with .Attributes.title -}}{{- $label = . -}}{{- end -}}
+{{- end -}}
+{{- /* The filename and title attributes must not be rendered on the wrapper */ -}}
+{{- $highlighted := replaceRE `^<div class="highlight"[^>]*>` `<div class="highlight">` (string $result.Wrapped) 1 | safeHTML -}}
+{{- if $label -}}
+<div class="highlightedFile">
+<div class="filename">{{ $label }}</div>
+{{- $highlighted -}}
+</div>
+{{- else -}}
+{{- $highlighted -}}
+{{- end -}}

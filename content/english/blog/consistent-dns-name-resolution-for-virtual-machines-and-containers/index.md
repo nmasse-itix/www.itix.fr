@@ -48,7 +48,7 @@ Hence, if you try to query your container by its DNS name from your host, it wil
 By configuring a third dnsmasq instance to gather the libvirt and podman ones, we achieve consistent DNS name resolution.
 The beauty of this setup is that you do not have to maintain this third dnsmasq instance since there is one provided with NetworkManager, and we will re-use it!
 
-{{< attachedFigure src="dnsmasq-for-consistent-dns-resolution-vm-containers.svg" title="Three dnsmasq instances to get consistent DNS name resolution between VMs, containers and the host." >}}
+![Three dnsmasq instances to get consistent DNS name resolution between VMs, containers and the host.](dnsmasq-for-consistent-dns-resolution-vm-containers.svg "Three dnsmasq instances to get consistent DNS name resolution between VMs, containers and the host.")
 
 ## Configure Podman
 
@@ -113,7 +113,7 @@ This also prevents the infamous 5 seconds timeout on IPv6 DNS queries.
 
 Create a file **/tmp/default-net.xml** that contains the following libvirt network definition.
 
-{{< highlightFile "/tmp/default-net.xml" "xml" "" >}}
+```xml {filename="/tmp/default-net.xml"}
 <network xmlns:dnsmasq="http://libvirt.org/schemas/network/dnsmasq/1.0">
   <name>default</name>
   <forward mode='nat'>
@@ -132,7 +132,7 @@ Create a file **/tmp/default-net.xml** that contains the following libvirt netwo
     <dnsmasq:option value="auth-zone=dns.libvirt"/>
   </dnsmasq:options>
 </network>
-{{< /highlightFile >}}
+```
 
 Replace the default libvirt network.
 
@@ -180,11 +180,11 @@ options edns0 trust-ad
 
 Create the dnsmasq configuration file to dispatch requests to **dns.podman**, **dns.libvirt** and **dns.host**.
 
-{{< highlightFile "/etc/NetworkManager/dnsmasq.d/podman-libvirt-dns.conf" "ini" "" >}}
+```ini {filename="/etc/NetworkManager/dnsmasq.d/podman-libvirt-dns.conf"}
 server=/dns.podman/10.88.0.1
 server=/dns.libvirt/192.168.122.1
 host-record=host.dns.host,192.168.122.1
-{{< /highlightFile >}}
+```
 
 Restart the dnsmasq instance of NetworkManager.
 
@@ -237,6 +237,6 @@ dig +short www.google.fr
 
 If your configuration is correct, you should get the following result. The top left terminal is the container, the bottom left terminal is the virtual machine and the right terminal is the host.
 
-{{< attachedFigure src="consistent-dns-resolution-in-vm-and-containers.png" title="Consistent DNS name resolution between VMs, containers and the host." >}}
+![Consistent DNS name resolution between VMs, containers and the host.](consistent-dns-resolution-in-vm-and-containers.png "Consistent DNS name resolution between VMs, containers and the host.")
 
 Congratulations! You just configured a consistent DNS name resolution between VMs, containers and the host.

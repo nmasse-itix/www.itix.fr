@@ -23,16 +23,16 @@ In this article, I will give you an overview of the demo and you will be able to
 
 ## The "Mission impossible" demo
 
-We designed this demo for the {{< internalLink path="/speaking/platform-day-2024/index.md" >}} event based on the latest opus of the movie **Mission Impossible: Dead Reckoning**.
+We designed this demo for the [](/speaking/platform-day-2024/index.md) event based on the latest opus of the movie **Mission Impossible: Dead Reckoning**.
 In this demo, **Ethan Hunt** needs help to stop the **Lego City #60337** train before it's too late!
 Nothing less than the fate of humanity is at stake!
 
-{{< attachedFigure src="mission-impossible-plot.png" >}}
+![](mission-impossible-plot.png)
 
 The scenario requires **Ethan Hunt** to board the train to connect a **Nvidia Jetson Orin Nano** card to the train's computer network and deploy an AI that will recognise the traffic signs and stop the train on time before it derails!
 A console will provide a remote view of the train's video surveillance camera, with the results of the AI model's inference overlaid.
 
-{{< attachedFigure src="mission-impossible-scenario.png" >}}
+![](mission-impossible-scenario.png)
 
 To run this demo, we equipped the **Lego** train with a **Nvidia Jetson Orin Nano** card, a webcam and a portable battery.
 The Nvidia Jetson Orin card is a System On Chip (SoC), it includes all the hardware that **Ethan Hunt** needs for its mission: CPU, RAM, storage...
@@ -40,7 +40,7 @@ Plus a GPU to speed up the calculations!
 The Jetson receives the video stream from the onboard camera and transmits orders to the **Lego** Hub via the **Bluetooth Low Energy** protocol.
 It is powered by a portable battery for the duration of the mission.
 
-{{< attachedFigure src="rhel-booth-mission-impossible-demo.jpeg" >}}
+![](rhel-booth-mission-impossible-demo.jpeg)
 
 We are in an Edge Computing context.
 On the Jetson, we have installed **Red Hat Device Edge**.
@@ -55,7 +55,7 @@ The video stream is broadcast from the Jetson via a **Kafka broker**!
 On top of this, there are MLops pipelines to train the AI model.
 And finally CI/CD pipelines to build the container images of our microservices for x86 and ARM architectures.
 
-{{< attachedFigure src="mission-impossible-hardware-architecture.png" >}}
+![](mission-impossible-hardware-architecture.png)
 
 To enable **Ethan Hunt** to carry out its mission successfully, we had to guarantee end-to-end data transmission.
 To do this, we implemented five services that communicate via an asynchronous message transmission system (**MQTT**).
@@ -65,7 +65,7 @@ Each image is resized to 600x400 pixels and encapsulated in an event with a uniq
 This event is transmitted to the AI model, which enriches it with the result of the prediction.
 The latter is transmitted to a transformation service whose role is to extract the train's action, transmit it to the train controller to slow down or stop the train and at the same time send the event to the streaming service (**Kafka**) deployed on a remote Openshift, which displays the images and the prediction in real time.
 
-{{< attachedFigure src="mission-impossible-software-architecture.png" >}}
+![](mission-impossible-software-architecture.png)
 
 And finally, we had to build an artificial intelligence model.
 To do this, we followed best practices for managing the model's lifecycle, known as **MLOps**:
@@ -78,7 +78,7 @@ To do this, we followed best practices for managing the model's lifecycle, known
 - **Measure performance and re-train**: By observing the model's behaviour, we were able to measure the quality of the predictions and note that not all **Lego** panels were well recognised.
   We decided to re-train the model by refining it with an enriched dataset.
 
-{{< attachedFigure src="mission-impossible-ai.png" >}}
+![](mission-impossible-ai.png)
 
 ## Watch the replay!
 

@@ -74,7 +74,7 @@ Vous remarquerez que le fichier [ignition](https://coreos.github.io/ignition/con
 C'est également une spécificité de CoreOS : tous les logiciels qui tournent sur CoreOS doivent tourner sous la forme de conteneurs, instanciés et démarrés depuis un *unit* systemd ou provisionné par OpenShift.
 
 Note: si vous souhaitez tout de même installer un package RPM, il est possible de personnaliser l'image CoreOS avec vos modification.
-Je vous conseille alors la lecture de cet article : {{< internalLink path="/blog/build-your-own-distribution-on-fedora-coreos.md" >}}.
+Je vous conseille alors la lecture de cet article : [](/blog/build-your-own-distribution-on-fedora-coreos.md).
 
 Autre différence majeure avec un système d'exploitation classique : les mises à jour s'effectuent de manière transactionnelle.
 Cela signifie qu'une mise à jour du système d'exploitation s'effectue dans son intégralité ou ne se fait pas du tout.
@@ -133,7 +133,7 @@ Chaque version (identifiée par son empreinte SHA 256) contient l'ensemble du sy
 
 La commande `ostree admin status` permet de lister les versions installées.
 
-{{< highlight "sh" "hl_lines=2 14" >}}
+```sh {hl_lines="2 14"}
 [core@coreos ~]$ sudo ostree admin status
 * rhcos eb6dd3b8b2912914f568af791a7ece826665cc78153a4e4d304acdaae1daacd1.0
     Version: 48.84.202106231817-0
@@ -150,7 +150,7 @@ boot  etc  lib   media  opt  proc    run   srv   sysroot  usr
 /ostree/deploy/rhcos/deploy/eb6dd3b8b2912914f568af791a7ece826665cc78153a4e4d304acdaae1daacd1.0/:
 bin   dev  home  lib64  mnt  ostree  root  sbin  sys      tmp  var
 boot  etc  lib   media  opt  proc    run   srv   sysroot  usr
-{{< / highlight >}}
+```
 
 Pour éviter de gâcher de l'espace disque, les fichiers communs à deux versions sont partagés via un *hard link*.
 Ici, la commande `ls` est identique entre les deux versions et ainsi les deux fichiers ont le même *inode*.
@@ -191,7 +191,7 @@ Red Hat CoreOS est une version de Red Hat Enterprise Linux, packagée de manièr
 
 Le premier indice se trouve dans le fichier /etc/os-release qui nous indique que la version de CoreOS embarquée avec OpenShift 4.8 est basée sur une Red Hat Enterprise Linux 8.4.
 
-{{< highlightFile "/etc/os-release" "sh" "hl_lines=18" >}}
+```sh {filename="/etc/os-release" hl_lines="18"}
 NAME="Red Hat Enterprise Linux CoreOS"
 VERSION="48.84.202108062347-0"
 ID="rhcos"
@@ -211,32 +211,32 @@ REDHAT_SUPPORT_PRODUCT_VERSION="4.8"
 OPENSHIFT_VERSION="4.8"
 RHEL_VERSION="8.4"
 OSTREE_VERSION='48.84.202108062347-0'
-{{< / highlightFile >}}
+```
 
 La version du noyau Linux est, à peu de choses près, la même sur CoreOS que sur RHEL.
 
-{{< highlightWithTitle "RHEL 8.4" "sh" "hl_lines=3" >}}
+```sh {title="RHEL 8.4" hl_lines="3"}
 [nmasse@localhost ~]$ rpm -qa |grep kernel
 kernel-modules-4.18.0-305.el8.x86_64
 kernel-4.18.0-305.el8.x86_64
 kernel-core-4.18.0-305.el8.x86_64
 kernel-tools-4.18.0-305.el8.x86_64
 kernel-tools-libs-4.18.0-305.el8.x86_64
-{{< / highlightWithTitle >}}
+```
 
 &nbsp;
 
-{{< highlightWithTitle "CoreOS" "sh" "hl_lines=5" >}}
+```sh {title="CoreOS" hl_lines="5"}
 [core@coreos ~]$ rpm -qa |grep kernel
 kernel-core-4.18.0-305.10.2.el8_4.x86_64
 kernel-modules-4.18.0-305.10.2.el8_4.x86_64
 kernel-modules-extra-4.18.0-305.10.2.el8_4.x86_64
 kernel-4.18.0-305.10.2.el8_4.x86_64
-{{< / highlightWithTitle >}}
+```
 
 La glibc est exactement la même sur CoreOS et sur RHEL.
 
-{{< highlightWithTitle "RHEL 8.4" "sh" "hl_lines=4 7" >}}
+```sh {title="RHEL 8.4" hl_lines="4 7"}
 [nmasse@localhost ~]$ rpm -qa |grep glibc
 glibc-langpack-en-2.28-151.el8.x86_64
 glibc-common-2.28-151.el8.x86_64
@@ -244,11 +244,11 @@ glibc-2.28-151.el8.x86_64
 
 [nmasse@localhost ~]$ sha1sum /lib64/libc-2.28.so
 5dd511ebea3476a03d710eff1bab8a72a47fdf71  /lib64/libc-2.28.so
-{{< / highlightWithTitle >}}
+```
 
 &nbsp;
 
-{{< highlightWithTitle "CoreOS" "sh" "hl_lines=4 7" >}}
+```sh {title="CoreOS" hl_lines="4 7"}
 [core@coreos ~]$ rpm -qa |grep glibc
 glibc-common-2.28-151.el8.x86_64
 glibc-all-langpacks-2.28-151.el8.x86_64
@@ -256,7 +256,7 @@ glibc-2.28-151.el8.x86_64
 
 [core@coreos ~]$ sha1sum /lib64/libc-2.28.so
 5dd511ebea3476a03d710eff1bab8a72a47fdf71  /lib64/libc-2.28.so
-{{< / highlightWithTitle >}}
+```
 
 Et la [documentation OpenShift](https://docs.openshift.com/container-platform/4.9/architecture/architecture-rhcos.html) confirme ces investigations avec l'information suivante :
 

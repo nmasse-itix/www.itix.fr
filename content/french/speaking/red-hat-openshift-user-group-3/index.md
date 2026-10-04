@@ -20,4 +20,5 @@ Durant la session, de nombreuses questions ont été abordées :
 - Quel modèles organisationnels au niveau du dépôt Git ? un dépot par environnement ? une branche par environnement ? quelles droits d'accès ?
 - Comment sont gérées les approbations pour le déploiement en production ?
 
-{{< attachedFigure src="photo-participants.jpeg" >}}
+![](photo-participants.jpeg)
+

@@ -16,7 +16,7 @@ resources:
 - '*.gif'
 ---
 
-Lors du {{< internalLink path="/speaking/red-hat-summit-connect-france-2024/index.md" >}}, j'ai animé un atelier pour les développeurs intitulé "**Open Code Quest**".
+Lors du [](/speaking/red-hat-summit-connect-france-2024/index.md), j'ai animé un atelier pour les développeurs intitulé "**Open Code Quest**".
 Dans cet atelier, les développeurs devaient coder des micro-services en utilisant Quarkus, OpenShift et un service d'Intelligence Artificielle : le modèle Granite d'IBM.
 L'atelier était conçu sous la forme d'une compétition de vitesse : les premiers à valider les trois exercices ont reçu une récompense.
 
@@ -75,7 +75,7 @@ Et c'est justement ce qui nous intéresse :
 Et si les trois conditions précédentes sont vraies, on peut en déduire que l'utilisateur a terminé et validé l'exercice **hero**.
 Au cours du temps, ces *time series* progressent telles que représentées sur la figure suivante.
 
-{{< attachedFigure src="exercise-validation.png" title="Lorsque les trois conditions sont réunies, l'exercice est validé." >}}
+![Lorsque les trois conditions sont réunies, l'exercice est validé.](exercise-validation.png "Lorsque les trois conditions sont réunies, l'exercice est validé.")
 
 C'est un bon début, non ?
 Si on fait la même chose pour les trois exercices, on peut savoir qui a terminé l'atelier dans son ensemble.
@@ -84,7 +84,7 @@ Vu que certains exercices prennent plus de temps que d'autres, on peut imaginer 
 C'est ce que j'ai essayé de modéliser dans la figure ci-dessous avec un poids de 55 pour le premier exercice, 30 pour le second et 45 pour le dernier.
 L'idée étant d'approcher une progression linéaire des points au cours du temps (1 point par minute).
 
-{{< attachedFigure src="counting-scheme-no-time.png" title="Progression du nombre de points pour un utilisateur normal, lent et rapide au cours du temps et avec pondération de chaque exercise en fonction de la durée nominale de l'exercise." >}}
+![Progression du nombre de points pour un utilisateur normal, lent et rapide au cours du temps et avec pondération de chaque exercise en fonction de la durée nominale de l'exercise.](counting-scheme-no-time.png "Progression du nombre de points pour un utilisateur normal, lent et rapide au cours du temps et avec pondération de chaque exercise en fonction de la durée nominale de l'exercise.")
 
 Ça commence à prendre forme.
 Mais si on regarde bien, à la fin de l'atelier (à la 150ème minute), tous les participants ont terminé et ont le même score.
@@ -108,12 +108,12 @@ Est-ce qu'on ne pourrait pas activer un accélérateur à chaque validation d'un
 Voilà qui rendrait la compétition plus engageante et plus amusante !  
 Et c'est ce que j'ai essayé de modéliser sur le schéma ci-dessous.
 
-{{< attachedFigure src="counting-scheme-with-time.png" title="Progression du nombre de points pour un utilisateur normal, lent et rapide au cours du temps et avec accélérateur et pondération de chaque exercise en fonction du temps que met l'utilisateur à réaliser l'exercice." >}}
+![Progression du nombre de points pour un utilisateur normal, lent et rapide au cours du temps et avec accélérateur et pondération de chaque exercise en fonction du temps que met l'utilisateur à réaliser l'exercice.](counting-scheme-with-time.png "Progression du nombre de points pour un utilisateur normal, lent et rapide au cours du temps et avec accélérateur et pondération de chaque exercise en fonction du temps que met l'utilisateur à réaliser l'exercice.")
 
 Maintenant, la question est : est-ce qu'un utilisateur qui prend la tête dans le premier exercice acquiert un avantage significatif qui rendrait la compétition déséquilibrée ?
 La réponse, nous l'avons obtenue lors des différentes répétitions qui ont eu lieu chez Red Hat avant le Jour J.
 
-{{< attachedFigure src="counting-scheme-dry-run.png" title="Validation du modèle de comptage des points lors d'un dry-run." >}}
+![Validation du modèle de comptage des points lors d'un dry-run.](counting-scheme-dry-run.png "Validation du modèle de comptage des points lors d'un dry-run.")
 
 Dans la capture d'écran ci-dessus, on voit que Batman a terminé l'exercice "hero" **tardivement**.  
 Mais en terminant l'exercice "villain" **très rapidement**, il a pu reprendre la tếte... **temporairement**.  
@@ -169,7 +169,7 @@ Des données doivent normalement apparaître dans le tableau de bord Grafana.
 Pour en profiter pleinement, arrêtez le script `run.sh` avec un appui sur **Ctrl + C** et relancez le !
 Au bout de quelques secondes, vous devriez voir apparaitre sur le tableau de bord des données toutes fraiches, comme dans la vidéo ci-dessous.
 
-{{< attachedFigure src="leaderboard-simulation.gif" title="Simulation de l'atelier Open Code Quest sur le banc d'essai afin de valider le système de comptage de points (vidéo accélérée 10x)." >}}
+![Simulation de l'atelier Open Code Quest sur le banc d'essai afin de valider le système de comptage de points (vidéo accélérée 10x).](leaderboard-simulation.gif "Simulation de l'atelier Open Code Quest sur le banc d'essai afin de valider le système de comptage de points (vidéo accélérée 10x).")
 
 ### Requêtes Prometheus
 
@@ -227,7 +227,7 @@ EOF
 
 Copiez-collez la requète dans la section **Explore** de Grafana et vous devriez obtenir le graphe suivant.
 
-{{< attachedFigure src="grafana-explore-opencodequest-leaderboard-hero.png" title="La métrique \"opencodequest_leaderboard_hero:prod\" représente l'état de complétude de l'exercice \"hero\" dans l'environnement \"prod\"." >}}
+![La métrique "opencodequestleaderboardhero:prod" représente l'état de complétude de l'exercice "hero" dans l'environnement "prod".](grafana-explore-opencodequest-leaderboard-hero.png "La métrique \"opencodequest_leaderboard_hero:prod\" représente l'état de complétude de l'exercice \"hero\" dans l'environnement \"prod\".")
 
 Il faut le lire de la manière suivante (note : 1728646377 = 13:32:57) :
 
@@ -290,7 +290,7 @@ Ces trois requêtes sont conçues sur le même modèle.
 Pour bien comprendre comment fonctionne cette requête, je vous propose de la scinder en deux : la partie `increase(...)` d'un coté et le reste de l'autre.
 On superpose tout ça avec la requête précédente et ça donne la figure suivante.
 
-{{< attachedFigure src="grafana-opencodequest-leaderboard-onetime-bonus.png" title="La métrique \"opencodequest_leaderboard_hero_onetime_bonus:prod\" représente le bonus temps alloué à un utilisateur lorsqu'il termine l'exercice \"hero\" dans l'environnement \"prod\"." >}}
+![La métrique "opencodequestleaderboardheroonetimebonus:prod" représente le bonus temps alloué à un utilisateur lorsqu'il termine l'exercice "hero" dans l'environnement "prod".](grafana-opencodequest-leaderboard-onetime-bonus.png "La métrique \"opencodequest_leaderboard_hero_onetime_bonus:prod\" représente le bonus temps alloué à un utilisateur lorsqu'il termine l'exercice \"hero\" dans l'environnement \"prod\".")
 
 De haut en bas, on peut observer :
 
@@ -320,7 +320,7 @@ On peut le voir comme l'intégrale de la *time serie*.
 
 La figure suivante présente le fonctionnement de cette requête de manière plus parlante.
 
-{{< attachedFigure src="grafana-opencodequest-leaderboard-lifetime-bonus.png" title="La métrique \"opencodequest_leaderboard_hero_lifetime_bonus:prod\" représente le report à nouveau du bonus temps alloué à un utilisateur lorsqu'il termine l'exercice \"hero\" dans l'environnement \"prod\"." >}}
+![La métrique "opencodequestleaderboardherolifetimebonus:prod" représente le report à nouveau du bonus temps alloué à un utilisateur lorsqu'il termine l'exercice "hero" dans l'environnement "prod".](grafana-opencodequest-leaderboard-lifetime-bonus.png "La métrique \"opencodequest_leaderboard_hero_lifetime_bonus:prod\" représente le report à nouveau du bonus temps alloué à un utilisateur lorsqu'il termine l'exercice \"hero\" dans l'environnement \"prod\".")
 
 De haut en bas, on peut observer :
 
@@ -366,7 +366,7 @@ En effet, les 3 accélérateurs s'additionnent déjà, ce qui fait que l'utilisa
 
 La figure suivante présente les 6 composantes de requête Prometheus permettant de calculer les points de l'utilisateur.
 
-{{< attachedFigure src="grafana-opencodequest-leaderboard.png" title="Les 6 composantes de la requête Prometheus calculant les scores des utilisateurs et le résultat." >}}
+![Les 6 composantes de la requête Prometheus calculant les scores des utilisateurs et le résultat.](grafana-opencodequest-leaderboard.png "Les 6 composantes de la requête Prometheus calculant les scores des utilisateurs et le résultat.")
 
 ### *Recording Rules*
 
@@ -440,7 +440,7 @@ La syntaxe `${user:regex}` permet à Grafana de remplacer `user=~"${user:regex}"
 
 Pour montrer le classement instantané, j'ai utilisé la visualisation **Bar Chart** avec une transformation de type **Sort by** sur le champ **Value**.
 
-{{< attachedFigure src="grafana-opencodequest-leaderboard-instant-snapshot.png" title="Paramètres de la visualisation Grafana pour le classement instantané." >}}
+![Paramètres de la visualisation Grafana pour le classement instantané.](grafana-opencodequest-leaderboard-instant-snapshot.png "Paramètres de la visualisation Grafana pour le classement instantané.")
 
 Les paramètres importants de cette visualisation sont :
 
@@ -452,7 +452,7 @@ Les paramètres importants de cette visualisation sont :
 
 Pour suivre la progression des points au cours du temps, j'ai opté pour la visualisation **Time series**.
 
-{{< attachedFigure src="grafana-opencodequest-leaderboard-points-over-time.png" title="Paramètres de la visualisation Grafana pour la progression des points." >}}
+![Paramètres de la visualisation Grafana pour la progression des points.](grafana-opencodequest-leaderboard-points-over-time.png "Paramètres de la visualisation Grafana pour la progression des points.")
 
 Les paramètres importants de cette visualisation sont :
 
@@ -478,7 +478,7 @@ Quant à la question qui est sur toutes les lèvres : est-ce qu'il y a eu de la 
 La réponse est un grand **OUI** !
 Et il y a eu du frisson lors de l'annonce des résultats...
 
-{{< attachedFigure src="grafana-opencodequest-points.png" title="Progression des points des 74 participants lors de l'Open Code Quest." >}}
+![Progression des points des 74 participants lors de l'Open Code Quest.](grafana-opencodequest-points.png "Progression des points des 74 participants lors de l'Open Code Quest.")
 
 Observez toutes ces courbes qui se croisent, tous ces super-héros en compétition pour la première place !
 
@@ -490,4 +490,4 @@ Ce projet a non seulement mis en lumière des technologies comme Quarkus, OpenSh
 Concevoir le Leaderboard, bien que complexe, a ajouté une dimension compétitive motivante à l’atelier.
 Le jour J, voir les participants rivaliser de rapidité tout en explorant les solutions Red Hat a été incroyablement gratifiant.
 
-Et pour savoir comment j'ai implémenté ce Leaderboard dans une architecture multi-cluster avec Red Hat ACM, c'est par ici : {{< internalLink path="/blog/behind-the-scenes-at-open-code-quest-how-i-implemented-leaderboard-with-acm/index.md" >}}.
+Et pour savoir comment j'ai implémenté ce Leaderboard dans une architecture multi-cluster avec Red Hat ACM, c'est par ici : [](/blog/behind-the-scenes-at-open-code-quest-how-i-implemented-leaderboard-with-acm/index.md).

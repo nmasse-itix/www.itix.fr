@@ -933,11 +933,11 @@ jq '.cors[0].configuration' policies.json > cors_schema.json
 
 Create a sample configuration for the **cors** policy.
 
-{{< highlightFile "cors.json" "json" "" >}}
+```json {filename="cors.json"}
 {
     "allow_credentials": true
 }
-{{< /highlightFile >}}
+```
 
 Validate that the configuration conforms to the extracted schema.
 
@@ -948,7 +948,7 @@ jsonschema -i cors.json cors_schema.json
 
 Create the final policy chain.
 
-{{< highlightFile "policy_chain.json" "json" "" >}}
+```json {filename="policy_chain.json"}
 [
   {
     "name": "cors",
@@ -965,7 +965,7 @@ Create the final policy chain.
     "enabled": true
   }
 ]
-{{< /highlightFile >}}
+```
 
 You can then change the policy chain with the **Proxy Policies Chain Update** method.
 For instance, update the policy chain of the **echo** service with the new policy chain.

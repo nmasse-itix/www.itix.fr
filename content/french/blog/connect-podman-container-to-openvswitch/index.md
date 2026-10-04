@@ -64,10 +64,10 @@ ip -n podman-c1 link set ivs123 up
 Pour tester facilement notre setup, je propose de créer une image de conteneur avec tout le nécessaire.
 Pour cela, créer un fichier **Containerfile** avec le contenu suivant:
 
-{{< highlightFile "Containerfile" "docker" "" >}}
+```docker {filename="Containerfile"}
 FROM quay.io/centos/centos:stream10
 RUN dnf install -y iproute bind-utils net-tools iputils && dnf clean all
-{{< / highlightFile >}}
+```
 
 Construire l'image de conteneur avec :
 
@@ -116,7 +116,7 @@ ovs-vsctl add-br ivs
 Créer le réseau libvirt qui référence le bridge **Open vSwitch**.
 Pour cela, vous devrez créer le fichier de définition au format XML :
 
-{{< highlightFile "ovs-net.xml" "xml" "" >}}
+```xml {filename="ovs-net.xml"}
 <network>
     <name>ivs</name>
     <forward mode="bridge" />
@@ -126,7 +126,7 @@ Pour cela, vous devrez créer le fichier de définition au format XML :
     <portgroup name='default' default='true'>
     </portgroup>
 </network>
-{{< /highlightFile >}}
+```
 
 Puis créer le réseau libvirt depuis ce fichier de définition :
 
@@ -250,7 +250,7 @@ Pour éviter de coder dans le Quadlet tous les paramètres réseau, je me suis a
 
 Le quadlet résultat est celui-ci :
 
-{{< highlightFile "/etc/containers/systemd/test-openvswitch.container" "ini" "" >}}
+```ini {filename="/etc/containers/systemd/test-openvswitch.container"}
 [Unit]
 Description=Sample container to test the integration with Open vSwitch
 Before=openvswitch.service
@@ -282,7 +282,7 @@ ExecStopPost=/bin/sh -Eeuo pipefail -c 'if ip -n $NS -br addr show | grep -q "^$
 [Install]
 # Start by default on boot
 WantedBy=multi-user.target default.target
-{{< /highlightFile >}}
+```
 
 L'adresse mac statique du conteneur peut se définir au niveau de l'interface **Open vSwitch**.
 Dans la commande suivante, les guillemets sont échappés car ils font partie de la valeur attendue par **Open vSwitch**.

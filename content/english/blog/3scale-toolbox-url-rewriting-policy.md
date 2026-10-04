@@ -21,14 +21,14 @@ By default, the public and private basepath have the same value and are taken fr
 Let's examine a concrete example.
 You have an actual API implementation live at **/camel/my-route** and an API contract as follow:
 
-{{< highlight yaml "hl_lines=5" >}}
+```yaml {hl_lines="5"}
 swagger: '2.0'
 info:
   title: 'Beer Catalog API'
   [...]
 basePath: /camel/my-route
 [...]
-{{< / highlight >}}
+```
 
 If you wish to expose it publicly *as-is* on **/camel/my-route**, there is nothing special to do, the toolbox will do the right thing.
 
@@ -41,14 +41,14 @@ But if you want to expose it publicly on **/api/v1**, you will have to pass the 
 Let's examine another example.
 You have an API contract stating that you want to expose your API publicly on **/api/v1**
 
-{{< highlight yaml "hl_lines=5" >}}
+```yaml {hl_lines="5"}
 swagger: '2.0'
 info:
   title: 'Beer Catalog API'
   [...]
 basePath: /api/v1
 [...]
-{{< / highlight >}}
+```
 
 If unfortunately your API backend is live at another *Base Path* (**/camel/my-route**), you will have to pass the following option to the *3scale import openapi* command:
 

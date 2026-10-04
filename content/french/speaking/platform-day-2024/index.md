@@ -20,7 +20,7 @@ Le 28 Mai 2024, j'ai participé à l'événement [Platform Day](https://events.r
 La démo mets en scène l'équipe du film **Mission Impossible** qui a fait une halte inattendue au Pavillon Royal pour offrir aux invités un aperçu de l'une des scènes les plus audacieuses du nouvel épisode.
 Le film met en vedette Ethan Hunt et son équipe, qui doivent déjouer un complot visant à prendre le contrôle des Kubernetes de la planète. 😄
 
-{{< attachedFigure src="equipe.jpeg" title="L'équipe en charge de la démo Mission Impossible." >}}
+![L'équipe en charge de la démo Mission Impossible.](equipe.jpeg "L'équipe en charge de la démo Mission Impossible.")
 
 Les personnages principaux de cette mission sont :
 
@@ -41,7 +41,7 @@ Dans cette mission, mon rôle a consisté à **prendre le contrôle du train**.
 Le train est équipé d’un moteur et d’un Hub Lego.
 Le Hub Lego reçoit les ordres d’accélération, décélération et freinage via le protocole **Bluetooth Low Energy**.
 
-{{< attachedFigure src="architecture-materielle.png" title="L'architecture matérielle mise en oeuvre dans la démonstration." >}}
+![L'architecture matérielle mise en oeuvre dans la démonstration.](architecture-materielle.png "L'architecture matérielle mise en oeuvre dans la démonstration.")
 
 Nous avons intégré une carte **Nvidia Jetson Orin** dans le train Lego.
 La carte Nvidia Jetson Orin est un *System on Chip* (SoC) qui intègre tous les composants nécessaires à notre mission : CPU, RAM, stockage et un puissant GPU pour accélérer les calculs.
@@ -60,7 +60,7 @@ Le flux vidéo est relayé depuis le Jetson via un **broker Kafka**.
 
 De plus, des pipelines MLOps sont mis en place pour entraîner le modèle d'intelligence artificielle, ainsi que des pipelines CI/CD pour construire les images de conteneurs de nos microservices pour les architectures x86 et ARM.
 
-{{< attachedFigure src="mission-edge.png" title="Les points clés de ma mission." >}}
+![Les points clés de ma mission.](mission-edge.png "Les points clés de ma mission.")
 
 Durant cette mission, j'ai fait face à trois principaux défis.
 
@@ -88,7 +88,7 @@ Il suffit d'ajouter la dépendance vers la bibliothèque **node-poweredup** patc
 }
 ```
 
-{{< attachedFigure src="challenges-edge.png" title="Les défis que j'ai pu rencontrer lors de ma mission." >}}
+![Les défis que j'ai pu rencontrer lors de ma mission.](challenges-edge.png "Les défis que j'ai pu rencontrer lors de ma mission.")
 
 Le **second défi** a été de préparer des images du système d'exploitation (**Red Hat Enterprise Linux 9**), adaptées pour la carte **Nvidia Jetson Orin Nano**.
 Pour cela, j'ai utilisé l'outil [composer-cli](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/composing_installing_and_managing_rhel_for_edge_images/composing-a-rhel-for-edge-image-using-image-builder-command-line_composing-installing-managing-rhel-for-edge-images#network_based_deployments_workflow).
@@ -104,7 +104,7 @@ Il a donc fallu récupérer auprès de l'*engineering* RHEL les modules noyau Nv
 Le **dernier défi** a été de concevoir des **pipelines CI/CD** pour créer des images de conteneur multi-architecture.
 En effet, les puces M1 d'Apple ont une architecture **arm64**, les PC sont en **x86_64**.
 Idem, les tests d'intégration sont souvent exécutés sur des serveurs dans le cloud (**x86_64**) alors que le déploiement se fait sur la carte Nvidia Jetson Orin Nano (**arm64**).
-J'ai détaillé la procédure complète dans l'article intitulé {{< internalLink path="/blog/build-multi-architecture-container-images-with-kubernetes-buildah-tekton-aws/index.md" >}}.
+J'ai détaillé la procédure complète dans l'article intitulé [](/blog/build-multi-architecture-container-images-with-kubernetes-buildah-tekton-aws/index.md).
 
 ## Genius Bar
 
@@ -112,7 +112,7 @@ L'après-midi, nous avons animé un atelier *Genius Bar*, où beaucoup de partic
 L'afflux était tel que nous n'avons pas trouvé 5 minutes pour démarrer le train.
 C'était intense ! 🥵
 
-{{< attachedFigure src="genius-bar.jpeg" title="Le Genius Bar de la démo Mission Impossible." >}}
+![Le Genius Bar de la démo Mission Impossible.](genius-bar.jpeg "Le Genius Bar de la démo Mission Impossible.")
 
 ## Conclusion
 

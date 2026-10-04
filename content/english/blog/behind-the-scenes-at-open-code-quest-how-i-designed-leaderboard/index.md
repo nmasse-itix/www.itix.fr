@@ -16,7 +16,7 @@ resources:
 - '*.gif'
 ---
 
-At the {{< internalLink path="/speaking/red-hat-summit-connect-france-2024/index.md" >}}, I led a workshop for developers entitled "**Open Code Quest**".
+At the [](/speaking/red-hat-summit-connect-france-2024/index.md), I led a workshop for developers entitled "**Open Code Quest**".
 In this workshop, developers had to code microservices using Quarkus, OpenShift and an Artificial Intelligence service: IBM's Granite model.
 The workshop was designed as a speed competition: the first to complete all three exercises received a reward.
 
@@ -74,7 +74,7 @@ And that's precisely what we're interested in:
 And if the three previous conditions are true, we can deduce that the user has completed and validated the **hero** exercise.
 Over time, these time series progress as shown in the figure below.
 
-{{< attachedFigure src="exercise-validation.png" title="When the three conditions are met, the exercise is validated." >}}
+![When the three conditions are met, the exercise is validated.](exercise-validation.png "When the three conditions are met, the exercise is validated.")
 
 That's a good start, isn't it?
 If you do the same thing for all three exercises, you can see who has completed the whole workshop.
@@ -83,7 +83,7 @@ Given that some exercises take longer than others, we could imagine awarding mor
 This is the approach I've tried to model in the figure below, with a weighting of 55 for the first exercise, 30 for the second and 45 for the last.
 The idea is to approximate a linear progression of points over time (1 point per minute).
 
-{{< attachedFigure src="counting-scheme-no-time.png" title="Progression of the number of points for a normal, slow and fast user over time and with each exercise weighted according to the nominal duration of the exercise." >}}
+![Progression of the number of points for a normal, slow and fast user over time and with each exercise weighted according to the nominal duration of the exercise.](counting-scheme-no-time.png "Progression of the number of points for a normal, slow and fast user over time and with each exercise weighted according to the nominal duration of the exercise.")
 
 It's starting to come together.
 But if you look closely, at the end of the workshop (at the 150th minute), all the participants have finished and have the same score.
@@ -107,12 +107,12 @@ Couldn't an accelerator be activated each time an exercise is validated, giving 
 That would make the competition more engaging and more fun!  
 And that's what I've tried to model in the diagram below.
 
-{{< attachedFigure src="counting-scheme-with-time.png" title="Progression of the number of points for a normal, slow and fast user over time and with accelerator and weighting of each exercise according to the time it takes the user to complete the exercise." >}}
+![Progression of the number of points for a normal, slow and fast user over time and with accelerator and weighting of each exercise according to the time it takes the user to complete the exercise.](counting-scheme-with-time.png "Progression of the number of points for a normal, slow and fast user over time and with accelerator and weighting of each exercise according to the time it takes the user to complete the exercise.")
 
 Now the question is: does a user who takes the lead in the first exercise gain a significant advantage that would make the competition unbalanced?
 We found the answer during the various rehearsals that took place at Red Hat before D-Day.
 
-{{< attachedFigure src="counting-scheme-dry-run.png" title="Validation of the point counting model during a dry-run." >}}
+![Validation of the point counting model during a dry-run.](counting-scheme-dry-run.png "Validation of the point counting model during a dry-run.")
 
 In the screenshot above, you can see that Batman completed the "hero" exercise **late**.  
 But by completing the "villain" exercise **very quickly**, he was able to take back the lead... **temporarily**.  
@@ -168,7 +168,7 @@ Data should now appear in the Grafana dashboard.
 To enjoy this to the full, stop the `run.sh` script by pressing **Ctrl + C** and run it again!
 After a few seconds, you should see fresh data appear on the dashboard, as in the video below.
 
-{{< attachedFigure src="leaderboard-simulation.gif" title="Simulation of the Open Code Quest workshop on the testing workbench to validate the point-counting system (video accelerated 10x)." >}}
+![Simulation of the Open Code Quest workshop on the testing workbench to validate the point-counting system (video accelerated 10x).](leaderboard-simulation.gif "Simulation of the Open Code Quest workshop on the testing workbench to validate the point-counting system (video accelerated 10x).")
 
 ### Prometheus queries
 
@@ -226,7 +226,7 @@ EOF
 
 Copy and paste the query into the **Explore** section of Grafana and you should get the following graph.
 
-{{< attachedFigure src="grafana-explore-opencodequest-leaderboard-hero.png" title="The metric \"opencodequest_leaderboard_hero:prod\" represents the completeness status of the exercise \"hero\" in the environment \"prod\"." >}}
+![The metric "opencodequestleaderboardhero:prod" represents the completeness status of the exercise "hero" in the environment "prod".](grafana-explore-opencodequest-leaderboard-hero.png "The metric \"opencodequest_leaderboard_hero:prod\" represents the completeness status of the exercise \"hero\" in the environment \"prod\".")
 
 It should be read as follows (note: 1728646377 = 13:32:57):
 
@@ -289,7 +289,7 @@ It may seem complex at first, but in fact it's not that complex.
 To understand how this query works, I suggest you split it into two parts: the `increase(...)` part on one side and the rest on the other.
 We overlay this with the previous query and we get the following figure.
 
-{{< attachedFigure src="grafana-opencodequest-leaderboard-onetime-bonus.png" title="The metric \"opencodequest_leaderboard_hero_onetime_bonus:prod\" represents the time bonus allocated to a user when they complete the \"hero\" exercise in the \"prod\" environment." >}}
+![The metric "opencodequestleaderboardheroonetimebonus:prod" represents the time bonus allocated to a user when they complete the "hero" exercise in the "prod" environment.](grafana-opencodequest-leaderboard-onetime-bonus.png "The metric \"opencodequest_leaderboard_hero_onetime_bonus:prod\" represents the time bonus allocated to a user when they complete the \"hero\" exercise in the \"prod\" environment.")
 
 From top to bottom, we can see:
 
@@ -319,7 +319,7 @@ This can be seen as the integral of the time serie.
 
 The following figure shows how this query works in more detail.
 
-{{< attachedFigure src="grafana-opencodequest-leaderboard-lifetime-bonus.png" title="The metric \"opencodequest_leaderboard_hero_lifetime_bonus:prod\" represents the carry-over of the time bonus allocated to a user when he completes the exercise \"hero\" in the environment \"prod\"." >}}
+![The metric "opencodequestleaderboardherolifetimebonus:prod" represents the carry-over of the time bonus allocated to a user when he completes the exercise "hero" in the environment "prod".](grafana-opencodequest-leaderboard-lifetime-bonus.png "The metric \"opencodequest_leaderboard_hero_lifetime_bonus:prod\" represents the carry-over of the time bonus allocated to a user when he completes the exercise \"hero\" in the environment \"prod\".")
 
 From top to bottom, we can observe:
 
@@ -364,7 +364,7 @@ In fact, the 3 accelerators already add up, so the user gains 1 point every 5 mi
 
 The following figure shows the 6 Prometheus query components used to calculate the user's score.
 
-{{< attachedFigure src="grafana-opencodequest-leaderboard.png" title="The 6 components of the Prometheus query calculating user scores and the final result." >}}
+![The 6 components of the Prometheus query calculating user scores and the final result.](grafana-opencodequest-leaderboard.png "The 6 components of the Prometheus query calculating user scores and the final result.")
 
 ### Recording Rules
 
@@ -438,7 +438,7 @@ The `${user:regex}` syntax allows Grafana to replace `user=~"${user:regex}"` wit
 
 To show the instant ranking, I used the **Bar Chart** visualisation with a **Sort by** transformation on the **Value** field.
 
-{{< attachedFigure src="grafana-opencodequest-leaderboard-instant-snapshot.png" title="Grafana visualisation settings for instant ranking." >}}
+![Grafana visualisation settings for instant ranking.](grafana-opencodequest-leaderboard-instant-snapshot.png "Grafana visualisation settings for instant ranking.")
 
 The important parameters of this visualisation are :
 
@@ -450,7 +450,7 @@ The important parameters of this visualisation are :
 
 To track the progression of scores over time, I have opted for the **Time series** visualisation.
 
-{{< attachedFigure src="grafana-opencodequest-leaderboard-points-over-time.png" title="Grafana visualisation settings for score progression." >}}
+![Grafana visualisation settings for score progression.](grafana-opencodequest-leaderboard-points-over-time.png "Grafana visualisation settings for score progression.")
 
 The important parameters of this visualisation are :
 
@@ -476,7 +476,7 @@ As for the question on everyone's lips: did superheroes fight it out for the pod
 The answer is a resounding **YES!**
 And there were plenty of thrills when the results were announced...
 
-{{< attachedFigure src="grafana-opencodequest-points.png" title="Progression of the Open Code Quest 74 participants' scores." >}}
+![Progression of the Open Code Quest 74 participants' scores.](grafana-opencodequest-points.png "Progression of the Open Code Quest 74 participants' scores.")
 
 Take a look at all those intersecting curves, all those superheroes competing for first place!
 
@@ -488,4 +488,4 @@ The project not only highlighted technologies such as Quarkus, OpenShift and IBM
 Designing the Leaderboard, although complex, added a motivating competitive dimension to the workshop.
 On the day, watching the participants compete for speed while exploring Red Hat solutions was incredibly gratifying.
 
-To find out how I implemented this Leaderboard in a multi-cluster architecture using Red Hat ACM, please visit: {{< internalLink path="/blog/behind-the-scenes-at-open-code-quest-how-i-implemented-leaderboard-with-acm/index.md" >}}.
+To find out how I implemented this Leaderboard in a multi-cluster architecture using Red Hat ACM, please visit: [](/blog/behind-the-scenes-at-open-code-quest-how-i-implemented-leaderboard-with-acm/index.md).

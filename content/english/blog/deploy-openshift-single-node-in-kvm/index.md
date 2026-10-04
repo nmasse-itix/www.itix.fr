@@ -21,7 +21,7 @@ This article explores how to deploy OpenShift Single Node (SNO) using KVM on you
 
 On your Fedora workstation, make sure you installed the required packages [as explained in the Fedora documentation](https://docs.fedoraproject.org/en-US/quick-docs/getting-started-with-virtualization/).
 
-Configure {{<internalLink path="/blog/consistent-dns-name-resolution-for-virtual-machines-and-containers/index.md" title="NetworkManager to use dnsmasq" >}} for DNS resolution.
+Configure [NetworkManager to use dnsmasq](/blog/consistent-dns-name-resolution-for-virtual-machines-and-containers/index.md) for DNS resolution.
 
 Choose a base domain name and a cluster name.
 The base domain does not need to be public or registered somewhere.
@@ -44,7 +44,7 @@ You can get one for free by registering as a developer [here](https://developers
 
 Create the libvirt network definition.
 
-{{< highlightFile "ocp-net.xml" "xml" "" >}}
+```xml {filename="ocp-net.xml"}
 <network xmlns:dnsmasq="http://libvirt.org/schemas/network/dnsmasq/1.0">
   <name>ocp-dev</name>
   <forward mode='nat'>
@@ -72,7 +72,7 @@ Create the libvirt network definition.
     <dnsmasq:option value="cname=*.apps.itix-dev.ocp.itix,lb.itix-dev.ocp.itix"/>
   </dnsmasq:options>
 </network>
-{{< /highlightFile >}}
+```
 
 This file defines a libvirt network named **ocp-dev** and add the required DNS records for a standard installation of OpenShift.
 Make sure to replace **itix-dev.ocp.itix** by your cluster name and base domain.
@@ -106,7 +106,7 @@ Configure the cluster.
 * Check **I want to install single node OpenShift (SNO)**
 * Click **Next**
 
-{{< attachedFigure src="assisted-installer-1.png" title="Assisted Installer: configure the cluster." >}}
+![Assisted Installer: configure the cluster.](assisted-installer-1.png "Assisted Installer: configure the cluster.")
 
 Generate the ISO image.
 
@@ -131,7 +131,7 @@ On cloud.redhat.com, wait for the node to appear in the list.
 
 * Click **Next**.
 
-{{< attachedFigure src="assisted-installer-2.png" title="Assisted Installer: wait for the node to appear in the list." >}}
+![Assisted Installer: wait for the node to appear in the list.](assisted-installer-2.png "Assisted Installer: wait for the node to appear in the list.")
 
 * Select your Network Subnet in the dropdown list.
 * Click **Next**.
@@ -140,10 +140,10 @@ On cloud.redhat.com, wait for the node to appear in the list.
 You can follow the installation process from cloud.redhat.com.
 Once the installation is complete, download the **kubeadmin** password and make sure you can access the OpenShift Console.
 
-{{< attachedFigure src="assisted-installer-5.png" title="Assisted Installer: the installation is complete." >}}
+![Assisted Installer: the installation is complete.](assisted-installer-5.png "Assisted Installer: the installation is complete.")
 
 Also, make sure you can login with SSH to your OpenShift node.
-If you configured NetworkManager and dnsmasq {{<internalLink path="/blog/consistent-dns-name-resolution-for-virtual-machines-and-containers/index.md" title="as explained here" >}}, you should be able to reach your OpenShift node by its DNS name.
+If you configured NetworkManager and dnsmasq [as explained here](/blog/consistent-dns-name-resolution-for-virtual-machines-and-containers/index.md), you should be able to reach your OpenShift node by its DNS name.
 Otherwise, use the IP address.
 
 ```sh

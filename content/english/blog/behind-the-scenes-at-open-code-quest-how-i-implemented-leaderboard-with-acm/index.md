@@ -17,7 +17,7 @@ resources:
 - '*.gif'
 ---
 
-After revealing the behind-the-scenes design of the Leaderboard for the "Open Code Quest" workshop during the {{< internalLink path="/speaking/red-hat-summit-connect-france-2024/index.md" >}}, it's time to delve deeper into its practical implementation!
+After revealing the behind-the-scenes design of the Leaderboard for the "Open Code Quest" workshop during the [](/speaking/red-hat-summit-connect-france-2024/index.md), it's time to delve deeper into its practical implementation!
 
 In this article, I'm going to take you through the configuration of **Red Hat Advanced Cluster Management** as well as the various adaptations needed to connect the *Leaderboard* created earlier with the **Open Code Quest** infrastructure.
 
@@ -25,7 +25,7 @@ Come on board with me for this new stage, which is more technical than the previ
 
 <!--more-->
 
-This article follows on from {{< internalLink path="/blog/behind-the-scenes-at-open-code-quest-how-i-designed-leaderboard/index.md" >}}.
+This article follows on from [](/blog/behind-the-scenes-at-open-code-quest-how-i-designed-leaderboard/index.md).
 If you haven't read it yet, I advise you to read it first to understand the context better.
 
 ## Prometheus queries
@@ -227,7 +227,7 @@ Observability is an additional module (in the sense that it is not installed by 
 The following diagram shows the architecture of the observability module in **Red Hat Advanced Cluster Management**.
 I created it by observing the relationships between the components from an installation of ACM version 2.11.
 
-{{< attachedFigure src="redhat-acm-observability-architecture.svg" title="Logical architecture of observability in Red Hat Advanced Cluster Management 2.11" >}}
+![Logical architecture of observability in Red Hat Advanced Cluster Management 2.11](redhat-acm-observability-architecture.svg "Logical architecture of observability in Red Hat Advanced Cluster Management 2.11")
 
 The components deployed on the central cluster are in **green**, those deployed on the managed clusters are in **blue** and the configuration items are in **grey**.
 I've also illustrated the two possible places for calculating *recording rules*, in **yellow**.
@@ -429,7 +429,7 @@ read -q "?press any key to continue "
 ./switch-to-grafana-admin.sh "$(oc whoami)"
 ```
 
-Then create the "Red Hat Summit Connect 2024" dashboard, as explained in the article {{< internalLink path="/blog/behind-the-scenes-at-open-code-quest-how-i-designed-leaderboard/index.md" >}}.
+Then create the "Red Hat Summit Connect 2024" dashboard, as explained in the article [](/blog/behind-the-scenes-at-open-code-quest-how-i-designed-leaderboard/index.md).
 
 And finally, export the dashboard in the form of a ConfigMap.
 

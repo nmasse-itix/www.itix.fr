@@ -87,7 +87,7 @@ Enter **Global Build Settings** and:
 * Press space to unset **Select all userspace packages by default**
 * Leave **Cryptographically sign packages** set
 
-{{< attachedFigure src="make-menuconfig.png" title="Parameters to activate in your make menuconfig" >}}
+![Parameters to activate in your make menuconfig](make-menuconfig.png "Parameters to activate in your make menuconfig")
 
 Go back to the root menu.
 

@@ -14,7 +14,7 @@ opensource:
 
 Le 6 Juin 2023, j'ai participé à l'événement [MAD Roadshow Paris 2023](https://events.redhat.com/profile/form/index.cfm?PKformID=0x784359abcd&sc_cid=7013a0000034l4oAAA) durant lequel j'ai montré une démo intitulée "Ease app development and deployment - From a laptop to production, the great and easy way".
 
-{{< attachedFigure src="slide.png" >}}
+![](slide.png)
 
 La démonstration combine de nombreux outils de la plateforme [Red Hat OpenShift](https://www.redhat.com/en/technologies/cloud-computing/openshift) :
 
@@ -31,5 +31,7 @@ Le code de la démo est disponible sur GitHub :
 
 Quelques photos de l'évènement :
 
-{{< attachedFigure src="20230606_114542.jpeg" >}}
-{{< attachedFigure src="20230606_114804.jpeg" >}}
+![](20230606_114542.jpeg)
+
+![](20230606_114804.jpeg)
+

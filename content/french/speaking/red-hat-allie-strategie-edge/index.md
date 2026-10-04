@@ -11,12 +11,12 @@ Le jeudi 28 mars à 10h, j'ai animé un webinaire sur le thème du *Edge Computi
 
 <!--more-->
 
-{{< screenshotOf src="tweet-RedHatFrance.png" href="https://twitter.com/RedHatFrance/status/1768201675481698412" >}}
+[![Tweet de @RedHatFrance](tweet-RedHatFrance.png)](https://twitter.com/RedHatFrance/status/1768201675481698412)
 
 Lors du webinaire, une introduction à l'*Edge Computing* a été présentée, suivie d'une exploration des solutions spécifiques de Red Hat pour cette technologie.
 La session s'est achevée avec un cas client.
 
-{{< attachedFigure src="agenda.png" >}}
+![](agenda.png)
 
 Bien que l'*Edge Computing* ne soit pas un concept nouveau, il continue de gagner en popularité grâce à sa mise en oeuvre dans divers secteurs tels que les télécommunications, le commerce de détail et l'industrie.
 Cette technologie se caractérise par le déploiement d'applications au plus près des données et des utilisateurs, englobant une diversité d'applications et de technologies.
@@ -28,7 +28,7 @@ Malgré ces défis, les avantages tels que l'amélioration de la rapidité de pr
 Red Hat a introduit **Red Hat Device Edge**, une solution caractérisée par sa modularité, sa flexibilité et sa cohérence.
 Cette solution comprend **Red Hat Enterprise Linux**, optimisé pour l'*Edge Computing*, **Microshift** — une version allégée de Kubernetes adaptée à cette technologie — et **Ansible Automation Platform** pour une gestion simplifiée à grande échelle.
 
-{{< attachedFigure src="redhat-device-edge.png" >}}
+![](redhat-device-edge.png)
 
 **Red Hat Device Edge** a été conçu pour offrir une flexibilité en termes de configuration, permettant aux utilisateurs de choisir entre différentes combinaisons de systèmes d'exploitation, d'orchestration de conteneurs et d'automatisation pour optimiser les coûts.
 

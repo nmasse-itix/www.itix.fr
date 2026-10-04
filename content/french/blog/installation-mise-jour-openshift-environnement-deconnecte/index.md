@@ -150,7 +150,7 @@ En effet, ce fichier openshift-install n'est valide que pour une install de **ce
 Créer le fichier install-config.yaml comme pour une installation connectée, en fonction de vos choix d'architecture et de votre environnement.
 Ajouter la section **imageContentSources** comme indiqué ci-dessus.
 
-{{< highlight yaml "hl_lines=26-34" >}}
+```yaml {hl_lines="26-34"}
 apiVersion: v1
 baseDomain: itix.xyz
 compute:
@@ -185,7 +185,7 @@ imageContentSources:
   - registry.itix.xyz/openshift-mirror/ocp4
   - registry.itix.xyz/openshift-mirror/ocp4-release
   source: quay.io/openshift-release-dev/ocp-v4.0-art-dev
-{{< / highlight >}}
+```
 
 Puis lancer l'installation comme pour une installation connectée.
 
@@ -316,11 +316,11 @@ EOF
 
 Créer un fichier **Dockerfile** avec le contenu suivant.
 
-{{< highlightFile "Dockerfile" "docker" "" >}}
+```docker {filename="Dockerfile"}
 FROM registry.access.redhat.com/ubi8/ubi:8.1
 RUN curl -L -o cincinnati-graph-data.tar.gz https://github.com/openshift/cincinnati-graph-data/archive/master.tar.gz
 CMD exec /bin/bash -c "tar xvzf cincinnati-graph-data.tar.gz -C /var/lib/cincinnati/graph-data/ --strip-components=1"
-{{< / highlightFile >}}
+```
 
 Construire l'image correspondante et la pousser dans la registry privée.
 
@@ -369,15 +369,15 @@ oc patch clusterversion version -p "{\"spec\":{\"upstream\":\"${POLICY_ENGINE_GR
 
 Pour préparer la mise à jour, j'utilise le [Red Hat OpenShift Container Platform Update Graph](https://access.redhat.com/labs/ocpupgradegraph/update_path).
 
-{{< attachedFigure src="update-graph-1.png" title="Saisir la version source, la version cible et le canal de mise à jour." >}}
+![Saisir la version source, la version cible et le canal de mise à jour.](update-graph-1.png "Saisir la version source, la version cible et le canal de mise à jour.")
 
 Il m'a permis de découvrir que le channel **fast-4.8** me permet de passer de la 4.7.10 à la 4.8.5 avec une seule étape intermédiaire: la 4.7.24.
 
-{{< attachedFigure src="update-graph-2.png" title="En utilisant le canal fast-4.8, je peux passer de la 4.7.10 à la 4.7.24 à la 4.8.5." >}}
+![En utilisant le canal fast-4.8, je peux passer de la 4.7.10 à la 4.7.24 à la 4.8.5.](update-graph-2.png "En utilisant le canal fast-4.8, je peux passer de la 4.7.10 à la 4.7.24 à la 4.8.5.")
 
 L'outil génère aussi un graphe contenant toutes les versions disponibles et les chemins autorisés entre ces versions.
 
-{{< attachedFigure src="update-graph-3.png" title="Le graphe de mise à jour résultant." >}}
+![Le graphe de mise à jour résultant.](update-graph-3.png "Le graphe de mise à jour résultant.")
 
 Nous effectuerons donc une mise à jour en deux étapes: d'abord une mise à jour vers la 4.7.24, puis vers la 4.8.5.
 

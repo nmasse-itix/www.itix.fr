@@ -27,7 +27,7 @@ This lack has been identified by the community and is tracked through the [GitHu
 
 In the meantime, we can use StatsD as a bridge between K6 and Prometheus since K6 has a native support for StatsD and Prometheus handle the StatsD protocol through its [statsd_exporter](https://github.com/prometheus/statsd_exporter).
 
-{{< attachedFigure src="k6-statsd-prometheus.svg" title="K6 pushes its metrics to the statsd_exporter while Prometheus scrapes the statsd_exporter." >}}
+![K6 pushes its metrics to the statsdexporter while Prometheus scrapes the statsdexporter.](k6-statsd-prometheus.svg "K6 pushes its metrics to the statsd_exporter while Prometheus scrapes the statsd_exporter.")
 
 K6 has two implementations of the StatsD protocol: statsd and datadog.
 The datadog implementation has the advantage of enabling the tags extension in the StatsD protocol.
@@ -40,7 +40,7 @@ This article explains how to set it up on Fedora using Podman.
 
 Create the statsd_exporter configuration file.
 
-{{< highlightFile "statsd_exporter.yaml" "yaml" "" >}}
+```yaml {filename="statsd_exporter.yaml"}
 defaults:
   observer_type: histogram
 mappings:
@@ -52,7 +52,7 @@ mappings:
     http_name: "$1"
     check_name: "$2"
     outcome: "$3"
-{{< /highlightFile >}}
+```
 
 This configuration instructs statsd_exporter to:
 
@@ -69,7 +69,7 @@ Create the Prometheus configuration that scrapes the statsd_exporter every secon
 It also filters out some labels that are not used in the Grafana dashboard.
 It is important to filter out the **url** label since it can lead to [high cardinalities](https://www.robustperception.io/cardinality-is-key) in Prometheus.
 
-{{< highlightFile "prometheus.yaml" "yaml" "" >}}
+```yaml {filename="prometheus.yaml"}
 global:
   scrape_interval:      1s
   evaluation_interval:  1s
@@ -82,7 +82,7 @@ scrape_configs:
   metric_relabel_configs:
   - regex: '(job|instance|url)'
     action: labeldrop
-{{< /highlightFile >}}
+```
 
 Start the Prometheus server.
 
@@ -108,7 +108,7 @@ CONTAINER ID  IMAGE                                      COMMAND               C
 
 Open [http://localhost:9090/targets](http://localhost:9090/targets) and make sure Prometheus can scrape the statsd_exporter.
 
-{{< attachedFigure src="prometheus-targets.png" title="Prometheus successfully scrapes the statsd_exporter." >}}
+![Prometheus successfully scrapes the statsdexporter.](prometheus-targets.png "Prometheus successfully scrapes the statsd_exporter.")
 
 Open [http://localhost:3000/](http://localhost:3000/) and login with **admin** / **admin**.
 
@@ -150,7 +150,7 @@ sudo dnf install k6
 There was a couple Grafana dashboards available in the community but none of them matched my requirements.
 So I designed my own that features measurement of the seven standard Go HTTP timings and tracking of multiple K6 HTTP request (by their name).
 
-{{< attachedFigure src="k6-grafana-dashboard.png" title="Screenshot of the Grafana dashboard while K6 is conducting a performance test." >}}
+![Screenshot of the Grafana dashboard while K6 is conducting a performance test.](k6-grafana-dashboard.png "Screenshot of the Grafana dashboard while K6 is conducting a performance test.")
 
 The dashboard is divided in three parts:
 
@@ -183,7 +183,7 @@ You can try the whole stack with this simple K6 test.
 It starts by defining the number of VUs over three stages: ramp-up, steady, ramp-down.
 It adds error counting (how many JavaScript exceptions during a test run), a very simple test function and wraps this test function with error counting.
 
-{{< highlightFile "simple-test.js" "js" "" >}}
+```js {filename="simple-test.js"}
 import http from "k6/http";
 import { check, sleep } from "k6";
 import { Rate } from "k6/metrics";
@@ -223,7 +223,7 @@ function simpleTest() {
 }
 
 export default wrapWithErrorCounting(simpleTest);
-{{< /highlightFile >}}
+```
 
 You can run the test with the **k6 run** command.
 
@@ -233,13 +233,13 @@ k6 run -o datadog simple-test.js
 
 If everything went fine, you should see the k6 summary in the console.
 
-{{< attachedFigure src="k6-simple-test2.png" title="K6 prints a summary upon completion." >}}
+![K6 prints a summary upon completion.](k6-simple-test2.png "K6 prints a summary upon completion.")
 
 In the grafana dashboard, select **simple-test** in the **K6 request name** dropdown list and **req_duration** in the **Go HTTP Metric Name** dropdown list.
 Note: you might have to hit **CTRL-R** to reload the page if the dropdown list is empty.
 Then, the grafana dashboard should look like this.
 
-{{< attachedFigure src="k6-simple-test.png" title="The grafana dashboard shows a K6 test run." >}}
+![The grafana dashboard shows a K6 test run.](k6-simple-test.png "The grafana dashboard shows a K6 test run.")
 
 ## Conclusion
 

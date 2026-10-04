@@ -18,7 +18,7 @@
 {{- else if eq .Kind "term" -}}
   {{- $description = printf "%s %s" (i18n "articles_related_to" | strings.TrimSpace) .Title -}}
 {{- else -}}
-  {{- $summary := .Summary | plainify | htmlUnescape | replaceRE `\s+` " " | strings.TrimSpace -}}
+  {{- $summary := .Summary | replaceRE `(?s)\s*<svg.*?</svg>` "" | plainify | htmlUnescape | replaceRE `\s+` " " | strings.TrimSpace -}}
   {{- with $summary -}}
     {{- $description = truncate 160 . -}}
   {{- else -}}

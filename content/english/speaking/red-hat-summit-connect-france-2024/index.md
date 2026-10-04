@@ -33,7 +33,7 @@ All while immersing them in a captivating adventure where every exercise involve
 
 During the workshop, participants had to develop no less than four microservices to build an application simulating combat between superheroes and super villains.
 
-{{< attachedFigure src="open-code-quest-microservices.png" >}}
+![](open-code-quest-microservices.png)
 
 The microservices were developed in Quarkus, the native Java framework for the cloud, demonstrating how it can transform application development by combining speed of development, lightness and performance.
 In particular, Quarkus significantly reduces the memory footprint of applications, while enabling them to start up almost instantaneously.
@@ -46,7 +46,7 @@ Based on the **Tekton Chains** and **Sigstore** technologies, this product offer
 Attendees were able to discover how these tools enhance the security of deployments by providing proof of compliance and transparency on the dependencies used in applications.
 I'll let you discover the full list of tools used in the **Open Code Quest** workshop:
 
-{{< attachedFigure src="open-code-quest-namespaces.png" >}}
+![](open-code-quest-namespaces.png)
 
 Before and during the **Open Code Quest**, the administration of the **platform** played a key role in the success of the event.
 As an organising member, I was responsible, along with [Sébastien Lallemand](https://sebastienlallemand.net/), for preparing, sizing, installing and configuring the eight OpenShift clusters needed for the workshops to run smoothly.
@@ -55,7 +55,7 @@ This crucial preparation phase ensured a stable, high-performance infrastructure
 During the event, my role as SRE (Site Reliability Engineer) was to closely monitor critical metrics, such as resource utilisation, to ensure a smooth and optimal experience for all participants.
 Thanks to this proactive monitoring, we were able to offer constant availability of the environments and thus facilitate the smooth running of the workshop.
 
-{{< attachedFigure src="open-code-quest-clusters.png" >}}
+![](open-code-quest-clusters.png)
 
 Another challenge I tackled for the Open Code Quest was the creation of a **Leaderboard** designed to encourage emulation between participants.
 This project required me to think outside the box, as I had to use tools such as **Prometheus** and **Grafana** for a task they weren't designed for: sorting participants by order of finish.
@@ -76,22 +76,22 @@ How have I calibrated the bonuses and accelerators to encourage competition and 
 
 Everything is explained in these two articles:
 
-1. {{< internalLink path="/blog/behind-the-scenes-at-open-code-quest-how-i-designed-leaderboard/index.md" >}}
-2. {{< internalLink path="/blog/behind-the-scenes-at-open-code-quest-how-i-implemented-leaderboard-with-acm/index.md" >}}
+1. [](/blog/behind-the-scenes-at-open-code-quest-how-i-designed-leaderboard/index.md)
+2. [](/blog/behind-the-scenes-at-open-code-quest-how-i-implemented-leaderboard-with-acm/index.md)
 
 ## "Mission Impossible" demo: Lego, AI & Edge Computing
 
 For part of the day, I was on the RHEL booth, accompanied by [Adrien](https://www.linkedin.com/in/adrien-legros-78674a133/), [Mourad](https://www.linkedin.com/in/mourad-ouachani-0734218/) and [Pauline](https://www.linkedin.com/in/trg-pauline/) to install the "Mission Impossible" demo and answer questions from the public.
-We designed this demo for the {{< internalLink path="/speaking/platform-day-2024/index.md" >}} event based on the latest opus of the movie **Mission Impossible: Dead Reckoning**.
+We designed this demo for the [](/speaking/platform-day-2024/index.md) event based on the latest opus of the movie **Mission Impossible: Dead Reckoning**.
 In this demo, **Ethan Hunt** needs help to stop the **Lego City #60337** train before it's too late!
 Nothing less than the fate of humanity is at stake!
 
-{{< attachedFigure src="mission-impossible-plot.png" >}}
+![](mission-impossible-plot.png)
 
 The scenario requires **Ethan Hunt** to board the train to connect a **Nvidia Jetson Orin Nano** card to the train's computer network and deploy an AI that will recognise the traffic signs and stop the train on time before it derails!
 A console will provide a remote view of the train's video surveillance camera, with the results of the AI model's inference overlaid.
 
-{{< attachedFigure src="mission-impossible-scenario.png" >}}
+![](mission-impossible-scenario.png)
 
 To run this demo, we equipped the **Lego** train with a **Nvidia Jetson Orin Nano** card, a webcam and a portable battery.
 The Nvidia Jetson Orin card is a System On Chip (SoC), it includes all the hardware that **Ethan Hunt** needs for its mission: CPU, RAM, storage...
@@ -99,7 +99,7 @@ Plus a GPU to speed up the calculations!
 The Jetson receives the video stream from the onboard camera and transmits orders to the **Lego** Hub via the **Bluetooth Low Energy** protocol.
 It is powered by a portable battery for the duration of the mission.
 
-{{< attachedFigure src="rhel-booth-mission-impossible-demo.jpeg" >}}
+![](rhel-booth-mission-impossible-demo.jpeg)
 
 We are in an Edge Computing context.
 On the Jetson, we have installed **Red Hat Device Edge**.
@@ -114,7 +114,7 @@ The video stream is broadcast from the Jetson via a **Kafka broker**!
 On top of this, there are MLops pipelines to train the AI model.
 And finally CI/CD pipelines to build the container images of our microservices for x86 and ARM architectures.
 
-{{< attachedFigure src="mission-impossible-hardware-architecture.png" >}}
+![](mission-impossible-hardware-architecture.png)
 
 To enable **Ethan Hunt** to carry out its mission successfully, we had to guarantee end-to-end data transmission.
 To do this, we implemented five services that communicate via an asynchronous message transmission system (**MQTT**).
@@ -124,7 +124,7 @@ Each image is resized to 600x400 pixels and encapsulated in an event with a uniq
 This event is transmitted to the AI model, which enriches it with the result of the prediction.
 The latter is transmitted to a transformation service whose role is to extract the train's action, transmit it to the train controller to slow down or stop the train and at the same time send the event to the streaming service (**Kafka**) deployed on a remote Openshift, which displays the images and the prediction in real time.
 
-{{< attachedFigure src="mission-impossible-software-architecture.png" >}}
+![](mission-impossible-software-architecture.png)
 
 And finally, we had to build an artificial intelligence model.
 To do this, we followed best practices for managing the model's lifecycle, known as **MLOps**:
@@ -137,9 +137,9 @@ To do this, we followed best practices for managing the model's lifecycle, known
 - **Measure performance and re-train**: By observing the model's behaviour, we were able to measure the quality of the predictions and note that not all **Lego** panels were well recognised.
   We decided to re-train the model by refining it with an enriched dataset.
 
-{{< attachedFigure src="mission-impossible-ai.png" >}}
+![](mission-impossible-ai.png)
 
-If you weren't able to come and see us on the stand, you can catch up with us in the video below (captured during the {{< internalLink path="/speaking/platform-day-2024/index.md" >}}).
+If you weren't able to come and see us on the stand, you can catch up with us in the video below (captured during the [](/speaking/platform-day-2024/index.md)).
 You can see the train stop when it detects the corresponding road sign.
 
 {{< embeddedVideo src="mission-impossible-demo.mp4" autoplay="true" loop="true" muted="true" width="1920" height="1080" >}}

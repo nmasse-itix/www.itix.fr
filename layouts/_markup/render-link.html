@@ -1,0 +1,64 @@
+{{- /*
+  -- Renders the Markdown links.
+  --
+  -- Internal links are resolved, in this order:
+  -- 1. to a resource of the current page (attached file), which is then
+  --    published: [the slides](slides.pdf)
+  -- 2. to a page of the current site, then of the other site (language).
+  --    A flag is displayed when the target page is in a different language
+  --    than the current page. When the link text is empty, the title of the
+  --    target page is used: [](/blog/my-article.md)
+  -- 3. relative links (../other-article/) are made relative to the site root,
+  --    so that they also work in the RSS feeds.
+  --
+  -- The output must not contain any extra whitespace since the link is
+  -- usually embedded in a sentence.
+  */ -}}
+{{- $u := urls.Parse .Destination -}}
+{{- $href := .Destination -}}
+{{- /*
+  -- An image wrapped in a link ([![alt](image.png)](URL)) is rendered as a
+  -- figure by the image render hook: a figure is not allowed in a link, so
+  -- only the image is kept.
+  */ -}}
+{{- $text := replaceRE `^\s*<figure>\s*(<img[^>]*>)\s*</figure>\s*$` "$1" .Text -}}
+{{- $flag := "" -}}
+{{- /* Links whose destination is a shortcode are left as-is (placeholder) */ -}}
+{{- if and (not $u.IsAbs) $u.Path (not (strings.Contains .Destination "HAHAHUGOSHORTCODE")) -}}
+  {{- $fragment := cond (ne $u.Fragment "") (printf "#%s" $u.Fragment) "" -}}
+  {{- $currentPage := .Page -}}
+  {{- $currentLang := .Page.Lang -}}
+
+  {{- /* 1. Resources of the current page (attached files) */ -}}
+  {{- with .Page.Resources.Get $u.Path -}}
+    {{- $href = printf "%s%s" .RelPermalink $fragment -}}
+  {{- else -}}
+    {{- /* 2. Pages of the current site first, then of the other site */ -}}
+    {{- $target := $currentPage.GetPage $u.Path -}}
+    {{- if and (not $target) (strings.HasPrefix $u.Path "/") -}}
+      {{- range hugo.Sites -}}
+        {{- if and (not $target) (ne .Language.Lang $currentLang) -}}
+          {{- with .GetPage $u.Path -}}{{- $target = . -}}{{- end -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+
+    {{- if $target -}}
+      {{- $href = printf "%s%s" $target.RelPermalink $fragment -}}
+      {{- if not $text -}}{{- $text = $target.Title | htmlEscape -}}{{- end -}}
+      {{- if and (eq $currentLang "en") (eq $target.Lang "fr") -}}
+        {{- $flag = partial "icons/fr.svg" $target -}}
+      {{- else if eq $currentLang "fr" -}}
+        {{- partial "lang-detection.html" $target -}}
+        {{- if $target.Store.Get "en_article_in_fr_site" -}}
+          {{- $flag = partial "icons/en.svg" $target -}}
+        {{- end -}}
+      {{- end -}}
+    {{- else if not (strings.HasPrefix $u.Path "/") -}}
+      {{- /* 3. Relative links */ -}}
+      {{- $href = printf "%s%s%s" (path.Join $currentPage.RelPermalink $u.Path) (cond (strings.HasSuffix $u.Path "/") "/" "") $fragment -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+<a href="{{ $href | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }}>{{ $text | safeHTML }}</a>
+{{- with $flag }} {{ . | strings.TrimSpace | safeHTML }}{{ end -}}

@@ -33,9 +33,9 @@ This **HP DL20 Gen9** server is equipped with :
 - 2 x 3.5" disks, 4 TB each, configured as RAID 1 using the HP RAID card
 - 6 x 1 GbE RJ-45 ports
 
-{{< attachedFigure src="hp-dl20-gen9.webp" title="The existing HP DL20 Gen9 server." >}}
+![The existing HP DL20 Gen9 server.](hp-dl20-gen9.webp "The existing HP DL20 Gen9 server.")
 
-This server is currently racked in a 7U, short depth IT rack in the basement of the house and is currently running **CentOS Stream 8** which I have configured as a router (see {{< internalLink path="/blog/fibre-orange-remplacer-livebox-routeur-centos-stream-8" >}}) and hypervisor (with **libvirt**).
+This server is currently racked in a 7U, short depth IT rack in the basement of the house and is currently running **CentOS Stream 8** which I have configured as a router (see [](/blog/fibre-orange-remplacer-livebox-routeur-centos-stream-8)) and hypervisor (with **libvirt**).
 
 The hypervisor runs several VMs:
 
@@ -68,7 +68,7 @@ The expansion capabilities of the **HP DL20 Gen9** are quite limited: 2 PCIe x8 
 The full-height slot is taken by the RAID controller and the half-height slot is taken by the 4-port GbE network card.
 
 Last but not least, the motherboard and CPU of the **HP DL20 Gen9** do not support **SR-IOV**. This currently forces me to run network routing functions directly on the hypervisor.
-SR-IOV would allow me to put the {{<internalLink path="/blog/fibre-orange-remplacer-livebox-routeur-centos-stream-8" title="CentOS Stream router" >}} into a VM without performance loss.
+SR-IOV would allow me to put the [CentOS Stream router](/blog/fibre-orange-remplacer-livebox-routeur-centos-stream-8) into a VM without performance loss.
 
 To sum up, I need :
 
@@ -143,7 +143,7 @@ Then it will still be time to upgrade to a more powerful CPU.
 
 The **Ampere Altra Q64-22** CPU has a TDP of 69 W according to the [Ampere Altra datasheet](https://d1o0i0v5q5lp8h.cloudfront.net/ampere/live/assets/documents/Altra_Rev_A1_DS_v1.27_20220331.pdf).
 
-{{< attachedFigure src="ampere-altra-q64-22.jpeg" title="The Ampere Altra Q64-22 CPU, mounted on the ASRock Rack ALTRAD8UD-1L2T motherboard" >}}
+![The Ampere Altra Q64-22 CPU, mounted on the ASRock Rack ALTRAD8UD-1L2T motherboard](ampere-altra-q64-22.jpeg "The Ampere Altra Q64-22 CPU, mounted on the ASRock Rack ALTRAD8UD-1L2T motherboard")
 
 Another difficulty is that I live in France, and Newegg doesn't ship to France...
 So I had to go through a reshipper: a company located the USA that receives packages and ships them all over the world.
@@ -187,7 +187,7 @@ Before deciding to buy the [Innovision M24306](http://iovserver.com/2u-server-ca
 
 The **Innovision M24306** is available on [Aliexpress](https://www.aliexpress.us/item/1005005856237609.html) and [Alibaba](https://www.alibaba.com/product-detail/Ultra-Short-2U-rackmount-Server-Chassis_1600636420062.html).
 
-{{< attachedFigure src="innovision-m24306.jpeg" title="The Innovision M24306 case." >}}
+![The Innovision M24306 case.](innovision-m24306.jpeg "The Innovision M24306 case.")
 
 Some useful notes (I asked for clarification before ordering):
 
@@ -200,7 +200,7 @@ Some useful notes (I asked for clarification before ordering):
 Note: the VGA connector on the server's right ear is not connected to anything.
 But this isn't a problem in the sense that the case has its inputs/outputs on the front side, so the VGA connector is already on the front side and doesn't need to be remoted.
 
-{{< attachedFigure src="vga-not-connected.jpeg" title="The VGA socket on the right ear of the Innovision M24306 is not connected." >}}
+![The VGA socket on the right ear of the Innovision M24306 is not connected.](vga-not-connected.jpeg "The VGA socket on the right ear of the Innovision M24306 is not connected.")
 
 ## FSP CRPS power supply
 
@@ -228,7 +228,7 @@ The [FSP-FC250](https://www.fsp-group.com/download/pro/FSP-FC250_Datasheet.pdf),
 I then opted for the lowest-powered power supply module available, as 2 x 550W is already a lot for a small server!
 This is the [FSP550-20FM](https://www.fsp-group.com/download/pro/FSP550-20FM_Datasheet.pdf) model.
 
-{{< attachedFigure src="psu-fsp.webp" title="The composition of the FSP CRPS power supply." >}}
+![The composition of the FSP CRPS power supply.](psu-fsp.webp "The composition of the FSP CRPS power supply.")
 
 Please note that the Power Distribution Board is only fixed to the case by two small screws.
 To prevent it from moving, I had to shim it with a piece of foam.
@@ -257,7 +257,7 @@ The reference **CAB-8654/8654-8i-11-P0.5M-85** from [10Gtek](https://www.10gtek.
 - Finally, you can opt for angled or straight connectors.
   I chose the **straight connectors**.
 
-{{< attachedFigure src="slimsas-cables.webp" title="SlimSAS / SFF-8654 cable routing in the Innovision M24306 box." >}}
+![SlimSAS / SFF-8654 cable routing in the Innovision M24306 box.](slimsas-cables.webp "SlimSAS / SFF-8654 cable routing in the Innovision M24306 box.")
 
 ## Storage
 
@@ -271,7 +271,7 @@ These SSDs are in *Add-in Card (AIC)*, half-height, half-length (**HHHL**) forma
 But for the time being, it keeps me going.
 And if I find an eBay auction with a batch of Samsung PM1733 SSDs at a good price, I'll just have to transfer the data to the new SSDs to get 3 PCIe slots back.
 
-{{< attachedFigure src="nvme-storage.jpeg" title="Three Samsung PM1735 SSDs and one Samsung 980 PRO SSD installed in the case." >}}
+![Three Samsung PM1735 SSDs and one Samsung 980 PRO SSD installed in the case.](nvme-storage.jpeg "Three Samsung PM1735 SSDs and one Samsung 980 PRO SSD installed in the case.")
 
 It should be noted that the **Samsung PM1733A** SSDs have been tested by **Ampere Computing** and have shown good performance with their CPU! See [Samsung FIO Performance - Solution Brief](https://amperecomputing.com/briefs/samsung-FIO-performance).
 
@@ -279,7 +279,7 @@ On top of that, I've added an NVMe SSD in M.2 format to host the operating syste
 
 I also tested six U.2 format (PCIe 3.0) NVMe SSDs on the case's NVMe backplane. And it works! However, I didn't test the hotplug feature, as I don't think the case's backplane has it implemented.
 
-{{< attachedFigure src="more-nvme-storage.webp" title="Six more NVMe SSDs, for a total of 26.4 TB of NVMe storage!" >}}
+![Six more NVMe SSDs, for a total of 26.4 TB of NVMe storage!](more-nvme-storage.webp "Six more NVMe SSDs, for a total of 26.4 TB of NVMe storage!")
 
 ## Bill of Materials
 
@@ -307,7 +307,7 @@ And in this price, I haven't counted shipping costs, customs duties, etc. 💸
 It should be noted that, by default, the airflow of the **FSP 550-20FM** power supply and **Innovision M24306** case fans is reversed: the power supply fans blow in a **front to back** direction, while the case fans blow in a **back to front** direction.
 Fortunately, the case fans can be reversed.
 
-{{< attachedFigure src="fans-air-flow.webp" title="I flipped all four fans to have front to back airflow. In this configuration, the fan labels are not visible from inside the case." >}}
+![I flipped all four fans to have front to back airflow. In this configuration, the fan labels are not visible from inside the case.](fans-air-flow.webp "I flipped all four fans to have front to back airflow. In this configuration, the fan labels are not visible from inside the case.")
 
 I haven't done a performance test yet, but the temperatures measured are lower with this optimized airflow.
 The effect is most noticeable in the 6 NVMe SSDs on the left.
@@ -320,15 +320,15 @@ The three unused slots can be masked to force airflow to where it's most needed.
 
 The external appearance of the product is rather flattering, almost professional.
 
-{{< attachedFigure src="final-product.webp" title="2U server based on an Innovision M24306 case, an ASRock Rack ALTRAD8UD-1L2T motherboard and an Ampere Altra Q64-22 CPU. Front view is on the top, rear view is on the bottom." >}}
+![2U server based on an Innovision M24306 case, an ASRock Rack ALTRAD8UD-1L2T motherboard and an Ampere Altra Q64-22 CPU. Front view is on the top, rear view is on the bottom.](final-product.webp "2U server based on an Innovision M24306 case, an ASRock Rack ALTRAD8UD-1L2T motherboard and an Ampere Altra Q64-22 CPU. Front view is on the top, rear view is on the bottom.")
 
 The interior isn't as well designed as an HP or Dell server, but I'd be quite happy with it. 😎
 
-{{< attachedFigure src="internal-layout.webp" title="Internal layout of the Innovision M24306 case with an ASRock Rack ALTRAD8UD-1L2T motherboard and an Ampere Altra Q64-22 CPU." >}}
+![Internal layout of the Innovision M24306 case with an ASRock Rack ALTRAD8UD-1L2T motherboard and an Ampere Altra Q64-22 CPU.](internal-layout.webp "Internal layout of the Innovision M24306 case with an ASRock Rack ALTRAD8UD-1L2T motherboard and an Ampere Altra Q64-22 CPU.")
 
 Last photos, this time with the cover in place, ready to be racked! 🚀
 
-{{< attachedFigure src="perspective-view.webp" title="Innovision M24306 case with an ASRock Rack ALTRAD8UD-1L2T motherboard and an Ampere Altra Q64-22 CPU." >}}
+![Innovision M24306 case with an ASRock Rack ALTRAD8UD-1L2T motherboard and an Ampere Altra Q64-22 CPU.](perspective-view.webp "Innovision M24306 case with an ASRock Rack ALTRAD8UD-1L2T motherboard and an Ampere Altra Q64-22 CPU.")
 
 ## Conclusion
 

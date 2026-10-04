@@ -6,6 +6,10 @@ enableRobotsTXT: true
 capitalizeListTitles: false
 
 markup:
+  goldmark:
+    parser:
+      # Standalone images are rendered as figures by the image render hook
+      wrapStandAloneImageWithinParagraph: false
   highlight:
     # Use CSS classes for syntax highlighting. The style sheet is generated with:
     #   hugo gen chromastyles --style=borland > assets/css/chroma.css

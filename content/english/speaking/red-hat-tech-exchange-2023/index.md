@@ -22,7 +22,7 @@ An application at the headquarter displays the parcels moving from one hub to an
 
 The whole room had a lot of fun!
 
-{{< attachedFigure src="Image_20230203_090806_445.jpeg" title="I presented the Lab organization." >}}
+![I presented the Lab organization.](Image_20230203_090806_445.jpeg "I presented the Lab organization.")
 
 If you want to play with the Lab, all the code is under the [RHTE-2023-Edge-Lab](https://github.com/RHTE-2023-Edge-Lab) organization.
 

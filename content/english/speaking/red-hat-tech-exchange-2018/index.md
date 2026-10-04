@@ -14,4 +14,5 @@ From the 17th to 21th Septembre 2018, I co-presented two sessions:
 For the session _An API Journey: from mock to deployment_, we received an award
 based on the amazing feedbacks from the public! 
 
-{{< attachedFigure src="2018-10-21-RHTE-Award.jpg" title="We received our award, on-stage!" >}}
+![We received our award, on-stage!](2018-10-21-RHTE-Award.jpg "We received our award, on-stage!")
+

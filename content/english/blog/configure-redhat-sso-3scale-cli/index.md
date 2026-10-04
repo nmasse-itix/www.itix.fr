@@ -98,7 +98,7 @@ You can use the following URL for the **OpenID Connect Issuer** (replace $SSO_HO
 https://zync:s3cr3t@$SSO_HOSTNAME/auth/realms/3scale
 ```
 
-{{< attachedFigure src="openid-connect-issuer.png" title="OpenID Connect Issuer settings in the 3scale Admin Portal." >}}
+![OpenID Connect Issuer settings in the 3scale Admin Portal.](openid-connect-issuer.png "OpenID Connect Issuer settings in the 3scale Admin Portal.")
 
 Or when [deploying an API in 3scale with the 3scale toolbox](https://developers.redhat.com/blog/2019/07/29/3scale-toolbox-deploy-an-api-from-the-cli/), you can use:
 

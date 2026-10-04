@@ -29,6 +29,6 @@
 
     {{- .Store.Set "en_article_in_fr_site" false -}}
     {{- partial "lang-detection.html" . -}}
-    {{- $.Store.Add "index" (dict "title" .Title "opensource" .Params.opensource "topics" .Params.topics "permalink" .Permalink "hasEnFlag" (.Store.Get "en_article_in_fr_site") "type" .Type "type_label" (i18n (print "type_" .Type)) "date" ($.Store.Get "date") "reading_time" ($.Store.Get "reading_time") "summary" (.Summary | plainify | htmlUnescape)) -}}
+    {{- $.Store.Add "index" (dict "title" .Title "opensource" .Params.opensource "topics" .Params.topics "permalink" .Permalink "hasEnFlag" (.Store.Get "en_article_in_fr_site") "type" .Type "type_label" (i18n (print "type_" .Type)) "date" ($.Store.Get "date") "reading_time" ($.Store.Get "reading_time") "summary" (.Summary | replaceRE `(?s)\s*<svg.*?</svg>` "" | plainify | htmlUnescape)) -}}
 {{- end -}}
 {{- dict "taxonomies" ($.Store.Get "taxonomies") "index" ($.Store.Get "index") | jsonify -}}

@@ -20,11 +20,11 @@ La démo est basée sur le scénario du 7ème opus de la saga **Mission Impossib
 **Ethan Hunt** a besoin d'aide pour arrêter le train.
 Grâce un modèle d'intelligence artificielle conçu dans **OpenShift AI** et déployé sur un **Nvidia Jetson Orin** faisant tourner **Red Hat Device Edge**, le train reconnait les panneaux de signalisation et s'arrête tout seul !
 
-{{< attachedFigure src="le-train-lego.jpeg" title="Le train Lego équipé de la webcam, du Nvidia Jetson Orin et de la batterie." >}}
+![Le train Lego équipé de la webcam, du Nvidia Jetson Orin et de la batterie.](le-train-lego.jpeg "Le train Lego équipé de la webcam, du Nvidia Jetson Orin et de la batterie.")
 
-Et c'est à l'occasion de cette démo que j'ai écrit un article sur intitulé {{< internalLink path="/blog/build-multi-architecture-container-images-with-kubernetes-buildah-tekton-aws/index.md" >}}.
+Et c'est à l'occasion de cette démo que j'ai écrit un article sur intitulé [](/blog/build-multi-architecture-container-images-with-kubernetes-buildah-tekton-aws/index.md).
 
-{{< attachedFigure src="train-console-1.png" title="Vue de la caméra embarquée du train avec les résultats de l'inférence." >}}
+![Vue de la caméra embarquée du train avec les résultats de l'inférence.](train-console-1.png "Vue de la caméra embarquée du train avec les résultats de l'inférence.")
 
 La démo est en train d'être affinée pour être présentée dans les prochains événements Red Hat.
 Venez nous voir !

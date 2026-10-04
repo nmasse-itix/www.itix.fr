@@ -1,0 +1,32 @@
+{{- /*
+  -- Renders the Markdown images.
+  --
+  -- The image is resolved to a resource of the current page, or to a global
+  -- resource (assets, static/images). A standalone image is rendered as a
+  -- figure, with its title as caption (Markdown allowed):
+  --
+  --   ![Alternative text](image.png "Caption")
+  */ -}}
+{{- $u := urls.Parse .Destination -}}
+{{- $src := .Destination -}}
+{{- if not $u.IsAbs -}}
+  {{- with or (.Page.Resources.Get $u.Path) (resources.Get (strings.TrimPrefix "/" $u.Path)) -}}
+    {{- $src = .RelPermalink -}}
+  {{- else -}}
+    {{- if not (strings.HasPrefix $u.Path "/") -}}
+      {{- errorf "%s: image %q not found" .Page.String .Destination -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- if .IsBlock -}}
+<figure>
+  <img src="{{ $src }}" alt="{{ .PlainText }}">
+  {{- with .Title }}
+  <figcaption>
+    {{- . | markdownify -}}
+  </figcaption>
+  {{- end }}
+</figure>
+{{- else -}}
+<img src="{{ $src }}" alt="{{ .PlainText }}">
+{{- end -}}

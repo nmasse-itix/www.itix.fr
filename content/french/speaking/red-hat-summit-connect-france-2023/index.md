@@ -16,7 +16,7 @@ Il y avait plus de 600 personnes ce jour là.
 
 Retrouvez ci-dessous les principaux éléments de ma *Keynote* !
 
-{{< attachedFigure src="RedHat.HL-56.jpeg" >}}
+![](RedHat.HL-56.jpeg)
 
 Le DevOps est un sujet absolument **passionnant**, pour lequel les entreprises en attendent de **produire plus de valeur, avec toujours moins de coûts**.
 Mais rien de tout cela n'est vraiment **nouveau**.
@@ -56,7 +56,7 @@ Developer Hub vous offre une plateforme développeur Open Source, avec la stabil
 Developer Hub **est basé sur Red Hat OpenShift** et tire parti des compétences que vous avez déjà sur OpenShift.
 Et c’est probablement l’information la plus importante de la journée : **si vous avez déjà OpenShift, Red Hat Developer Hub vous tend les bras pour améliorer la productivité de vos développeurs.**
 
-{{< attachedFigure src="RedHat.HL-61.jpeg" >}}
+![](RedHat.HL-61.jpeg)
 
 Et je ne peux pas terminer cette partie sur le développement applicatif sans parler du sujet à la mode : **l’intelligence artificielle**.
 L’IA est utilisée pour résoudre des problèmes compliqués, qui s’il devaient être implémentés de manière traditionnelle, ne le serait pas ou alors trop coûteux pour être rentable.
@@ -75,7 +75,7 @@ OpenShift AI vous permet de créer, entraîner et mettre à disposition vos mod�
 
 Et après vous avoir parlé de DevOps et d’IA, abordons le thème de la sécurité informatique.
 
-{{< attachedFigure src="RedHat.HL-65.jpeg" >}}
+![](RedHat.HL-65.jpeg)
 
 La sécurité informatique, c’est un peu le parent pauvre de notre industrie: **on y pense quand il est trop tard**, quand le problème est là.
 Cette situation est exacerbée par la **complexité** et l’étendue des architectures logicielles.
@@ -119,8 +119,8 @@ Permettez-moi de vous présenter **Red Hat Trusted Software Supply Chain**, notr
 C’est une sélections de packages, bibliothèque et dépendances spécialement sélectionnés par Red Hat.
 C’est également une plateforme de CI pour construire des applicatifs de manière sécurisée.
 
-{{< attachedFigure src="RedHat.HL-63.jpeg" >}}
+![](RedHat.HL-63.jpeg)
 
-[Téléchargez les slides de ma Keynote !]({{< attachedFileLink src="slides.pdf" >}})
+[Téléchargez les slides de ma Keynote !](slides.pdf)
 
 À l'année prochaine !

@@ -15,7 +15,7 @@ resources:
 - '*.svg'
 ---
 
-In 2022, I wrote an article on this subject named {{< internalLink path="/blog/build-multi-architecture-container-images-with-kubernetes-buildah-tekton-and-qemu/index.md" >}}.
+In 2022, I wrote an article on this subject named [](/blog/build-multi-architecture-container-images-with-kubernetes-buildah-tekton-and-qemu/index.md).
 The article described the configuration I had set up for my personal projects.
 It even went beyond its initial purpose as it has also been used by several colleagues at Red Hat who had the same need.
 While the configuration described in this previous article is still relevant, the approach is somewhat dated.
@@ -56,7 +56,7 @@ While the previous article targeted vanilla Kubernetes platforms, in this one I 
 
 In the Tekton pipelines, I use **Buildah** to build and push the container images to the registry.
 
-{{< attachedFigure src="overview.svg" title="Overview of the implemented configuration." >}}
+![Overview of the implemented configuration.](overview.svg "Overview of the implemented configuration.")
 
 ## Deployment of OpenShift on AWS in Multi-Architecture Mode
 
@@ -105,7 +105,7 @@ curl -sfL https://mirror.openshift.com/pub/openshift-v4/multi/clients/ocp/4.15.1
 Create the **install-config.yaml** file.
 The highlighted areas are the important points of the file.
 
-{{< highlightFile "install-config.yaml" "yaml" "hl_lines=10 15 26 29" >}}
+```yaml {filename="install-config.yaml" hl_lines="10 15 26 29"}
 additionalTrustBundlePolicy: Proxyonly
 apiVersion: v1
 baseDomain: aws.itix.cloud
@@ -154,7 +154,7 @@ publish: External
 pullSecret: 'REDACTED'
 sshKey: |
   REDACTED
-{{< /highlightFile >}}
+```
 
 I chose to keep the declaration of the Compute nodes but with replicas set to 0 because this simplifies the instantiation of the **x86_64** Compute node later on.
 
@@ -169,7 +169,7 @@ As the [OpenShift 4.15 documentation](https://docs.openshift.com/container-platf
 Edit the **manifests/cvo-overrides.yaml** file and add the **additionalEnabledCapabilities** section.
 Do not copy and paste the entire file below because the **clusterID** is specific to your installation!
 
-{{< highlightFile "manifests/cvo-overrides.yaml" "yaml" "hl_lines=10-21" >}}
+```yaml {filename="manifests/cvo-overrides.yaml" hl_lines="10-21"}
 apiVersion: config.openshift.io/v1
 kind: ClusterVersion
 metadata:
@@ -191,7 +191,7 @@ spec:
   - OperatorLifecycleManager
   - Build
   - DeploymentConfig
-{{< /highlightFile >}}
+```
 
 Start the cluster installation on AWS.
 
@@ -362,7 +362,7 @@ At this point, you should have three nodes in your cluster:
 - 1 Compute node **x86_64**
 - 1 Compute node **arm64**
 
-{{< attachedFigure src="openshift-console-three-nodes-x86_64-and-arm64.png" title="OpenShift console showing three nodes: two x86_64 nodes and one arm64." >}}
+![OpenShift console showing three nodes: two x8664 nodes and one arm64.](openshift-console-three-nodes-x86_64-and-arm64.png "OpenShift console showing three nodes: two x86_64 nodes and one arm64.")
 
 ## Tekton operator installation
 
@@ -453,7 +453,7 @@ spec:
 
 Create an EFS volume by following the steps in the [AWS documentation](https://docs.aws.amazon.com/efs/latest/ug/gs-step-two-create-efs-resources.html).
 
-{{< attachedFigure src="aws-console-efs.png" title="AWS console showing an EFS volume." >}}
+![AWS console showing an EFS volume.](aws-console-efs.png "AWS console showing an EFS volume.")
 
 Create the **StorageClass** associated with the EFS volume.
 The **fileSystemId** field matches to the second column in the screenshot above.
@@ -476,7 +476,7 @@ parameters:
 
 Following the documentation [OpenShift 4.15](https://docs.openshift.com/container-platform/4.15/storage/container_storage_interface/persistent-storage-csi-aws-efs.html#efs-create-volume_persistent-storage-csi-aws-efs), modify the EFS **Security Group** to allow OpenShift nodes to access storage via the NFS protocol.
 
-{{< attachedFigure src="aws-console-security-group.png" title="AWS console showing the EFS Security Group configuration." >}}
+![AWS console showing the EFS Security Group configuration.](aws-console-security-group.png "AWS console showing the EFS Security Group configuration.")
 
 At this point, the AWS EFS service is accessible from the OpenShift cluster but is not yet usable by Tekton pipelines.
 Indeed, Tekton's **affinity-assistant** prohibits an RWX persistent volume from being mounted in two places at the same time (error *"more than one PersistentVolumeClaim is bound"*).
@@ -533,7 +533,7 @@ The specifics of this task are related to the prerequisites necessary for runnin
 - The `STORAGE_DRIVER=vfs` environment variable disables the use of **overlayfs**.
 - Finally, the capability **SETFCAP** is assigned to **buildah**.
 
-{{< highlightFile "tekton/task-buildah-build.yaml" "yaml" "hl_lines=19-20 25-26 33-35 37-38" >}}
+```yaml {filename="tekton/task-buildah-build.yaml" hl_lines="19-20 25-26 33-35 37-38"}
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
@@ -572,7 +572,7 @@ spec:
     volumeMounts:
     - name: container-storage
       mountPath: /var/lib/containers
-{{< /highlightFile >}}
+```
 
 The script executed by this task is concise (only two steps):
 
@@ -638,11 +638,11 @@ The first use case presented at the beginning of this article is about the use o
 
 The corresponding pipeline fetches the source code, executes a **buildah build** for each architecture (**x86_64** and **arm64**) and pushes the manifest to the registry.
 
-{{< attachedFigure src="tekton-pipeline-containerfile.png" title="OpenShift console showing running the multi-architecture Tekton pipeline (Containerfile building a container image of the `htop` utility)." >}}
+![OpenShift console showing running the multi-architecture Tekton pipeline (Containerfile building a container image of the htop utility).](tekton-pipeline-containerfile.png "OpenShift console showing running the multi-architecture Tekton pipeline (Containerfile building a container image of the `htop` utility).")
 
 The resulting image on the quay.io registry clearly shows a manifest containing two images: one for **x86_64** and one for **arm64**.
 
-{{< attachedFigure src="quay-image-containerfile.png" title="Quay console showing a multi-architecture image of the `htop` utility)." >}}
+![Quay console showing a multi-architecture image of the htop utility).](quay-image-containerfile.png "Quay console showing a multi-architecture image of the `htop` utility).")
 
 ### The "NodeJS" pipeline
 
@@ -651,7 +651,7 @@ The NodeJS pipeline is significantly different in that the Git repository is fet
 The reason is that the **npm install** command will download the application dependencies and some of these dependencies can embed native code (this is the case for some low-level libraries).
 Therefore, we need a separate *workspace* for each architecture.
 
-{{< attachedFigure src="tekton-pipeline-nodejs.png" title="OpenShift console showing running the multi-architecture Tekton pipeline building a NodeJS application." >}}
+![OpenShift console showing running the multi-architecture Tekton pipeline building a NodeJS application.](tekton-pipeline-nodejs.png "OpenShift console showing running the multi-architecture Tekton pipeline building a NodeJS application.")
 
 ### The "Quarkus" Pipeline
 
@@ -659,7 +659,7 @@ The Quarkus pipeline is different from the NodeJS pipeline in the sense that the
 The bytecode contained in Jar files can run on any architecture.
 Therefore there is only one Git workspace shared between all architectures.
 
-{{< attachedFigure src="tekton-pipeline-quarkus.png" title="OpenShift console showing running the multi-architecture Tekton pipeline building a Quarkus application." >}}
+![OpenShift console showing running the multi-architecture Tekton pipeline building a Quarkus application.](tekton-pipeline-quarkus.png "OpenShift console showing running the multi-architecture Tekton pipeline building a Quarkus application.")
 
 ### Link a task to an architecture
 
@@ -667,7 +667,7 @@ So far the article does not say how Tekton organizes itself to execute the task 
 
 There is no magic! It's all happening in the **PipelineRun**!
 
-{{< highlightFile "examples/htop/tekton/pipelinerun.yaml" "yaml" "hl_lines=41-49" >}}
+```yaml {filename="examples/htop/tekton/pipelinerun.yaml" hl_lines="41-49"}
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
@@ -717,7 +717,7 @@ spec:
     podTemplate:
       nodeSelector:
         beta.kubernetes.io/arch: arm64
-{{< /highlightFile >}}
+```
 
 The **taskRunSpecs** field allows you to add execution constraints to one or more pipeline tasks.
 

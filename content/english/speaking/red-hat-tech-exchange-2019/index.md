@@ -13,4 +13,5 @@ During the three Red Hat Tech Exchange sessions (Americas, EMEA and APAC), I pre
 
 The session _Leverage the power of open source communities to manage your APIs_ has been the second best voted session in RHTE APAC!
 
-{{< attachedFigure src="2019-10-21-RHTE-Award.png" title="I received an award!" >}}
+![I received an award!](2019-10-21-RHTE-Award.png "I received an award!")
+

@@ -16,34 +16,34 @@ It is very useful for mobile application and web development: by reducing the nu
 
 To install QLKube in OpenShift, use the NodeJS Source-to-Image builder:
 
-{{< highlight sh >}}
+```sh
 oc new-project qlkube --display-name=QLKube
 oc new-app nodejs~https://github.com/qlkube/qlkube.git --name=qlkube
-{{< / highlight >}}
+```
 
 Disable TLS certificate validation to accommodate your self-signed certificates:
 
-{{< highlight sh >}}
+```sh
 oc set env dc/qlkube NODE_TLS_REJECT_UNAUTHORIZED=0
-{{< / highlight >}}
+```
 
 And enable the NodeJS development mode to enable the GraphQL explorer (disabled in production mode):
 
-{{< highlight sh >}}
+```sh
 oc set env dc/qlkube NODE_ENV=development
-{{< / highlight >}}
+```
 
 Give the GLKube's Service Account the right to query the Kubernetes API for its own namespace:
 
-{{< highlight sh >}}
+```sh
 oc adm policy add-role-to-user view -z default
-{{< / highlight >}}
+```
 
 Once deployed, open the QLKube URL in your web browser:
 
-{{< highlight sh >}}
+```sh
 open $(oc get route qlkube -o go-template --template="http://{{.spec.host}}")
-{{< / highlight >}}
+```
 
 You can try the following queries in the GraphQL explorer.
 
@@ -53,7 +53,7 @@ Unless you gave the `cluster-admin` right to the QLKube Service Account, you wil
 
 **Query:**
 
-{{< highlight graphql >}}
+```graphql
 query getAllPodsInCurrentNamespace {
   all(namespace: "qlkube") {
     pods {
@@ -69,11 +69,11 @@ query getAllPodsInCurrentNamespace {
     }
   }
 }
-{{< / highlight >}}
+```
 
 **Response:**
 
-{{< highlight json >}}
+```json
 {
   "data": {
     "all": {
@@ -102,7 +102,7 @@ query getAllPodsInCurrentNamespace {
     }
   }
 }
-{{< / highlight >}}
+```
 
 ## Get a service by name
 
@@ -110,7 +110,7 @@ To get an object by name, you can use the `fieldSelector` parameter (in this exa
 
 **Query:**
 
-{{< highlight graphql >}}
+```graphql
 query getServiceByNameAndNamespace {
   all(namespace: "qlkube", fieldSelector: "metadata.name=qlkube") {
     services {
@@ -126,11 +126,11 @@ query getServiceByNameAndNamespace {
     }
   }
 }
-{{< / highlight >}}
+```
 
 **Response:**
 
-{{< highlight json >}}
+```json
 {
   "data": {
     "all": {
@@ -150,14 +150,14 @@ query getServiceByNameAndNamespace {
     }
   }
 }
-{{< / highlight >}}
+```
 
 ## Type introspection
 
 Playing with the built-in types of GLKube is nice but you might soon be limited.
 To discover all the available types, run this query:
 
-{{< highlight graphql >}}
+```graphql
 {
   __schema {
     types {
@@ -165,11 +165,11 @@ To discover all the available types, run this query:
     }
   }
 }
-{{< / highlight >}}
+```
 
 This query returns a list of all the available types (truncated here for brevity):
 
-{{< highlight json >}}
+```json
 {
   "data": {
     "__schema": {
@@ -199,7 +199,7 @@ This query returns a list of all the available types (truncated here for brevity
     }
   }
 }
-{{< / highlight >}}
+```
 
 ## Get a Deployment Config by name and namespace
 
@@ -210,7 +210,7 @@ Once the desired data type discovered, you can use it directly.
 
 **Query:**
 
-{{< highlight graphql >}}
+```graphql
 query getDeploymentConfigByNameAndNamespace {
   comGithubOpenshiftApiAppsV1DeploymentConfig(name: "qlkube", namespace: "qlkube") {
     metadata {
@@ -222,11 +222,11 @@ query getDeploymentConfigByNameAndNamespace {
     }
   }
 }
-{{< / highlight >}}
+```
 
 **Reponse:**
 
-{{< highlight json >}}
+```json
 {
   "data": {
     "comGithubOpenshiftApiAppsV1DeploymentConfig": {
@@ -240,7 +240,7 @@ query getDeploymentConfigByNameAndNamespace {
     }
   }
 }
-{{< / highlight >}}
+```
 
 ## Get routes by hostname and namespace
 
@@ -248,7 +248,7 @@ This query use a `fieldSelector` on the `host` field in the `spec` section and u
 
 **Query:**
 
-{{< highlight graphql >}}
+```graphql
 query getRouteByHostnameAndNamespace {
   routes: comGithubOpenshiftApiRouteV1RouteList(namespace: "qlkube" fieldSelector: "spec.host=qlkube-qlkube.app.itix.fr") {
     items {
@@ -266,11 +266,11 @@ query getRouteByHostnameAndNamespace {
     }
   }
 }
-{{< / highlight >}}
+```
 
 **Reponse:**
 
-{{< highlight json >}}
+```json
 {
   "data": {
     "routes": {
@@ -296,13 +296,13 @@ query getRouteByHostnameAndNamespace {
     }
   }
 }
-{{< / highlight >}}
+```
 
 ## Sending your GraphQL request from curl
 
 Once your GraphQL queries refined in the GraphQL Explorer, you can send them directly using curl or any HTTP client.
 
-{{< highlight sh >}}
+```sh
 export GLKUBE_HOSTNAME=$(oc get route qlkube -o go-template --template="{{.spec.host}}")
 
 cat <<EOF | curl -XPOST "http://$GLKUBE_HOSTNAME/" -H "Content-Type: application/json" -d @- -s |jq .
@@ -323,7 +323,7 @@ cat <<EOF | curl -XPOST "http://$GLKUBE_HOSTNAME/" -H "Content-Type: application
             }"
 }
 EOF
-{{< / highlight >}}
+```
 
 ## Advanced use-cases
 

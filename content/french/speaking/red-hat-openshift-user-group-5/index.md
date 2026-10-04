@@ -13,7 +13,7 @@ opensource:
 
 Le 14 Mai 2024, j'ai participé à l'événement [OpenShift User Group #5](https://events.redhat.com/profile/form/index.cfm?PKformID=0x1014468abcd) [💾](https://web.archive.org/web/20240522122155/https://events.redhat.com/profile/form/index.cfm?PKformID=0x1014468abcd) durant lequel j'ai animé les groupes de travail *"Sécurité des Conteneurs"* et *"Gestion multi-cluster"*.
 
-{{< attachedFigure src="atelier-gestion-multi-cluster.jpeg" >}}
+![](atelier-gestion-multi-cluster.jpeg)
 
 Les deux ateliers se sont déroulés de manière collaborative :
 
@@ -23,6 +23,7 @@ Les deux ateliers se sont déroulés de manière collaborative :
 
 Dans les graphes ci-dessous, les thèmes couverts sont en bleu et les thèmes restant à couvrir sont en gris.
 
-{{< attachedFigure src="atelier-gestion-multi-cluster.svg" title="Sujets abordés lors de l'atelier \"Gestion multi-cluster\"." >}}
+![Sujets abordés lors de l'atelier "Gestion multi-cluster".](atelier-gestion-multi-cluster.svg "Sujets abordés lors de l'atelier \"Gestion multi-cluster\".")
 
-{{< attachedFigure src="atelier-securite-conteneur.svg" title="Sujets abordés lors de l'atelier \"Sécurité des conteneurs\"." >}}
+![Sujets abordés lors de l'atelier "Sécurité des conteneurs".](atelier-securite-conteneur.svg "Sujets abordés lors de l'atelier \"Sécurité des conteneurs\".")
+
