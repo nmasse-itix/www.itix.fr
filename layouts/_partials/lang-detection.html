@@ -1,15 +1,22 @@
-{{ if and .IsPage .IsTranslated (eq .Lang "fr") }}
-  <!-- Try to compare files by SH256 fingerprint. -->
-  {{ if and (index .AllTranslations 0).File (index .AllTranslations 1).File }}
-    {{ $file0 := readFile (index .AllTranslations 0).File.Filename }}
-    {{ $file1 := readFile (index .AllTranslations 1).File.Filename }}
-    {{ if eq (sha256 $file0) (sha256 $file1) }}
-      {{ .Store.Set "en_article_in_fr_site" true }}
-    {{ end }}
-  {{ else }}
-    <!-- Sometimes there is no file though. In that case, compare the content. -->
-    {{ if eq (index .AllTranslations 0).Plain (index .AllTranslations 1).Plain }}
-      {{ .Store.Set "en_article_in_fr_site" true }}
-    {{ end }}
-  {{ end }}
-{{ end }}
+{{- /*
+  -- Detects the english articles published as-is in the french site and
+  -- sets "en_article_in_fr_site" in the page store.
+  --
+  -- This partial must not output anything since it is also called from
+  -- inline contexts (internalLink shortcode, article headlines).
+  */ -}}
+{{- if and .IsPage .IsTranslated (eq .Lang "fr") -}}
+  {{- if and (index .AllTranslations 0).File (index .AllTranslations 1).File -}}
+    {{- /* Try to compare files by SHA256 fingerprint. */ -}}
+    {{- $file0 := readFile (index .AllTranslations 0).File.Filename -}}
+    {{- $file1 := readFile (index .AllTranslations 1).File.Filename -}}
+    {{- if eq (sha256 $file0) (sha256 $file1) -}}
+      {{- .Store.Set "en_article_in_fr_site" true -}}
+    {{- end -}}
+  {{- else -}}
+    {{- /* Sometimes there is no file though. In that case, compare the content. */ -}}
+    {{- if eq (index .AllTranslations 0).Plain (index .AllTranslations 1).Plain -}}
+      {{- .Store.Set "en_article_in_fr_site" true -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
