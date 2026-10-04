@@ -1,5 +1,14 @@
 # www.itix.fr
 
+## Netlify CLI
+
+```sh
+npm install -g netlify-cli
+netlify login
+netlify link
+netlify status
+```
+
 ## How to update this website
 
 Create a new branch:

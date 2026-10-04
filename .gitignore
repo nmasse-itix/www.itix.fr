@@ -2,3 +2,7 @@ public
 .DS_Store
 resources
 
+
+# Local Netlify folder
+.netlify
+.hugo_build.lock
