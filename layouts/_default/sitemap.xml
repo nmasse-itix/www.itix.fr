@@ -1,0 +1,32 @@
+{{- /*
+  -- Based on the Hugo embedded sitemap template (v0.121.2).
+  --
+  -- The english articles published as-is in the french site are excluded
+  -- from the sitemap and from the list of alternates, since they are
+  -- duplicates of the original articles.
+  */ -}}
+{{ printf "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" | safeHTML }}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  {{ range $page := .Data.Pages }}
+    {{- partial "lang-detection.html" . -}}
+    {{- if and .Permalink (not (.Scratch.Get "en_article_in_fr_site")) -}}
+  <url>
+    <loc>{{ .Permalink }}</loc>{{ if not .Lastmod.IsZero }}
+    <lastmod>{{ safeHTML ( .Lastmod.Format "2006-01-02T15:04:05-07:00" ) }}</lastmod>{{ end }}{{ with .Sitemap.ChangeFreq }}
+    <changefreq>{{ . }}</changefreq>{{ end }}{{ if ge .Sitemap.Priority 0.0 }}
+    <priority>{{ .Sitemap.Priority }}</priority>{{ end }}{{ with partial "real-translations.html" . }}{{ range . }}
+    <xhtml:link
+                rel="alternate"
+                hreflang="{{ .Language.LanguageCode }}"
+                href="{{ .Permalink }}"
+                />{{ end }}
+    <xhtml:link
+                rel="alternate"
+                hreflang="{{ $page.Language.LanguageCode }}"
+                href="{{ $page.Permalink }}"
+                />{{ end }}
+  </url>
+    {{- end -}}
+  {{ end }}
+</urlset>

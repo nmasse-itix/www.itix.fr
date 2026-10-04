@@ -1,4 +1,4 @@
-{{ if and .IsTranslated (eq .Lang "fr") }}
+{{ if and .IsPage .IsTranslated (eq .Lang "fr") }}
   <!-- Try to compare files by SH256 fingerprint. -->
   {{ if and (index .AllTranslations 0).File (index .AllTranslations 1).File }}
     {{ $file0 := readFile (index .AllTranslations 0).File.Filename }}

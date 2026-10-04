@@ -1,0 +1,12 @@
+{{- /*
+  -- Returns the translations of a page, excluding the english articles
+  -- published as-is in the french site (they are not real translations).
+  */ -}}
+{{- $translations := slice -}}
+{{- range .Translations -}}
+  {{- partial "lang-detection.html" . -}}
+  {{- if not (.Scratch.Get "en_article_in_fr_site") -}}
+    {{- $translations = $translations | append . -}}
+  {{- end -}}
+{{- end -}}
+{{- return $translations -}}

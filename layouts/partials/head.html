@@ -92,8 +92,6 @@
 
 <!-- Deal with the case of english articles published in the french site -->
 {{- partial "lang-detection.html" . -}}
-{{- if .IsTranslated -}}
-{{- range .Translations -}}
 {{- if .Scratch.Get "en_article_in_fr_site" -}}
 <!--
   -- It's an english article published in the french site
@@ -101,12 +99,21 @@
   --
   -- See https://developers.google.com/search/docs/advanced/crawling/consolidate-duplicate-urls
   -->
+{{- range first 1 .Translations }}
 <link rel="canonical" href="{{ .Permalink }}">
+{{- end }}
 <meta name="robots" content="noindex">
-{{ else }}
-<!-- Otherwise, just link to the available translations, if any. -->
+{{- else -}}
+<!--
+  -- Otherwise, link to the available translations, if any (including the
+  -- current page, as recommended by Google).
+  --
+  -- See https://developers.google.com/search/docs/specialty/international/localized-versions
+  -->
+{{- with partial "real-translations.html" . -}}
+{{- range . | append $ }}
 <link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}" title="{{ .Language.LanguageName }}">
-{{ end -}}
+{{- end -}}
 {{- end -}}
 {{- end -}}
 
