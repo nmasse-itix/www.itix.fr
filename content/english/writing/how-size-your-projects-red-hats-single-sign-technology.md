@@ -3,7 +3,7 @@ title: "How to size your projects for Red Hat's single sign-on technology"
 date: 2021-06-07T00:00:00+02:00
 draft: false
 opensource:
-- keycloak
+- Keycloak
 - K6
 topics:
 - Performance testing
