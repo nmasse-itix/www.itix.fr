@@ -65,6 +65,43 @@ Delete the old branch:
 git branch -d "$(date +%F)-update"
 ```
 
+## Writing content
+
+Standard Markdown is used, rendered by the render hooks in `layouts/_markup`.
+
+Images (a standalone image is rendered as a figure, the title is the caption;
+JPEG, PNG and WebP images are served as WebP in several widths):
+
+```markdown
+![Alternative text](image.png "Caption, *Markdown* allowed")
+[![Tweet by @someone](tweet-someone.png)](https://twitter.com/someone/status/123)
+```
+
+Links to pages (with a flag when the target is in the other language; an empty
+text is replaced by the title of the page) and to attached files:
+
+```markdown
+[](/blog/my-article.md)
+[Some text](/blog/my-article.md#some-section)
+[The slides](slides.pdf)
+```
+
+Code blocks, optionally with a file name or a title:
+
+````markdown
+```yaml {filename="config.yaml" hl_lines="3-5"}
+```
+```sh {title="CoreOS"}
+```
+````
+
+Shortcodes: `youtube`, `embeddedVideo` (videos attached to the page) and
+`attachedFileLink` (URL of an attached file, e.g. in a code block).
+
+The old shortcodes (`attachedFigure`, `screenshotOf`, `internalLink`,
+`highlightFile`, `highlightWithTitle`, `highlight`, `relref`) can be converted
+with `scripts/convert-shortcodes.py FILE.md`.
+
 ## Theme
 
 The theme lives directly in this repository (`layouts`, `assets`, `i18n` and
