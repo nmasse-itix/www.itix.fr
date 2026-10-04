@@ -86,6 +86,12 @@ module:
       matrix:
         languages: [fr]
 
+# Embed YouTube videos from youtube-nocookie.com: no cookie is set until
+# the visitor plays the video.
+privacy:
+  youtube:
+    privacyEnhanced: true
+
 taxonomies:
   opensource: "opensource"
   topic: "topics"
