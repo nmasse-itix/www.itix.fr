@@ -55,6 +55,6 @@ Key Highlights from the Demo:
 This demo has been designed for DevOps professionals, cloud architects, and developers looking to leverage OpenShift and AWS in multi-architecture container image creation.
 The session provided them with both a high-level understanding and practical skills to implement and manage these capabilities in their environments.
 
-If you have not been able to attend the live session, I invite you to [watch the replay](https://events.redhat.com/profile/form/index.cfm?PKformID=0x11759490001) and [download the slides](slides.pdf)!
+If you have not been able to attend the live session, I invite you to [watch the replay](https://events.redhat.com/profile/form/index.cfm?PKformID=0x11759490001) and [download the slides]({{< attachedFileLink src="slides.pdf" >}})!
 
 If you are ready to dive deeper, have a look at the article I wrote on this subject: {{< internalLink path="/blog/build-multi-architecture-container-images-with-kubernetes-buildah-tekton-aws/index.md" >}}!

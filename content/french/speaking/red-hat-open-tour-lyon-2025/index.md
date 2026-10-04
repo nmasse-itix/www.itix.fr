@@ -31,4 +31,4 @@ Le 20 Mai 2025, j'ai participé à l'événement [Red Hat Open Tour](https://eve
 ## Ressources
 
 - [Énoncé de l'atelier](https://open-tour-2025.netlify.app/fr/)
-- [Supports de présentation](slides.pdf)
+- [Supports de présentation]({{< attachedFileLink src="slides.pdf" >}})

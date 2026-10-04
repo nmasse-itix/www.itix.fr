@@ -79,3 +79,10 @@ params:
   enablePlausible: false
   images:
   - /images/avatar-2022-12.webp
+
+# Only publish the page resources that are actually used (images, attached
+# files, etc.) and not the source files that sit next to them (xcf, heic,
+# raw videos, etc.).
+cascade:
+  _build:
+    publishResources: false

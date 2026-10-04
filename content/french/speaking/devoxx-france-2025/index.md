@@ -47,4 +47,4 @@ Un succès que j’ai eu un immense plaisir à partager avec une salle bien remp
 ## Ressources
 
 - [Le code source des pipelines Tekton multi-architecture](https://github.com/nmasse-itix/tekton-pipeline-multiarch/tree/devoxx-france-2025)
-- [Les supports de présentation](slides.pdf)
+- [Les supports de présentation]({{< attachedFileLink src="slides.pdf" >}})

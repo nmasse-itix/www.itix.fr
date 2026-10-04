@@ -72,7 +72,7 @@ screen /dev/ttyUSB0 115200
 
 You then need to connect the VIN, GND, TXD and RXD wires to the correct GPIO pins of your Raspberry PI.
 
-{{< figure src="uart-pins.jpeg" title="The UART Pins of the Raspberry PI 3" >}}
+{{< attachedFigure src="uart-pins.jpeg" title="The UART Pins of the Raspberry PI 3" >}}
 
 Power-on your Raspberry PI, wait a couple seconds and press enter to display the OpenWRT prompt.
 
