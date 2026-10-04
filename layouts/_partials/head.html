@@ -86,10 +86,6 @@
 <script defer data-domain="itix.fr" src="https://plausible.io/js/plausible.js"></script>
 {{- end -}}
 
-{{- if .Params.enableMathJax -}}
-  {{- partial "mathjax.html" . -}}
-{{- end -}}
-
 <!-- Deal with the case of english articles published in the french site -->
 {{- partial "lang-detection.html" . -}}
 {{- if .Store.Get "en_article_in_fr_site" -}}
