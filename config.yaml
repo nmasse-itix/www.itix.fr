@@ -1,24 +1,21 @@
 baseURL: "/"
 title: "Nicolas Massé"
 author: "Nicolas Massé"
-# pygmentsUseClasses implies a style sheet that can be generated as follow:
-# hugo gen chromastyles --style=borland > assets/css/chroma.css
-# (this is done automatically by the ./hugo script)
-pygmentsUseClasses: true
-pygmentsCodefences: true
 enableRobotsTXT: true
+# Keep the taxonomy terms as they are written in the front matter
+capitalizeListTitles: false
 
-blackfriday:
-  extensionsmask:
-  # No "a" tag on bare links
-  - autolink
+markup:
+  highlight:
+    # Use CSS classes for syntax highlighting. The style sheet is generated with:
+    #   hugo gen chromastyles --style=borland > assets/css/chroma.css
+    noClasses: false
 
 defaultContentLanguage: "en"
 languages:
   en:
     weight: 1
-    languageName: English
-    contentDir: content/english
+    label: English
     menu:
       main:
       - name: "Articles"
@@ -44,8 +41,7 @@ languages:
         url: "https://www.linkedin.com/in/nicolasmasse/"
   fr:
     weight: 2
-    languageName: Français
-    contentDir: content/french
+    label: Français
     menu:
       main:
       - name: "Articles"
@@ -70,6 +66,26 @@ languages:
         weight: 70
         url: "https://www.linkedin.com/in/nicolasmasse/"
 
+# The french site contains the french content plus the english content that
+# has not been translated (french files take precedence over english files).
+module:
+  mounts:
+  - source: content/english
+    target: content
+    sites:
+      matrix:
+        languages: [en]
+  - source: content/french
+    target: content
+    sites:
+      matrix:
+        languages: [fr]
+  - source: content/english
+    target: content
+    sites:
+      matrix:
+        languages: [fr]
+
 taxonomies:
   opensource: "opensource"
   topic: "topics"
@@ -84,5 +100,5 @@ params:
 # files, etc.) and not the source files that sit next to them (xcf, heic,
 # raw videos, etc.).
 cascade:
-  _build:
+  build:
     publishResources: false

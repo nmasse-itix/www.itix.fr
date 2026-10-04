@@ -1,7 +1,7 @@
 {{ define "main" }}
-<!-- The "single" layout prints a single post -->
+<!-- The "page" layout prints a single post -->
 {{- partial "lang-detection.html" . -}}
-<article class="post" {{ if .Scratch.Get "en_article_in_fr_site" }}lang="en"{{ end }}>
+<article class="post" {{ if .Store.Get "en_article_in_fr_site" }}lang="en"{{ end }}>
     <header>
         <h1>{{ .Title }}</h1>
         {{- with .Description }}

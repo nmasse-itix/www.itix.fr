@@ -50,7 +50,7 @@
             {{- end -}}
             {{- else -}}
             <!-- Otherwise, redirect it to the homepage -->
-            {{- range site.Sites }}
+            {{- range hugo.Sites }}
             <a href="{{ .Home.RelPermalink }}">{{- partial (printf "icons/%s.svg" .Language.Lang) . -}}</a>
             {{- end -}}
             {{- end }}

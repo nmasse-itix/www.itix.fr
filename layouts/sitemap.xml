@@ -10,7 +10,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   {{ range $page := .Data.Pages }}
     {{- partial "lang-detection.html" . -}}
-    {{- if and .Permalink (not (.Scratch.Get "en_article_in_fr_site")) -}}
+    {{- if and .Permalink (not (.Store.Get "en_article_in_fr_site")) -}}
   <url>
     <loc>{{ .Permalink }}</loc>{{ if not .Lastmod.IsZero }}
     <lastmod>{{ safeHTML ( .Lastmod.Format "2006-01-02T15:04:05-07:00" ) }}</lastmod>{{ end }}{{ with .Sitemap.ChangeFreq }}
@@ -18,12 +18,12 @@
     <priority>{{ .Sitemap.Priority }}</priority>{{ end }}{{ with partial "real-translations.html" . }}{{ range . }}
     <xhtml:link
                 rel="alternate"
-                hreflang="{{ .Language.LanguageCode }}"
+                hreflang="{{ .Language.Locale }}"
                 href="{{ .Permalink }}"
                 />{{ end }}
     <xhtml:link
                 rel="alternate"
-                hreflang="{{ $page.Language.LanguageCode }}"
+                hreflang="{{ $page.Language.Locale }}"
                 href="{{ $page.Permalink }}"
                 />{{ end }}
   </url>

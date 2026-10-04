@@ -19,12 +19,12 @@ addExitHook "rm -rf \$DEST"
 echo "All artefacts will be generated in $DEST"
 
 #echo "Generating and serving content..."
-#./hugo serve -p 1313 -b http://localhost:1313/ --disableLiveReload --disableBrowserError --watch false --logLevel info --quiet --appendPort false &>"$DEST/hugo.log" &
+#hugo serve -p 1313 -b http://localhost:1313/ --disableLiveReload --disableBrowserError --watch false --logLevel info --quiet --appendPort false &>"$DEST/hugo.log" &
 #addExitHook "pkill -e --ignore-ancestors --full '^hugo'"
 
 echo "Generating content..."
 mkdir -p "$DEST/html" "$DEST/nginx"
-./hugo -b http://localhost:1313/ -d "$DEST/html"
+hugo -b http://localhost:1313/ -d "$DEST/html"
 
 echo "Serving content with nginx..."
 cat > "$DEST/nginx.conf" <<EOF

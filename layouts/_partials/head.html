@@ -70,8 +70,8 @@
   -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-{{ template "_internal/opengraph.html" . }}
-{{ template "_internal/twitter_cards.html" . }}
+{{ partial "opengraph.html" . }}
+{{ partial "twitter_cards.html" . }}
 
 <!-- The search page is the only one to require Javascript -->
 {{ if eq .Type "search" }}
@@ -92,7 +92,7 @@
 
 <!-- Deal with the case of english articles published in the french site -->
 {{- partial "lang-detection.html" . -}}
-{{- if .Scratch.Get "en_article_in_fr_site" -}}
+{{- if .Store.Get "en_article_in_fr_site" -}}
 <!--
   -- It's an english article published in the french site
   -- Tell Google not to index it and link to the original article.
@@ -112,7 +112,7 @@
   -->
 {{- with partial "real-translations.html" . -}}
 {{- range . | append $ }}
-<link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}" title="{{ .Language.LanguageName }}">
+<link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}" title="{{ .Language.Label }}">
 {{- end -}}
 {{- end -}}
 {{- end -}}
@@ -122,29 +122,29 @@
   -- https://search.google.com/test/rich-results
   -->
 {{- if .IsHome -}}
-  {{- $.Scratch.Set "structured_data" (dict "@context" "http://schema.org" "@type" "WebSite" "name" .Site.Title "url" .Site.BaseURL) -}}
+  {{- $.Store.Set "structured_data" (dict "@context" "http://schema.org" "@type" "WebSite" "name" .Site.Title "url" .Site.BaseURL) -}}
   {{- with .Site.Params.subtitle -}}
-    {{- $.Scratch.SetInMap "structured_data" "description" . -}}
+    {{- $.Store.SetInMap "structured_data" "description" . -}}
   {{- end -}}
 {{- else if and .IsPage (eq .Section "blog") -}}
-  {{- $.Scratch.Set "structured_data" (dict "@context" "http://schema.org" "@type" "BlogPosting" "headline" .Title "image" (slice) "articleSection" .Section) -}}
-  {{- if and (eq .Lang "fr") (.Scratch.Get "en_article_in_fr_site") -}}
-    {{- $.Scratch.SetInMap "structured_data" "inLanguage" "en" -}}
+  {{- $.Store.Set "structured_data" (dict "@context" "http://schema.org" "@type" "BlogPosting" "headline" .Title "image" (slice) "articleSection" .Section) -}}
+  {{- if and (eq .Lang "fr") (.Store.Get "en_article_in_fr_site") -}}
+    {{- $.Store.SetInMap "structured_data" "inLanguage" "en" -}}
     {{- range first 1 .Translations -}}
-      {{- $.Scratch.SetInMap "structured_data" "mainEntityOfPage" (dict "@type" "WebPage" "@id" .Permalink) -}}
+      {{- $.Store.SetInMap "structured_data" "mainEntityOfPage" (dict "@type" "WebPage" "@id" .Permalink) -}}
     {{- end -}}
   {{- else -}}
-    {{- $.Scratch.SetInMap "structured_data" "inLanguage" .Language.Lang -}}
-    {{- $.Scratch.SetInMap "structured_data" "mainEntityOfPage" (dict "@type" "WebPage" "@id" .Permalink) -}}
+    {{- $.Store.SetInMap "structured_data" "inLanguage" .Language.Lang -}}
+    {{- $.Store.SetInMap "structured_data" "mainEntityOfPage" (dict "@type" "WebPage" "@id" .Permalink) -}}
   {{- end -}}
   {{- if not .PublishDate.IsZero -}}
-    {{- $.Scratch.SetInMap "structured_data" "datePublished" .PublishDate -}}
+    {{- $.Store.SetInMap "structured_data" "datePublished" .PublishDate -}}
   {{- end -}}
   {{- if and (not .Lastmod.IsZero) (ne .Lastmod .PublishDate) -}}
-    {{- $.Scratch.SetInMap "structured_data" "dateModified" .Lastmod -}}
+    {{- $.Store.SetInMap "structured_data" "dateModified" .Lastmod -}}
   {{- end -}}
 {{- end -}}
-{{- with $.Scratch.Get "structured_data" }}
+{{- with $.Store.Get "structured_data" }}
 <script type="application/ld+json">
 {{- . | jsonify | safeJS -}}
 </script>

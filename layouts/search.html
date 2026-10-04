@@ -1,5 +1,5 @@
 {{ define "main" }}
-<!-- The "search/index.html" layout renders the search engine -->
+<!-- The "search" layout renders the search engine -->
 <article class="search article-list">
     <header>
         <h1>{{ .Title }}</h1>
@@ -167,37 +167,37 @@ function executeSearch(term) {
 }
 
 // Fill-in details about taxonomies
-{{- $.Scratch.Set "taxonomies" dict -}}
+{{- $.Store.Set "taxonomies" dict -}}
 {{- range $name, $taxonomy := .Site.Taxonomies -}}
-{{- $.Scratch.Set "taxonomy" dict -}}
+{{- $.Store.Set "taxonomy" dict -}}
 {{- range (index $.Site.Taxonomies $name) -}}
-{{- $.Scratch.SetInMap "taxonomy" .Page.Title (dict "href" .Page.RelPermalink "title" .Page.Title) -}}
+{{- $.Store.SetInMap "taxonomy" .Page.Title (dict "href" .Page.RelPermalink "title" .Page.Title) -}}
 {{- end -}}
-{{- $.Scratch.SetInMap "taxonomies" $name ($.Scratch.Get "taxonomy") -}}
+{{- $.Store.SetInMap "taxonomies" $name ($.Store.Get "taxonomy") -}}
 {{- end }}
-var taxonomies = {{- $.Scratch.Get "taxonomies" | jsonify | safeJS -}};
+var taxonomies = {{- $.Store.Get "taxonomies" | jsonify | safeJS -}};
 
 // Fill-in the Search DB with site's content
-{{- $.Scratch.Add "index" slice -}}
+{{- $.Store.Set "index" slice -}}
 {{- range .Site.RegularPages -}}
-    {{- $.Scratch.Set "reading_time" nil -}}
+    {{- $.Store.Set "reading_time" nil -}}
     {{- if eq .Type "blog" -}}
         {{- $minutes := .ReadingTime -}}
         {{- if gt $minutes 0 -}}
-        {{- $.Scratch.Set "reading_time" (i18n "minutes" $minutes) -}}
+        {{- $.Store.Set "reading_time" (i18n "minutes" $minutes) -}}
         {{- end -}}
     {{- end -}}
 
-    {{- $.Scratch.Set "date" nil -}}
+    {{- $.Store.Set "date" nil -}}
     {{- if ne .Type "page" -}}
-    {{- $.Scratch.Set "date" (.Date.Format (i18n "date_format")) -}}
+    {{- $.Store.Set "date" (.Date.Format (i18n "date_format")) -}}
     {{- end -}}
 
-    {{ .Scratch.Set "en_article_in_fr_site" false }}
+    {{ .Store.Set "en_article_in_fr_site" false }}
     {{- partial "lang-detection.html" . -}}
-    {{- $.Scratch.Add "index" (dict "title" .Title "opensource" .Params.opensource "topics" .Params.topics "permalink" .Permalink "hasEnFlag" (.Scratch.Get "en_article_in_fr_site") "type" .Type "type_label" (i18n (print "type_" .Type)) "date" ($.Scratch.Get "date") "reading_time" ($.Scratch.Get "reading_time") "summary" (.Summary | plainify | htmlUnescape)) -}}
+    {{- $.Store.Add "index" (dict "title" .Title "opensource" .Params.opensource "topics" .Params.topics "permalink" .Permalink "hasEnFlag" (.Store.Get "en_article_in_fr_site") "type" .Type "type_label" (i18n (print "type_" .Type)) "date" ($.Store.Get "date") "reading_time" ($.Store.Get "reading_time") "summary" (.Summary | plainify | htmlUnescape)) -}}
 {{- end }}
-var searchDb = {{- $.Scratch.Get "index" | jsonify | safeJS -}};
+var searchDb = {{- $.Store.Get "index" | jsonify | safeJS -}};
 
 // Initialize the Fuse.io framework with the Search DB
 fuseInit(searchDb);

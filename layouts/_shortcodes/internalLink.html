@@ -4,9 +4,9 @@
 {{ $path := .Get "path" }}
 {{ $currentLang := .Page.Lang }}
 {{ $title := .Get "title" }}
-{{ $sites := .Page.Sites }}
-{{ if ne $currentLang (index .Page.Sites 0).Language.Lang }}
-{{ $sites = collections.Reverse .Page.Sites }}
+{{ $sites := hugo.Sites }}
+{{ if ne $currentLang (index hugo.Sites 0).Language.Lang }}
+{{ $sites = collections.Reverse hugo.Sites }}
 {{ end }}
 {{ range $sites }}
 {{ with .GetPage $path }}
@@ -22,7 +22,7 @@
 {{ end }}
 {{ if (eq $currentLang "fr") }}
 {{- partial "lang-detection.html" . -}}
-{{ if .Scratch.Get "en_article_in_fr_site" }}
+{{ if .Store.Get "en_article_in_fr_site" }}
 {{- partial "icons/en.svg" . -}}
 {{ end }}
 {{ end }}

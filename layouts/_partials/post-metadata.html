@@ -10,7 +10,7 @@
     <!-- Expertise / Topics -->
     {{ range .current.Params.topics -}}
     <!-- Skip the item if we are on the term page presenting this item -->
-    {{- if or (not $.parent.Data.topic) (ne . $.parent.Data.Term) }}
+    {{- if not (and (eq $.parent.Kind "term") (eq $.parent.Data.Plural "topics") (eq (urlize .) (urlize $.parent.Data.Term))) }}
     <span class="topic">
         {{- partial "icons/link.svg" . -}}<a href="{{ "/topics/" | relLangURL }}{{ . | urlize }}/">{{ . }}</a>
     </span>
@@ -20,7 +20,7 @@
     <!-- Open Source communities -->
     {{ range .current.Params.opensource -}}
     <!-- Skip the item if we are on the term page presenting this item -->
-    {{- if or (not $.parent.Data.opensource) (ne . $.parent.Data.Term) }}
+    {{- if not (and (eq $.parent.Kind "term") (eq $.parent.Data.Plural "opensource") (eq (urlize .) (urlize $.parent.Data.Term))) }}
     <span class="opensource">
         {{- partial "icons/label.svg" . -}}<a href="{{ "/opensource/" | relLangURL }}{{ . | urlize }}/">{{ . }}</a>
     </span>

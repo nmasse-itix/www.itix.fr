@@ -5,7 +5,7 @@
 {{- $translations := slice -}}
 {{- range .Translations -}}
   {{- partial "lang-detection.html" . -}}
-  {{- if not (.Scratch.Get "en_article_in_fr_site") -}}
+  {{- if not (.Store.Get "en_article_in_fr_site") -}}
     {{- $translations = $translations | append . -}}
   {{- end -}}
 {{- end -}}

@@ -65,7 +65,7 @@ oc set volume dc/postgresql --add -t configmap --name postgresql-init \
                             -m /opt/app-root/src/postgresql-start
 ```
 
-Because of a <s>bug</s> feature in the [PostgreSQL base image](https://github.com/sclorg/postgresql-container) (see [#351](https://github.com/sclorg/postgresql-container/issues/351)), we need to hack a little bit the PostgreSQL image.
+Because of a ~~bug~~ feature in the [PostgreSQL base image](https://github.com/sclorg/postgresql-container) (see [#351](https://github.com/sclorg/postgresql-container/issues/351)), we need to hack a little bit the PostgreSQL image.
 
 ```sh
 cat <<"EOF" > /tmp/common.sh

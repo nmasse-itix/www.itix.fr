@@ -2,16 +2,16 @@
 publish = "public"
 # Use --minify to reduce HTML file size since Google is now tracking this
 # as "Core Web Vitals".
-command = "./hugo --baseURL https://www.itix.fr --minify"
+command = "hugo --baseURL https://www.itix.fr --minify"
 
 [build.environment] # Global
-HUGO_VERSION = "0.121.2"
+HUGO_VERSION = "0.167.0"
 
 [context.production.environment] # Only for prod
-HUGO_VERSION = "0.121.2"
+HUGO_VERSION = "0.167.0"
 
 [context.deploy-preview]
-command = "./hugo --buildDrafts --buildFuture --baseURL $DEPLOY_PRIME_URL"
+command = "hugo --buildDrafts --buildFuture --baseURL $DEPLOY_PRIME_URL"
 
 [context.deploy-preview.environment]
 HUGO_ENABLEGITINFO = "true"
