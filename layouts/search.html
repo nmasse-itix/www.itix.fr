@@ -18,197 +18,41 @@
         </div>
         {{- end }}
     </div>
-    <script type="text/javascript">
-var searchResults = document.getElementById('searchResults'); // targets the <div> above
-var searchInput = document.getElementById('searchInput'); // input box for search
-var lastSearch = "";
+    {{- /*
+      -- The search data are embedded in a JSON data block, used by /js/search.js
+      */ -}}
+    {{- /* Taxonomies */ -}}
+    {{- $.Store.Set "taxonomies" dict -}}
+    {{- range $name, $taxonomy := .Site.Taxonomies -}}
+    {{- $.Store.Set "taxonomy" dict -}}
+    {{- range (index $.Site.Taxonomies $name) -}}
+    {{- $.Store.SetInMap "taxonomy" .Page.Title (dict "href" .Page.RelPermalink "title" .Page.Title) -}}
+    {{- end -}}
+    {{- $.Store.SetInMap "taxonomies" $name ($.Store.Get "taxonomy") -}}
+    {{- end }}
 
-// Helper function to create an element with attributes
-function tag(name, attrs) {
-  var el = document.createElement(name.toString());
-
-  !!attrs && Object.keys(attrs).forEach(function(key) {
-    el.setAttribute(key, attrs[key]);
-  });
-
-  return el;
-}
-
-function printSearchResult(result) {
-    var section = tag("section");
-    
-    //
-    // Article headline
-    //
-    var a = tag("a", { href: result.item.permalink });
-    a.textContent = result.item.title;
-    if (result.item.hasEnFlag) {
-        var uk_flag_svg = document.getElementById("embedded-svg-en");
-        if (uk_flag_svg != null) {
-            var img = uk_flag_svg.firstChild.cloneNode(true);
-            a.appendChild(img);
-        }
-    }
-    var h4 = tag("h4");
-    h4.textContent = result.item.type_label + " >> ";
-    h4.appendChild(a);
-    section.appendChild(h4);
-
-    //
-    // Metadata
-    //
-    if (result.item.type != "page") {
-        var div = tag("div", { 'class': 'post-metadata'});
-        var span_date = tag("span", { 'class': 'publication-date' });
-        span_date.textContent = {{ i18n "published_on" }} + " " + result.item.date;
-        div.appendChild(span_date);
-        if (result.item.topics != null) {
-            result.item.topics.forEach(function (v) {
-                var topic_detail = taxonomies.topics[v];
-                if (topic_detail == null) {
-                    return;
-                }
-                var span = tag("span", { 'class': 'topic' });
-                var link_svg = document.getElementById("embedded-svg-link");
-                if (link_svg != null) {
-                    var img = link_svg.firstChild.cloneNode(true);
-                    span.appendChild(img);
-                }
-                var a = tag("a", { href: topic_detail.href });
-                a.textContent = topic_detail.title;
-                span.appendChild(a);
-                div.appendChild(span);
-            });
-        }
-        if (result.item.opensource != null) {
-            result.item.opensource.forEach(function (v) {
-                var opensource_detail = taxonomies.opensource[v];
-                if (opensource_detail == null) {
-                    return;
-                }
-                var span = tag("span", { 'class': 'opensource' });
-                var label_svg = document.getElementById("embedded-svg-label");
-                if (label_svg != null) {
-                    var img = label_svg.firstChild.cloneNode(true);
-                    span.appendChild(img);
-                }
-                var a = tag("a", { href: opensource_detail.href });
-                a.textContent = opensource_detail.title;
-                span.appendChild(a);
-                div.appendChild(span);
-            });
-        }
-        if (result.item.reading_time != null) {
-            var span = tag("span", { 'class': 'reading-time' });
-            var schedule_svg = document.getElementById("embedded-svg-schedule");
-                if (schedule_svg != null) {
-                    var img = schedule_svg.firstChild.cloneNode(true);
-                    span.appendChild(img);
-                }
-            var readingTime = document.createTextNode(result.item.reading_time);
-            span.appendChild(readingTime);
-            div.appendChild(span);
-        }
-        section.appendChild(div);
-    }
-
-    var p = tag("p", {});
-    p.textContent = result.item.summary;
-    var a = tag("a", { href: result.item.permalink, 'class': 'continue-reading' });
-    a.textContent = {{ i18n "continue_reading" }};
-    p.appendChild(a);
-    section.appendChild(p);
-
-    searchResults.appendChild(section);
-}
-
-function clearSearchResults() {
-  var child = searchResults.lastElementChild;  
-  while (child) { 
-    searchResults.removeChild(child); 
-    child = searchResults.lastElementChild; 
-  } 
-}
-
-//
-// load the search index
-//
-function fuseInit(searchDb) { 
-  var options = { // fuse.js options; check fuse.js website for details
-    shouldSort: true,
-    ignoreLocation: true,
-    threshold: 0.4,
-    minMatchCharLength: 3,
-    keys: [
-        'title',
-        'permalink',
-        'summary',
-        'topics',
-        'opensource'
-        ]
-    };
-    fuse = new Fuse(searchDb, options); // build the index from the json file
-}
-
-// 
-// using the index loaded previously, run  a search query (for "term")
-// every time a letter is typed in the search box
-//
-function executeSearch(term) {
-  if (lastSearch == term) {
-    // Don't query Fuse if the search terms have not changed
-    return;
-  }
-
-  clearSearchResults();
-  let results = fuse.search(term);
-  results.slice(0, 20).forEach(printSearchResult);
-  lastSearch = term;
-}
-
-// Fill-in details about taxonomies
-{{- $.Store.Set "taxonomies" dict -}}
-{{- range $name, $taxonomy := .Site.Taxonomies -}}
-{{- $.Store.Set "taxonomy" dict -}}
-{{- range (index $.Site.Taxonomies $name) -}}
-{{- $.Store.SetInMap "taxonomy" .Page.Title (dict "href" .Page.RelPermalink "title" .Page.Title) -}}
-{{- end -}}
-{{- $.Store.SetInMap "taxonomies" $name ($.Store.Get "taxonomy") -}}
-{{- end }}
-var taxonomies = {{- $.Store.Get "taxonomies" | jsonify | safeJS -}};
-
-// Fill-in the Search DB with site's content
-{{- $.Store.Set "index" slice -}}
-{{- range .Site.RegularPages -}}
-    {{- $.Store.Set "reading_time" nil -}}
-    {{- if eq .Type "blog" -}}
-        {{- $minutes := .ReadingTime -}}
-        {{- if gt $minutes 0 -}}
-        {{- $.Store.Set "reading_time" (i18n "minutes" $minutes) -}}
+    {{- /* Search index */ -}}
+    {{- $.Store.Set "index" slice -}}
+    {{- range .Site.RegularPages -}}
+        {{- $.Store.Set "reading_time" nil -}}
+        {{- if eq .Type "blog" -}}
+            {{- $minutes := .ReadingTime -}}
+            {{- if gt $minutes 0 -}}
+            {{- $.Store.Set "reading_time" (i18n "minutes" $minutes) -}}
+            {{- end -}}
         {{- end -}}
-    {{- end -}}
 
-    {{- $.Store.Set "date" nil -}}
-    {{- if ne .Type "page" -}}
-    {{- $.Store.Set "date" (.Date.Format (i18n "date_format")) -}}
-    {{- end -}}
+        {{- $.Store.Set "date" nil -}}
+        {{- if ne .Type "page" -}}
+        {{- $.Store.Set "date" (.Date.Format (i18n "date_format")) -}}
+        {{- end -}}
 
-    {{ .Store.Set "en_article_in_fr_site" false }}
-    {{- partial "lang-detection.html" . -}}
-    {{- $.Store.Add "index" (dict "title" .Title "opensource" .Params.opensource "topics" .Params.topics "permalink" .Permalink "hasEnFlag" (.Store.Get "en_article_in_fr_site") "type" .Type "type_label" (i18n (print "type_" .Type)) "date" ($.Store.Get "date") "reading_time" ($.Store.Get "reading_time") "summary" (.Summary | plainify | htmlUnescape)) -}}
-{{- end }}
-var searchDb = {{- $.Store.Get "index" | jsonify | safeJS -}};
-
-// Initialize the Fuse.io framework with the Search DB
-fuseInit(searchDb);
-
-//
-// execute search as each character is typed
-//
-searchInput.onkeyup = function(e) { 
-  executeSearch(this.value);
-}
-
-    </script>
+        {{ .Store.Set "en_article_in_fr_site" false }}
+        {{- partial "lang-detection.html" . -}}
+        {{- $.Store.Add "index" (dict "title" .Title "opensource" .Params.opensource "topics" .Params.topics "permalink" .Permalink "hasEnFlag" (.Store.Get "en_article_in_fr_site") "type" .Type "type_label" (i18n (print "type_" .Type)) "date" ($.Store.Get "date") "reading_time" ($.Store.Get "reading_time") "summary" (.Summary | plainify | htmlUnescape)) -}}
+    {{- end }}
+    {{- $data := dict "taxonomies" ($.Store.Get "taxonomies") "index" ($.Store.Get "index") "i18n" (dict "published_on" (i18n "published_on") "continue_reading" (i18n "continue_reading")) }}
+    <script type="application/json" id="search-data">{{ $data | jsonify | safeJS }}</script>
+    <script src="/js/search.js"></script>
 </article>
 {{ end }}
