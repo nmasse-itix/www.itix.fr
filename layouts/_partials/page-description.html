@@ -1,0 +1,28 @@
+{{- /*
+  -- Returns the description of a page (plain text), used by the meta
+  -- description, Open Graph, Twitter cards and structured data.
+  --
+  -- In order of preference:
+  -- 1. the "description" front matter parameter
+  -- 2. the description of the site, for the home page
+  -- 3. "Articles related to <term>" for the taxonomy term pages
+  -- 4. the summary of the page, truncated to ~160 characters
+  -- 5. the description of the site
+  -- 6. the title of the page
+  */ -}}
+{{- $description := "" -}}
+{{- if .Description -}}
+  {{- $description = .Description -}}
+{{- else if and .IsHome site.Params.description -}}
+  {{- $description = site.Params.description -}}
+{{- else if eq .Kind "term" -}}
+  {{- $description = printf "%s %s" (i18n "articles_related_to" | strings.TrimSpace) .Title -}}
+{{- else -}}
+  {{- $summary := .Summary | plainify | htmlUnescape | replaceRE `\s+` " " | strings.TrimSpace -}}
+  {{- with $summary -}}
+    {{- $description = truncate 160 . -}}
+  {{- else -}}
+    {{- $description = or site.Params.description .Title -}}
+  {{- end -}}
+{{- end -}}
+{{- return ($description | plainify | htmlUnescape | strings.TrimSpace) -}}

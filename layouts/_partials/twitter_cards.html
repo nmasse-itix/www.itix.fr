@@ -1,0 +1,36 @@
+{{- /*
+  -- Based on the Hugo embedded twitter_cards.html partial (v0.167.0).
+  --
+  -- Changes: the description comes from page-description.html and the image
+  -- from social-image.html (JPEG, 1200 px wide max).
+  */ -}}
+{{- /* The default image (avatar) is better displayed as a small card. */}}
+{{- $social := partialCached "social-image.html" . .Permalink }}
+{{- with $social.image }}
+	<meta name="twitter:card" content="{{ cond $social.isDefault "summary" "summary_large_image" }}">
+	<meta name="twitter:image" content="{{ .Permalink }}">
+	<meta name="twitter:image:alt" content="{{ $.Title | plainify }}">
+{{- else }}
+	<meta name="twitter:card" content="summary">
+{{- end }}
+
+{{- with or .Title site.Title site.Params.title | plainify }}
+	<meta name="twitter:title" content="{{ . }}">
+{{- end }}
+
+{{- with partialCached "page-description.html" . .Permalink }}
+	<meta name="twitter:description" content="{{ . }}">
+{{- end }}
+
+{{- $twitterSite := "" }}
+{{- with site.Params.social }}
+	{{- if reflect.IsMap . }}
+		{{- with .twitter }}
+			{{- $content := . }}
+			{{- if not (strings.HasPrefix . "@") }}
+				{{- $content = printf "@%v" . }}
+			{{- end }}
+			<meta name="twitter:site" content="{{ $content }}">
+		{{- end }}
+	{{- end }}
+{{- end }}

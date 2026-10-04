@@ -1,0 +1,76 @@
+{{- /*
+  -- Returns the image used when the page is shared on social networks
+  -- (Open Graph, Twitter cards) and in the structured data, as a dict:
+  --   - image: the processed image resource
+  --   - isDefault: true if the default image of the site is used
+  --
+  -- The image is chosen in this order:
+  -- 1. the first image of the "images" front matter parameter
+  -- 2. a page resource named *feature*, *cover* or *thumbnail*
+  -- 3. the first image displayed in the page content
+  -- 4. the first image of the "images" site parameter
+  --
+  -- The image is converted to JPEG (WebP is not supported everywhere) and
+  -- resized to 1200 px wide max, without cropping: the social networks crop
+  -- it to their own aspect ratio.
+  */ -}}
+{{- $formats := slice "jpeg" "png" "webp" "gif" "bmp" "tiff" -}}
+{{- $images := slice -}}
+{{- range .Resources.ByType "image" -}}
+  {{- if in $formats .MediaType.SubType -}}
+    {{- $images = $images | append . -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $source := false -}}
+{{- $isDefault := false -}}
+
+{{- /* 1. The "images" front matter parameter */ -}}
+{{- range $name := .Params.images -}}
+  {{- if not $source -}}
+    {{- range $images -}}
+      {{- if and (not $source) (eq .Name $name) -}}{{- $source = . -}}{{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* 2. A page resource named *feature*, *cover* or *thumbnail* */ -}}
+{{- if not $source -}}
+  {{- range $images -}}
+    {{- if and (not $source) (findRE `(?i)(feature|cover|thumbnail)` .Name) -}}{{- $source = . -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* 3. The first image displayed in the page content */ -}}
+{{- if and (not $source) $images -}}
+  {{- range findRESubmatch `<img[^>]*\ssrc="([^"]+)"` .Content -}}
+    {{- $src := index . 1 -}}
+    {{- if not $source -}}
+      {{- range $images -}}
+        {{- if and (not $source) (or (eq .RelPermalink $src) (eq .Permalink $src)) -}}{{- $source = . -}}{{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* 4. The default image of the site */ -}}
+{{- if not $source -}}
+  {{- with index site.Params.images 0 -}}
+    {{- with resources.Get (strings.TrimPrefix "/" .) -}}
+      {{- $source = . -}}
+      {{- $isDefault = true -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $result := dict -}}
+{{- with $source -}}
+  {{- $image := . -}}
+  {{- if gt .Width 1200 -}}
+    {{- $image = .Resize "1200x jpg q85" -}}
+  {{- else -}}
+    {{- $image = .Process "jpg q85" -}}
+  {{- end -}}
+  {{- $result = dict "image" $image "isDefault" $isDefault -}}
+{{- end -}}
+{{- return $result -}}

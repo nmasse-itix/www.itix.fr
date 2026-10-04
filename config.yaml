@@ -16,6 +16,8 @@ languages:
   en:
     weight: 1
     label: English
+    params:
+      description: "Nicolas Massé's website: articles, talks and publications about Kubernetes, OpenShift, API Management, Single Sign-On and homelab."
     menu:
       main:
       - name: "Articles"
@@ -42,6 +44,8 @@ languages:
   fr:
     weight: 2
     label: Français
+    params:
+      description: "Le site de Nicolas Massé : articles, conférences et publications sur Kubernetes, OpenShift, l'API Management, le Single Sign-On et le homelab."
     menu:
       main:
       - name: "Articles"
@@ -70,6 +74,12 @@ languages:
 # has not been translated (french files take precedence over english files).
 module:
   mounts:
+  # Default assets mount, plus the images of the static directory so that
+  # they can be processed by Hugo (social images).
+  - source: assets
+    target: assets
+  - source: static/images
+    target: assets/images
   - source: content/english
     target: content
     sites:
@@ -99,6 +109,10 @@ taxonomies:
 
 params:
   enablePlausible: false
+  # Used in the structured data (JSON-LD)
+  author:
+    name: "Nicolas Massé"
+    url: "https://www.linkedin.com/in/nicolasmasse/"
   images:
   - /images/avatar-2022-12.webp
 
