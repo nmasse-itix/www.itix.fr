@@ -41,9 +41,7 @@
  */
 @font-face{
   font-family: 'JetBrains Mono';
-  src: url('/fonts/JetBrainsMono-Regular.woff2') format('woff2'),
-    url('/fonts/JetBrainsMono-Regular.woff') format('woff'),
-    url('/fonts/JetBrainsMono-Regular.ttf') format('truetype');
+  src: url('/fonts/JetBrainsMono-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
 
@@ -57,7 +55,7 @@
 
 @font-face{
   font-family: 'Source Serif Pro';
-  src: url('/fonts/SourceSerifPro-Regular.ttf') format('truetype');
+  src: url('/fonts/SourceSerifPro-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
 
@@ -71,7 +69,7 @@
 
 @font-face{
   font-family: 'Source Sans Pro';
-  src: url('/fonts/SourceSansPro-Regular.ttf') format('truetype');
+  src: url('/fonts/SourceSansPro-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
 
