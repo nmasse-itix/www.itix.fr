@@ -4,7 +4,7 @@
 	<path d="M0,0 v30 h60 v-30 z"/>
 </clipPath>
 <clipPath id="t">
-	<path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/>
+	<path d="M30,15 H60 V30 Z M30,15 V30 H0 Z M30,15 H0 V0 Z M30,15 V0 H60 Z"/>
 </clipPath>
 <g clip-path="url(#s)">
 	<path d="M0,0 v30 h60 v-30 z" fill="#012169"/>
