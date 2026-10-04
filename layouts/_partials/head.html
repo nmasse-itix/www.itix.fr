@@ -59,15 +59,6 @@
 {{ partial "opengraph.html" . }}
 {{ partial "twitter_cards.html" . }}
 
-<!-- The search page is the only one to require Javascript -->
-{{ if eq .Type "search" }}
-<!--
-  -- Download and copy over fuse.js file from fusejs.io.
-  -- I used the UMD build, minified, version 6.4.3
-  -->
-<script src="/js/fuse.js"></script>
-{{ end }}
-
 {{- if .Site.Params.enablePlausible -}}
 <script defer data-domain="itix.fr" src="https://plausible.io/js/plausible.js"></script>
 {{- end -}}

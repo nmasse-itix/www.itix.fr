@@ -19,40 +19,13 @@
         {{- end }}
     </div>
     {{- /*
-      -- The search data are embedded in a JSON data block, used by /js/search.js
+      -- The search index is a separate JSON file (search.searchindex.json),
+      -- loaded by /js/search.js. Only the URL of the index and the translated
+      -- strings are embedded in the page, in a JSON data block (no inline
+      -- script, see the Content Security Policy).
       */ -}}
-    {{- /* Taxonomies */ -}}
-    {{- $.Store.Set "taxonomies" dict -}}
-    {{- range $name, $taxonomy := .Site.Taxonomies -}}
-    {{- $.Store.Set "taxonomy" dict -}}
-    {{- range (index $.Site.Taxonomies $name) -}}
-    {{- $.Store.SetInMap "taxonomy" .Page.Title (dict "href" .Page.RelPermalink "title" .Page.Title) -}}
-    {{- end -}}
-    {{- $.Store.SetInMap "taxonomies" $name ($.Store.Get "taxonomy") -}}
-    {{- end }}
-
-    {{- /* Search index */ -}}
-    {{- $.Store.Set "index" slice -}}
-    {{- range .Site.RegularPages -}}
-        {{- $.Store.Set "reading_time" nil -}}
-        {{- if eq .Type "blog" -}}
-            {{- $minutes := .ReadingTime -}}
-            {{- if gt $minutes 0 -}}
-            {{- $.Store.Set "reading_time" (i18n "minutes" $minutes) -}}
-            {{- end -}}
-        {{- end -}}
-
-        {{- $.Store.Set "date" nil -}}
-        {{- if ne .Type "page" -}}
-        {{- $.Store.Set "date" (.Date.Format (i18n "date_format")) -}}
-        {{- end -}}
-
-        {{ .Store.Set "en_article_in_fr_site" false }}
-        {{- partial "lang-detection.html" . -}}
-        {{- $.Store.Add "index" (dict "title" .Title "opensource" .Params.opensource "topics" .Params.topics "permalink" .Permalink "hasEnFlag" (.Store.Get "en_article_in_fr_site") "type" .Type "type_label" (i18n (print "type_" .Type)) "date" ($.Store.Get "date") "reading_time" ($.Store.Get "reading_time") "summary" (.Summary | plainify | htmlUnescape)) -}}
-    {{- end }}
-    {{- $data := dict "taxonomies" ($.Store.Get "taxonomies") "index" ($.Store.Get "index") "i18n" (dict "published_on" (i18n "published_on") "continue_reading" (i18n "continue_reading")) }}
-    <script type="application/json" id="search-data">{{ $data | jsonify | safeJS }}</script>
-    <script src="/js/search.js"></script>
+    {{- $config := dict "indexUrl" (.OutputFormats.Get "searchindex").RelPermalink "i18n" (dict "published_on" (i18n "published_on") "continue_reading" (i18n "continue_reading")) }}
+    <script type="application/json" id="search-config">{{ $config | jsonify | safeJS }}</script>
+    <script type="module" src="/js/search.js"></script>
 </article>
 {{ end }}

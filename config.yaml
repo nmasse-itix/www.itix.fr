@@ -102,6 +102,14 @@ privacy:
   youtube:
     privacyEnhanced: true
 
+# The search index, used by the search page (static/js/search.js)
+outputFormats:
+  searchindex:
+    mediaType: application/json
+    baseName: index
+    isPlainText: true
+    notAlternative: true
+
 taxonomies:
   opensource: "opensource"
   topic: "topics"

@@ -1,0 +1,34 @@
+{{- /*
+  -- The search index of the "search" page, loaded by /js/search.js.
+  */ -}}
+{{- /* Taxonomies */ -}}
+{{- $.Store.Set "taxonomies" dict -}}
+{{- range $name, $taxonomy := .Site.Taxonomies -}}
+{{- $.Store.Set "taxonomy" dict -}}
+{{- range (index $.Site.Taxonomies $name) -}}
+{{- $.Store.SetInMap "taxonomy" .Page.Title (dict "href" .Page.RelPermalink "title" .Page.Title) -}}
+{{- end -}}
+{{- $.Store.SetInMap "taxonomies" $name ($.Store.Get "taxonomy") -}}
+{{- end -}}
+
+{{- /* Search index */ -}}
+{{- $.Store.Set "index" slice -}}
+{{- range .Site.RegularPages -}}
+    {{- $.Store.Set "reading_time" nil -}}
+    {{- if eq .Type "blog" -}}
+        {{- $minutes := .ReadingTime -}}
+        {{- if gt $minutes 0 -}}
+        {{- $.Store.Set "reading_time" (i18n "minutes" $minutes) -}}
+        {{- end -}}
+    {{- end -}}
+
+    {{- $.Store.Set "date" nil -}}
+    {{- if ne .Type "page" -}}
+    {{- $.Store.Set "date" (.Date.Format (i18n "date_format")) -}}
+    {{- end -}}
+
+    {{- .Store.Set "en_article_in_fr_site" false -}}
+    {{- partial "lang-detection.html" . -}}
+    {{- $.Store.Add "index" (dict "title" .Title "opensource" .Params.opensource "topics" .Params.topics "permalink" .Permalink "hasEnFlag" (.Store.Get "en_article_in_fr_site") "type" .Type "type_label" (i18n (print "type_" .Type)) "date" ($.Store.Get "date") "reading_time" ($.Store.Get "reading_time") "summary" (.Summary | plainify | htmlUnescape)) -}}
+{{- end -}}
+{{- dict "taxonomies" ($.Store.Get "taxonomies") "index" ($.Store.Get "index") | jsonify -}}
