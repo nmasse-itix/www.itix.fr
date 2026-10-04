@@ -1,5 +1,6 @@
 ---
 title: "Expertise"
+description: "Les sujets abordés sur ce site : API Management, conteneurs, sécurité, tests de performance, etc."
 ---
 
 Au cours de mes différentes prestations, je suis amené à travailler sur des sujets variés pour lesquels j'ai écrit un ou plusieurs articles.
