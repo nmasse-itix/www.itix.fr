@@ -3,7 +3,7 @@
     {{- with .current.PublishDate }}
     <span class="publication-date">
         {{ i18n "published_on" }}
-        <time itemprop="published-on" date-time="{{ .Format "2006-01-02" }}">{{ .Format (i18n "date_format") }}</time>
+        <time datetime="{{ .Format "2006-01-02" }}">{{ .Format (i18n "date_format") }}</time>
     </span>
     {{- end }}
 

@@ -37,9 +37,6 @@
   {{ printf `<link rel=%q type=%q href=%q title=%q>` .Rel .MediaType.Type .Permalink site.Title | safeHTML }}
 {{ end }}
 
-<!-- Tell IE to use the Edge engine -->
-<meta name="X-UA-Compatible" content="IE=edge">
-
 <!--
   -- The viewport is the user's visible area of a web page.
   -- The viewport varies with the device, and will be smaller on a mobile phone
