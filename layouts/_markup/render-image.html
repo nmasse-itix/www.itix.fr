@@ -6,21 +6,77 @@
   -- figure, with its title as caption (Markdown allowed):
   --
   --   ![Alternative text](image.png "Caption")
+  --
+  -- Raster images (JPEG, PNG, WebP) are converted to WebP in several widths
+  -- (srcset), so that the browser downloads the most appropriate one.
+  -- GIF (possibly animated) and SVG images are served as-is.
+  --
+  -- All images get their dimensions (to avoid layout shifts) and are lazy
+  -- loaded, except the first one of the page.
   */ -}}
 {{- $u := urls.Parse .Destination -}}
-{{- $src := .Destination -}}
+{{- $attrs := dict "src" .Destination "alt" .PlainText -}}
+{{- $image := false -}}
 {{- if not $u.IsAbs -}}
   {{- with or (.Page.Resources.Get $u.Path) (resources.Get (strings.TrimPrefix "/" $u.Path)) -}}
-    {{- $src = .RelPermalink -}}
+    {{- $image = . -}}
   {{- else -}}
     {{- if not (strings.HasPrefix $u.Path "/") -}}
       {{- errorf "%s: image %q not found" .Page.String .Destination -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}
+
+{{- with $image -}}
+  {{- /* Note: .RelPermalink publishes the original image, only done when it is served as-is */ -}}
+  {{- if in (slice "jpeg" "png" "webp") .MediaType.SubType -}}
+    {{- /* WebP variants, no wider than the original image */ -}}
+    {{- $hint := cond (eq .MediaType.SubType "png") "drawing" "photo" -}}
+    {{- $variants := slice -}}
+    {{- range $width := slice 480 800 1200 1600 -}}
+      {{- if lt $width $image.Width -}}
+        {{- $variants = $variants | append ($image.Resize (printf "%dx webp q80 %s" $width $hint)) -}}
+      {{- end -}}
+    {{- end -}}
+    {{- if lt (len $variants) 4 -}}
+      {{- /* The original width, when smaller than the largest variant */ -}}
+      {{- $variants = $variants | append ($image.Process (printf "webp q80 %s" $hint)) -}}
+    {{- end -}}
+    {{- $srcset := slice -}}
+    {{- range $variants -}}
+      {{- $srcset = $srcset | append (printf "%s %dw" .RelPermalink .Width) -}}
+    {{- end -}}
+    {{- $largest := index $variants (sub (len $variants) 1) -}}
+    {{- $attrs = merge $attrs (dict
+      "src" $largest.RelPermalink
+      "srcset" (delimit $srcset ", ")
+      "sizes" "(max-width: 1140px) 100vw, (max-width: 1280px) 75vw, (max-width: 1440px) 55vw, 50vw"
+      "width" $largest.Width
+      "height" $largest.Height
+    ) -}}
+  {{- else if eq .MediaType.SubType "gif" -}}
+    {{- $attrs = merge $attrs (dict "src" .RelPermalink "width" .Width "height" .Height) -}}
+  {{- else -}}
+    {{- $attrs = merge $attrs (dict "src" .RelPermalink) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* The first image of the page is often the largest visible element */ -}}
+{{- if eq .Ordinal 0 -}}
+  {{- $attrs = merge $attrs (dict "fetchpriority" "high") -}}
+{{- else -}}
+  {{- $attrs = merge $attrs (dict "loading" "lazy" "decoding" "async") -}}
+{{- end -}}
+
+{{- $img := "" -}}
+{{- range $k, $v := $attrs -}}
+  {{- $img = printf `%s %s="%s"` $img $k (string $v | htmlEscape) -}}
+{{- end -}}
+{{- $img = printf "<img%s>" $img | safeHTML -}}
+
 {{- if .IsBlock -}}
 <figure>
-  <img src="{{ $src }}" alt="{{ .PlainText }}">
+  {{ $img }}
   {{- with .Title }}
   <figcaption>
     {{- . | markdownify -}}
@@ -28,5 +84,5 @@
   {{- end }}
 </figure>
 {{- else -}}
-<img src="{{ $src }}" alt="{{ .PlainText }}">
+{{ $img }}
 {{- end -}}

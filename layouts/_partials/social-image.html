@@ -43,11 +43,16 @@
 
 {{- /* 3. The first image displayed in the page content */ -}}
 {{- if and (not $source) $images -}}
+  {{- /*
+    -- The images are compared by name (without extension) since the image
+    -- render hook serves processed variants (name_hu_<hash>.webp). Do not use
+    -- .RelPermalink here: it would publish all the images of the page.
+    */ -}}
   {{- range findRESubmatch `<img[^>]*\ssrc="([^"]+)"` .Content -}}
-    {{- $src := index . 1 -}}
+    {{- $name := index . 1 | path.Base | replaceRE `_hu_[0-9a-f]+\.\w+$` "" | replaceRE `\.\w+$` "" -}}
     {{- if not $source -}}
       {{- range $images -}}
-        {{- if and (not $source) (or (eq .RelPermalink $src) (eq .Permalink $src)) -}}{{- $source = . -}}{{- end -}}
+        {{- if and (not $source) (eq (replaceRE `\.\w+$` "" (path.Base .Name)) $name) -}}{{- $source = . -}}{{- end -}}
       {{- end -}}
     {{- end -}}
   {{- end -}}
